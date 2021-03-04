@@ -29,7 +29,7 @@ public class Planet{
 		imgFileName = p.imgFileName;
 	}
 
-	public double calDistance(Planet p){
+	public double calcDistance(Planet p){
 		
 		double rrDistance = Math. sqrt( 
 		Math.pow((xxPos - p.xxPos),2) + 
@@ -37,6 +37,57 @@ public class Planet{
 		
 		//System.out.println( rrDistance);
 		return rrDistance;
+	}
+
+	public double calcForceExertedBy(Planet p){	
+	
+		double ffForce = (G*mass*p.mass)/(Math.pow(calcDistance(p),2));
+		//System.out.println( rrForce );
+		return ffForce;
+	}
+
+	public double calcForceExertedByX(Planet p){
+		if ((p.xxPos - xxPos) >= 0){
+		double xxForce = calcForceExertedBy(p)*
+		((xxPos - p.xxPos)/calcDistance(p));
+		}
+		double xxForce = - (calcForceExertedBy(p)*
+		((xxPos - p.xxPos)/calcDistance(p)));
+		return xxForce;
+	}
+
+	public double calcForceExertedByY(Planet p){
+		if ((p.yyPos - yyPos) >= 0){
+		double yyForce = calcForceExertedBy(p)*
+		((yyPos - p.yyPos)/calcDistance(p));
+		}
+		double yyForce = - (calcForceExertedBy(p)*
+		((yyPos - p.yyPos)/calcDistance(p)));
+		return yyForce;
+	}
+
+	public double calcNetForceExertedByX(Planet[] allP){
+		double xxNetForce = 0;
+		for (int i = 0 ; i < allP.length ; i +=1){
+			if (allP[i].equals(this)){
+				continue;
+			xxNetForce = xxNetForce + this.calcForceExertedByX(allP[i]);
+			}
+
+		}
+		return xxNetForce;
+	}
+
+	public double calcNetForceExertedByY(Planet[] allP){
+		double yyNetForce = 0;
+		for (int i = 0 ; i < allP.length ; i +=1){
+			if (allP[i].equals(this)){
+				continue;
+			yyNetForce = yyNetForce + this.calcForceExertedByY(allP[i]);
+			}
+
+		}
+		return yyNetForce;
 	}
 
 	
