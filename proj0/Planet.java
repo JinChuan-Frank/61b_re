@@ -66,29 +66,33 @@ public class Planet{
 		return yyForce;
 	}
 
-	public double calcNetForceExertedByX(Planet[] allP){
+	public double calcNetForceExertedByX(Planet[] allp){
 		double xxNetForce = 0;
-		for (int i = 0 ; i < allP.length ; i +=1){
-			if (allP[i].equals(this)){
+		for (int i = 0 ; i < allp.length ; i +=1){
+			if (allp[i].equals(this)){
 				continue;
-			xxNetForce = xxNetForce + this.calcForceExertedByX(allP[i]);
 			}
-
+			xxNetForce = xxNetForce + this.calcForceExertedByX(allp[i]);
 		}
 		return xxNetForce;
 	}
 
-	public double calcNetForceExertedByY(Planet[] allP){
+	public double calcNetForceExertedByY(Planet[] allp){
 		double yyNetForce = 0;
-		for (int i = 0 ; i < allP.length ; i +=1){
-			if (allP[i].equals(this)){
+		for (int i = 0 ; i < allp.length ; i +=1){
+			if (allp[i].equals(this)){
 				continue;
-			yyNetForce = yyNetForce + this.calcForceExertedByY(allP[i]);
 			}
-
+			yyNetForce = yyNetForce + this.calcForceExertedByY(allp[i]);
 		}
 		return yyNetForce;
 	}
 
-	
+	public void update(double dt, double fX, double fY){
+		xxVel = xxVel + dt*( fX / mass);
+		yyVel = yyVel + dt*( fY / mass);
+		xxPos = xxPos + dt*xxVel;
+		yyPos = yyPos + dt*yyVel;
+	}
+
 }
