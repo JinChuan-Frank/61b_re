@@ -1,5 +1,5 @@
 
-public class TestNBody{
+public class NBody{
 	public static double readRadius (String fileName){
 		In in = new In(fileName);
 		int numberofPlanets = in.readInt();
@@ -35,7 +35,7 @@ public class TestNBody{
 		StdDraw.setScale(-r, r);
 		String backgroud = "images/starfield.jpg";
 		StdDraw.enableDoubleBuffering();
-    StdDraw.picture(0, 0, backgroud);
+    	StdDraw.picture(0, 0, backgroud);
 		for (Planet p : pArray){
 		p.draw();
 		}
@@ -58,9 +58,17 @@ public class TestNBody{
 			for (Planet p : pArray){
 				p.draw();
 			}
-				StdDraw.show();
+			StdDraw.show();
+			StdDraw.pause(10);
 			t1 = t1 + dt;
 
+		}
+		StdOut.printf("%d\n", pArray.length);
+		StdOut.printf("%.2e\n", r);
+		for (int i = 0; i < pArray.length; i++) {
+    	StdOut.printf("%11.4e %11.4e %11.4e %11.4e %11.4e %12s\n",
+                  pArray[i].xxPos, pArray[i].yyPos, pArray[i].xxVel,
+                  pArray[i].yyVel, pArray[i].mass, pArray[i].imgFileName);   
 		}
 	}
 }
