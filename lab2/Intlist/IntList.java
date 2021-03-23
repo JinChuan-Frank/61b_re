@@ -97,12 +97,16 @@ public class IntList {
      * * elements of B.  May NOT modify items of A.  Use 'new'.
      */
     public static IntList catenate(IntList A, IntList B) {
-        IntList A1 = A;
-        while ( A1.rest != null){
-            A1 = A1.rest;
+        IntList AB = new IntList(A.first,null);
+        IntList p = AB;
+        IntList L = A.rest;
+        while (L != null){
+            p.rest = new IntList(L.first,null);
+            L= L.rest;
+            p = p.rest;
         }
-        int lastIntInA = A1.first;
-        return new IntList(lastIntInA,B);
+        p.rest = B;
+        return AB;
 
     }
 
