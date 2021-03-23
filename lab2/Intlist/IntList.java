@@ -88,7 +88,7 @@ public class IntList {
         while ( A1.rest != null){
             A1 = A1.rest;
         }
-        A1.rest = B
+        A1.rest = B;
         return A;
     }
 
@@ -101,7 +101,7 @@ public class IntList {
         while ( A1.rest != null){
             A1 = A1.rest;
         }
-        Int lastIntInA = A1.first;
+        int lastIntInA = A1.first;
         return new IntList(lastIntInA,B);
 
     }
