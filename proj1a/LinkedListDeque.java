@@ -14,10 +14,16 @@ public class LinkedListDeque {
     private IntNode last;
     private int size;
 
-    public SLList(int x) {
+    public LinkedListDeque(int x) {
         first = new IntNode(x, null, null);
         last =  new IntNode(x, null, null);
         size = 1;
+    }
+
+    public LinkedListDeque(){
+        first = null;
+        last = null;
+        size = 0;
     }
 
     /** Adds an item to the front of the list. */
@@ -41,5 +47,7 @@ public class LinkedListDeque {
     public int size() {
         return size;
     }
+
+
 
 }
