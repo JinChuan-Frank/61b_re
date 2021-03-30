@@ -25,6 +25,8 @@ public class LinkedListDeque {
     public LinkedListDeque(){
         sentFront = new IntNode (10, null, null);
         sentBack = new IntNode (-10, null, null);
+        sentFront.next = sentBack;
+        sentBack.previous = sentFront;
         size = 0;
     }
 
@@ -43,7 +45,7 @@ public class LinkedListDeque {
         size += 1;
     }
 
-    /**Returns true if deque is empty, false otherwise.*/
+    /** Returns true if deque is empty, false otherwise.*/
     public boolean isEmpty(){
         if (size = 0) {
             return true;
@@ -57,7 +59,7 @@ public class LinkedListDeque {
         return size;
     }
 
-    /**Prints the items in the deque from first to last,
+    /** Prints the items in the deque from first to last,
      * separated by a space. */
     public void printDeque() {
         for (IntNode p = sentFront.next; p != sentBack; p = p.next) {
@@ -65,7 +67,7 @@ public class LinkedListDeque {
         }
     }
 
-    /**Removes and returns the item at the front of the deque.
+    /** Removes and returns the item at the front of the deque.
      * If no such item exists, returns null.*/
     public int removeFirst() {
         if (sentFront.next != sentBack) {
@@ -77,7 +79,7 @@ public class LinkedListDeque {
         }
     }
 
-    /**Removes and returns the item at the back of the deque.
+    /** Removes and returns the item at the back of the deque.
      *  If no such item exists, returns null.*/
     public T removeLast(){
         if (sentBack.previous != sentFront) {
@@ -89,13 +91,22 @@ public class LinkedListDeque {
         }
     }
 
-    /**Gets the item at the given index.
+    /** Gets the item at the given index.
      * where 0 is the front, 1 is the next item, and so forth.
      * If no such item exists, returns null. Must not alter the deque!*/
     public T get(int index) {
         int i = 0;
-        while (i < size)
-        for (IntNode p = sentFront.next; p != sentBack; p = p.next)
+        IntNode p = sentFront;
+        while (i < index) {
+        i += 1;
+        p = p.next;
+        }
+        return p.next.item;
+    }
+
+    /** Same as get, but uses recursion.*/
+    public T getRecursive(int index){
+
     }
 
 
