@@ -57,18 +57,45 @@ public class LinkedListDeque {
         return size;
     }
 
-    /**Prints the items in the deque from first to last, separated by a space. */
+    /**Prints the items in the deque from first to last,
+     * separated by a space. */
     public void printDeque() {
         for (IntNode p = sentFront.next; p != sentBack; p = p.next) {
             System.out.print(p.item + " ");
         }
     }
 
-
+    /**Removes and returns the item at the front of the deque.
+     * If no such item exists, returns null.*/
     public int removeFirst() {
-        sentFront.next = sentFront.next.next;
-        sentFront.next.previous = sentFront;
-        return sentFront.next.item;
+        if (sentFront.next != sentBack) {
+            sentFront.next = sentFront.next.next;
+            sentFront.next.previous = sentFront;
+            return sentFront.next.item;
+        }  else {
+            return null;
+        }
+    }
+
+    /**Removes and returns the item at the back of the deque.
+     *  If no such item exists, returns null.*/
+    public T removeLast(){
+        if (sentBack.previous != sentFront) {
+            sentBack.previous = sentBack.previous.previous;
+            sentBack.previous.next = sentBack;
+            return sentBack.previous.item;
+        } else {
+            return null;
+        }
+    }
+
+    /**Gets the item at the given index.
+     * where 0 is the front, 1 is the next item, and so forth.
+     * If no such item exists, returns null. Must not alter the deque!*/
+    public T get(int index) {
+        int i = 0;
+        while (i < size)
+        for (IntNode p = sentFront.next; p != sentBack; p = p.next)
     }
 
 
