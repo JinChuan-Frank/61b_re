@@ -54,7 +54,7 @@ public class LinkedListDeque <LochNess> {
         }
     }
 
-    /** Returns the number of items in the list using recursion. */
+    /** Returns the number of items in the list */
     public int size() {
         return size;
     }
