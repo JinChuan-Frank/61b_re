@@ -9,6 +9,7 @@ public class ArrayDeque {
         items = new int[8];
         size = 0;
         posNextFirst = items.length - 1;
+        posNextLast = 0;
     }
 
     /** Resize the array if the Alist is getting too large to hold. */
@@ -20,19 +21,22 @@ public class ArrayDeque {
 
     /** Adds an item to the front of the list. */
     public void addFirst(int x) {
-        if (size < items.length -1) {
-        items [posNextFirst] = x;
-        size += 1;
-        posNextFirst = items.length -1;
-        } else {
+        if (size == items.length) {
             resize(size * 2);
-
+            posNextFirst = items.length - 1;
         }
+        items [posNextFirst] = x;
+        posNextFirst = posNextFirst -1;
+        size += 1;
     }
 
     /** Adds an item to the end of the list. */
     public void addLast(int x) {
-        items[size] = x;
+        if (size == items.length) {
+            resize(size * 2);
+            posNextLast = items.length - 1;
+        }
+        items[posNextLast] = x;
         size += 1;
     }
 
@@ -54,7 +58,7 @@ public class ArrayDeque {
      * separated by a space. */
     public void printDeque() {
         for (int i = 0; i < size; i += 1) {
-            System.out.print(item[i] + " ");
+            System.out.print(items[i] + " ");
         }
     }
 
