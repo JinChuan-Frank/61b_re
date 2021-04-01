@@ -73,6 +73,7 @@ public class LinkedListDeque <LochNess> {
         if (sentFront.next != sentBack) {
             sentFront.next = sentFront.next.next;
             sentFront.next.previous = sentFront;
+            size -= 1;
             return sentFront.next.item;
         }  else {
             return null;
@@ -85,6 +86,7 @@ public class LinkedListDeque <LochNess> {
         if (sentBack.previous != sentFront) {
             sentBack.previous = sentBack.previous.previous;
             sentBack.previous.next = sentBack;
+            size -= 1;
             return sentBack.previous.item;
         } else {
             return null;
