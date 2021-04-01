@@ -1,5 +1,17 @@
 public class ArrayDeque {
-    public AList() {
+
+    int [] items;
+    int size;
+
+    public ArrayDeque() {
+        items = new int[8];
+        size = 0;
+    }
+
+    /** Adds an item to the front of the list. */
+    public void addFirst(int x) {
+        items [size] = x;
+        size += 1;
     }
 
     /** Inserts X into the back of the list. */
@@ -8,7 +20,7 @@ public class ArrayDeque {
 
     /** Returns the item from the back of the list. */
     public int getLast() {
-        return 0;
+        return items [size - 1];
     }
     /** Gets the ith item in the list (0 is the front). */
     public int get(int i) {
