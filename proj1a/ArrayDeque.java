@@ -1,22 +1,38 @@
 public class ArrayDeque {
 
     private int [] items;
-    private size;
+    private int size;
+    private int posNextFirst;
+    private int posNextLast;
 
     public ArrayDeque() {
         items = new int[8];
         size = 0;
+        posNextFirst = items.length - 1;
+    }
+
+    /** Resize the array if the Alist is getting too large to hold. */
+    private void resize(int capacity) {
+        int[] a = new int[capacity];
+        System.arraycopy(items, 0, a, 0, size);
+        items = a;
     }
 
     /** Adds an item to the front of the list. */
     public void addFirst(int x) {
-        items[size] = x;
+        if (size < items.length -1) {
+        items [posNextFirst] = x;
         size += 1;
+        posNextFirst = items.length -1;
+        } else {
+            resize(size * 2);
+
+        }
     }
 
     /** Adds an item to the end of the list. */
     public void addLast(int x) {
-        items[0] = x;
+        items[size] = x;
         size += 1;
     }
 
