@@ -84,6 +84,7 @@ public class LinkedListDeque <LochNess> {
      *  If no such item exists, returns null.*/
     public LochNess removeLast(){
         if (sentBack.previous != sentFront) {
+            StuffNode a = sentBack.previous;
             sentBack.previous = sentBack.previous.previous;
             sentBack.previous.next = sentBack;
             size -= 1;

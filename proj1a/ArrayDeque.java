@@ -57,7 +57,10 @@ public class ArrayDeque {
     /** Prints the items in the deque from first to last,
      * separated by a space. */
     public void printDeque() {
-        for (int i = 0; i < size; i += 1) {
+        for (int i = posNextFirst + 1; i <= items.length - 1; i += 1) {
+            System.out.print(items[i] + " ");
+        }
+        for (int i = 0; i < posNextLast - 1; i += 1) {
             System.out.print(items[i] + " ");
         }
     }
@@ -65,23 +68,29 @@ public class ArrayDeque {
     /** Removes and returns the item at the front of the deque.
      * If no such item exists, returns null.*/
     public int removeFirst() {
-
+        if (posNextFirst == items.length - 1) {
+            return null;
+        }
+        if (posNextFirst == items.length - 2) {
+            posNextFirst = posNextFirst + 1;
+            return null;
+        } else {
+            return items[posNextFirst + 1];
+        }
     }
 
-    /** Returns the item from the back of the list. */
-    public int getLast() {
-        int item = items[size - 1];
-        return item;
+    /** Removes and returns the item at the back of the deque.
+     *  If no such item exists, returns null.*/
+    public int removeLast() {
+        if (posNextLast <= 1) {
+        return 0;
     }
+
 
     /** Gets the ith item in the list (0 is the front). */
     public int get(int i) {
         return items[i];
     }
 
-    /** Deletes item from back of the list and
-     * returns deleted item. */
-    public int removeLast() {
-        return 0;
-    }
+
 }
