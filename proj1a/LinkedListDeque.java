@@ -71,10 +71,11 @@ public class LinkedListDeque <LochNess> {
      * If no such item exists, returns null.*/
     public LochNess removeFirst() {
         if (sentFront.next != sentBack) {
+            StuffNode a = sentFront.next;
             sentFront.next = sentFront.next.next;
             sentFront.next.previous = sentFront;
             size -= 1;
-            return sentFront.next.item;
+            return a.item;
         }  else {
             return null;
         }
@@ -88,7 +89,7 @@ public class LinkedListDeque <LochNess> {
             sentBack.previous = sentBack.previous.previous;
             sentBack.previous.next = sentBack;
             size -= 1;
-            return sentBack.previous.item;
+            return a.item;
         } else {
             return null;
         }
