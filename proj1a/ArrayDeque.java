@@ -19,6 +19,17 @@ public class ArrayDeque<T> {
         items = a;
     }
 
+    private int setPosNextFirst() {
+        if (posNextFirst >= posNextLast) {
+           posNextFirst = posNextFirst - 1;
+        } else {
+           posNextFirst = posNextFirst + 1;
+        }
+
+
+        }
+    }
+
     /** Adds an T to the front of the list. */
     public void addFirst(T x) {
         if (size == items.length) {
@@ -54,11 +65,8 @@ public class ArrayDeque<T> {
     /** Prints the items in the deque from first to last,
      * separated by a space. */
     public void printDeque() {
-        for (int i = posNextFirst + 1; i <= items.length - 1; i += 1) {
-            System.out.print(items[i] + " ");
-        }
-        for (int i = 0; i < posNextLast - 1; i += 1) {
-            System.out.print(items[i] + " ");
+        for (int i = 0; i < size; i += 1) {
+            System.out.print(items[getPos(i)] + " ");
         }
     }
 
@@ -69,7 +77,9 @@ public class ArrayDeque<T> {
             return null;
         } else {
             T a = items[posNextFirst + 1];
+            items[posNextFirst + 1] = null;
             posNextFirst = posNextFirst + 1;
+            if (posNextFirst == items.length - 1 &&
             size -= 1;
             return a;
 
