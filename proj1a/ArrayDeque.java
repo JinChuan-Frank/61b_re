@@ -19,16 +19,6 @@ public class ArrayDeque<T> {
         items = a;
     }
 
-    private int setPosNextFirst() {
-        if (posNextFirst >= posNextLast) {
-           posNextFirst = posNextFirst - 1;
-        } else {
-           posNextFirst = posNextFirst + 1;
-        }
-
-
-        }
-    }
 
     /** Adds an T to the front of the list. */
     public void addFirst(T x) {
@@ -37,7 +27,7 @@ public class ArrayDeque<T> {
             posNextFirst = items.length - 1;
         }
         items [posNextFirst] = x;
-        posNextFirst = posNextFirst - 1;
+        posNextFirst = firstForward(posNextFirst);
         size += 1;
     }
 
@@ -48,9 +38,29 @@ public class ArrayDeque<T> {
             posNextLast = items.length - 1;
         }
         items[posNextLast] = x;
-        posNextLast = posNextLast + 1;
+        posNextLast = lastForward(posNextLast);
         size += 1;
     }
+
+    /** Helper methods to relocate the first and last pointers. */
+    private int firstForward(int x) {
+        if (x == 0) {
+            x = items.length - 1;
+        } else {
+            x = x - 1;
+        }
+        return x;
+    }
+
+    private int lastForward(int x) {
+        if (x == items.length - 1) {
+            x = 0;
+        } else {
+            x = x + 1;
+        }
+        return x;
+    }
+
 
     /** Returns true if deque is empty, false otherwise.*/
     public boolean isEmpty() {
@@ -73,31 +83,46 @@ public class ArrayDeque<T> {
     /** Removes and returns the T at the front of the deque.
      * If no such T exists, returns null.*/
     public T removeFirst() {
-        if (posNextFirst == items.length - 1) {
+        if (size == 0) {
             return null;
-        } else {
-            T a = items[posNextFirst + 1];
-            items[posNextFirst + 1] = null;
-            posNextFirst = posNextFirst + 1;
-            if (posNextFirst == items.length - 1 &&
-            size -= 1;
-            return a;
-
         }
+        posNextFirst = firstBackward(posNextFirst);
+        T a = items[posNextFirst];
+        size -= 1;
+        return a;
     }
 
     /** Removes and returns the T at the back of the deque.
      *  If no such T exists, returns null.*/
     public T removeLast() {
-        if (posNextLast == 0) {
+        if (size == 0) {
             return null;
-        } else {
-            T a = items[posNextLast - 1];
-            posNextFirst = posNextFirst - 1;
-            return a;
         }
+        posNextLast = lastBackward(posNextLast);
+        T a = items[posNextLast];
+        items[posNextLast] = null;
+        size -= 1;
+        return a;
     }
 
+    /** Helper methods to relocate the first and last pointers. */
+    private int firstBackward(int x) {
+        if (x == items.length - 1) {
+            x = 0;
+        } else {
+            x = x + 1;
+        }
+        return x;
+    }
+
+    private int lastBackward(int x) {
+        if (x == 0) {
+            x = items.length - 1;
+        } else {
+            x = x - 1;
+        }
+        return x;
+    }
 
     /** Gets the ith T in the list (0 is the front). */
     public T get(int i) {

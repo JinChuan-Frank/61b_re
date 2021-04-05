@@ -5,7 +5,7 @@ public class TestAD {
             a.addFirst(i);
             a.addLast(i);
         }
-        for (int i = 0; i <= 7; i += 1) {
+        for (int i = 0; i <= 5; i += 1) {
             a.removeFirst();
         }
         a.printDeque();
