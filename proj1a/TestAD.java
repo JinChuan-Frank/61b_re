@@ -11,7 +11,7 @@ public class TestAD {
         a.printDeque();
     }
 
-    public static int getPosTest(){
+    public static int getPosTest() {
         ArrayDeque a = new ArrayDeque();
         for (int i = 0; i <= 3; i += 1) {
             a.addFirst(i);
@@ -19,7 +19,7 @@ public class TestAD {
         }
         return a.getPos(7);
     }
-    public static void main(String[] args){
+    public static void main(String[] args) {
         testAddFirstLastRemove();
         //System.out.print(getPosTest());
     }

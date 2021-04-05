@@ -3,7 +3,7 @@ public class LinkedListDeque<T> {
         private T item;
         private StuffNode previous;
         private StuffNode next;
-        public StuffNode(T i, StuffNode m, StuffNode n) {
+        StuffNode(T i, StuffNode m, StuffNode n) {
             item = i;
             previous = m;
             next = n;
@@ -14,13 +14,13 @@ public class LinkedListDeque<T> {
     private StuffNode sentBack;
     private int size;
 
-    public LinkedListDeque(T x) {
+    /**public LinkedListDeque(T x) {
         sentFront = new StuffNode(null, null, null);
         sentBack = new StuffNode(null, null, null);
         sentFront.next = new StuffNode(x, sentFront, sentBack);
         sentBack.previous = sentFront.next;
         size = 1;
-    }
+    } */
 
     public LinkedListDeque() {
         sentFront = new StuffNode(null, null, null);
@@ -94,7 +94,7 @@ public class LinkedListDeque<T> {
     /** Gets the item at the given index.
      * where 0 is the front, 1 is the next item, and so forth.
      * If no such item exists, returns null. Must not alter the deque!*/
-    public T get(int index) {
+    private T get(int index) {
         int i = 0;
         StuffNode p = sentFront;
         while (i < index) {
@@ -109,7 +109,7 @@ public class LinkedListDeque<T> {
         return getNode(index).item;
     }
 
-    public StuffNode getNode(int index) {
+    private StuffNode getNode(int index) {
         if (index == 0) {
             return sentFront.next;
         } else {

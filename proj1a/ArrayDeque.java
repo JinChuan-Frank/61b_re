@@ -100,7 +100,7 @@ public class ArrayDeque<T> {
         }
         posNextLast = lastBackward(posNextLast);
         T a = items[posNextLast];
-        items[posNextLast] = null;
+        //items[posNextLast] = null;
         size -= 1;
         return a;
     }
