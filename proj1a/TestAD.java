@@ -1,14 +1,13 @@
 public class TestAD {
     public  static  void testAddFirstLastRemove() {
         ArrayDeque a = new ArrayDeque();
-        for (int i = 0; i <= 7; i += 1) {
+        for (int i = 0; i <= 3; i += 1) {
             a.addFirst(i);
-            //a.addLast(i);
+            a.addLast(i);
         }
-
-        /**for (int i = 1; i <= 7; i += 1) {
-            a.removeLast();
-        } */
+        for (int i = 0; i <= 5; i += 1) {
+            a.removeFirst();
+        }
         a.printDeque();
     }
 
@@ -18,10 +17,10 @@ public class TestAD {
             a.addFirst(i);
             a.addLast(i);
         }
-        return a.getPos(6);
+        return a.getPos(7);
     }
     public static void main(String[] args) {
-        //testAddFirstLastRemove();
-        System.out.print(getPosTest());
+        testAddFirstLastRemove();
+        //System.out.print(getPosTest());
     }
 }

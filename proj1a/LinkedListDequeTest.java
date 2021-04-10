@@ -18,15 +18,15 @@ public class LinkedListDequeTest {
         return true;
     }
 
-	/* Prints a nice message based on whether a test passed.
-	 * The \n means newline. */
-	public static void printTestStatus(boolean passed) {
-		if (passed) {
-			System.out.println("Test passed!\n");
-		} else {
-			System.out.println("Test failed!\n");
-		}
-	}
+    /* Prints a nice message based on whether a test passed.
+     * The \n means newline. */
+    public static void printTestStatus(boolean passed) {
+        if (passed) {
+            System.out.println("Test passed!\n");
+        } else {
+            System.out.println("Test failed!\n");
+        }
+    }
 
     /** Adds a few things to the list, checking isEmpty() and size() are correct,
       * finally printing the results.

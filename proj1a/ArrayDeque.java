@@ -132,7 +132,7 @@ public class ArrayDeque<T> {
 
     /** Convert position in list into position in array. */
     public int getPos(int i) {
-        int startPos = firstBackward(posNextFirst);
+        int startPos = posNextFirst + 1;
         int arrPos = startPos + i;
         if (arrPos > items.length - 1) {
             arrPos = arrPos - items.length;
