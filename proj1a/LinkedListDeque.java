@@ -14,13 +14,13 @@ public class LinkedListDeque<T> {
     private StuffNode sentBack;
     private int size;
 
-    /**public LinkedListDeque(T x) {
+    private LinkedListDeque(T x) {
         sentFront = new StuffNode(null, null, null);
         sentBack = new StuffNode(null, null, null);
         sentFront.next = new StuffNode(x, sentFront, sentBack);
         sentBack.previous = sentFront.next;
         size = 1;
-    } */
+    }
 
     public LinkedListDeque() {
         sentFront = new StuffNode(null, null, null);
