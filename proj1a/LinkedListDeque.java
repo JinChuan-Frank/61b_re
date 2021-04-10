@@ -14,14 +14,6 @@ public class LinkedListDeque<T> {
     private StuffNode sentBack;
     private int size;
 
-    private LinkedListDeque(T x) {
-        sentFront = new StuffNode(null, null, null);
-        sentBack = new StuffNode(null, null, null);
-        sentFront.next = new StuffNode(x, sentFront, sentBack);
-        sentBack.previous = sentFront.next;
-        size = 1;
-    }
-
     public LinkedListDeque() {
         sentFront = new StuffNode(null, null, null);
         sentBack = new StuffNode(null, null, null);
@@ -94,7 +86,7 @@ public class LinkedListDeque<T> {
     /** Gets the item at the given index.
      * where 0 is the front, 1 is the next item, and so forth.
      * If no such item exists, returns null. Must not alter the deque!*/
-    private T get(int index) {
+    public T get(int index) {
         int i = 0;
         StuffNode p = sentFront;
         while (i < index) {
