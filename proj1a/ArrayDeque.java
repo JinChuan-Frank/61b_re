@@ -88,6 +88,7 @@ public class ArrayDeque<T> {
         }
         posNextFirst = firstBackward(posNextFirst);
         T a = items[posNextFirst];
+        items[posNextFirst] = null;
         size -= 1;
         return a;
     }
@@ -100,7 +101,7 @@ public class ArrayDeque<T> {
         }
         posNextLast = lastBackward(posNextLast);
         T a = items[posNextLast];
-        //items[posNextLast] = null;
+        items[posNextLast] = null;
         size -= 1;
         return a;
     }
@@ -131,7 +132,7 @@ public class ArrayDeque<T> {
     }
 
     /** Convert position in list into position in array. */
-    public int getPos(int i) {
+    private int getPos(int i) {
         int startPos = posNextFirst + 1;
         int arrPos = startPos + i;
         if (arrPos > items.length - 1) {
