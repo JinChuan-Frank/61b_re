@@ -1,19 +1,38 @@
 public class TestAD {
     public  static  void testAddFirstLastRemove() {
         ArrayDeque a = new ArrayDeque();
-        a.addLast(0);
-        a.addLast(3);
+        a.addFirst(0);
+        a.addLast(1);
+        a.addFirst(3);
+        a.addLast(7);
+        a.addLast(9);
+        a.addLast(11);
+        a.addLast(12);
+        a.addFirst(13);
+        a.addFirst(14);
+        a.addFirst(15);
+        /**
         a.removeLast();
-        a.addFirst(5);
-        a.addFirst(6);
         a.addFirst(7);
-        a.addLast(8);
+
         a.removeLast();
         a.addFirst(10);
-        a.removeFirst();
-        System.out.print(a.get(0));
+        a.removeFirst(); */
+        System.out.print(a.get(10));
 
     }
+
+    /**public  static  void testSort() {
+        ArrayDeque a = new ArrayDeque();
+        a.addFirst(0);
+        a.addLast(1);
+        a.addFirst(3);
+        a.addLast(7);
+        a.addLast(9);
+        for (int i = 0; i < a.items.length; i += 1) {
+            System.out.print(a.sortArray(a.items)[i]);
+        }
+    } */
 
     /**public static int getPosTest() {
         ArrayDeque a = new ArrayDeque();
@@ -27,5 +46,6 @@ public class TestAD {
     public static void main(String[] args) {
         testAddFirstLastRemove();
         //System.out.print(getPosTest());
+        //testSort();
     }
 }

@@ -1,6 +1,6 @@
 public class ArrayDeque<T> {
 
-    private T [] items;
+    public T [] items;
     private int size;
     private int posNextFirst;
     private int posNextLast;
@@ -15,8 +15,17 @@ public class ArrayDeque<T> {
     /** Resize the array if the Alist is getting too large to hold. */
     private void resize(int capacity) {
         T [] a = (T []) new Object[capacity];
-        System.arraycopy(items, 0, a, 0, size);
+        T [] itemsSorted = sortArray(items);
+        System.arraycopy(itemsSorted, 0, a, 0, size);
         items = a;
+    }
+
+    public T [] sortArray(T [] items) {
+        T [] a = (T []) new Object[items.length];
+        for (int i = 0; i < items.length; i += 1) {
+            System.arraycopy(items, getPos(i), a, i, 1);
+        }
+        return a;
     }
 
 
@@ -25,6 +34,7 @@ public class ArrayDeque<T> {
         if (size == items.length) {
             resize(size * 2);
             posNextFirst = items.length - 1;
+            posNextLast = size;
         }
         items [posNextFirst] = x;
         posNextFirst = firstForward(posNextFirst);
