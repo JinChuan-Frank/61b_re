@@ -11,7 +11,7 @@ public class TestAD {
         a.removeLast();
         a.addFirst(10);
         a.removeFirst();
-        a.get(0);
+        System.out.print(a.get(0));
 
     }
 

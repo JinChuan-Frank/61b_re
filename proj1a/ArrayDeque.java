@@ -127,8 +127,7 @@ public class ArrayDeque<T> {
 
     /** Gets the ith T in the list (0 is the front). */
     public T get(int i) {
-        getPos(i);
-        return items[i];
+        return items[getPos(i)];
     }
 
     /** Convert position in list into position in array. */
