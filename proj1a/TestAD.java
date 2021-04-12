@@ -11,6 +11,9 @@ public class TestAD {
         a.addFirst(13);
         a.addFirst(14);
         a.addFirst(15);
+        a.removeFirst();
+        a.addLast(20);
+        a.addLast(21);
         /**
         a.removeLast();
         a.addFirst(7);
@@ -18,7 +21,8 @@ public class TestAD {
         a.removeLast();
         a.addFirst(10);
         a.removeFirst(); */
-        System.out.print(a.get(10));
+        a.printDeque();
+        //System.out.print(a.get(9));
 
     }
 

@@ -46,6 +46,7 @@ public class ArrayDeque<T> {
         if (size == items.length) {
             resize(size * 2);
             posNextLast = items.length - 1;
+            posNextLast = size;
         }
         items[posNextLast] = x;
         posNextLast = lastForward(posNextLast);
