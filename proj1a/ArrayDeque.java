@@ -1,6 +1,6 @@
 public class ArrayDeque<T> {
 
-    public T [] items;
+    private T [] items;
     private int size;
     private int posNextFirst;
     private int posNextLast;
@@ -20,7 +20,7 @@ public class ArrayDeque<T> {
         items = a;
     }
 
-    public T [] sortArray(T [] items) {
+    private T [] sortArray(T [] items) {
         T [] a = (T []) new Object[items.length];
         for (int i = 0; i < items.length; i += 1) {
             System.arraycopy(items, getPos(i), a, i, 1);
