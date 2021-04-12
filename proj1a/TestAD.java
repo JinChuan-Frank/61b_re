@@ -1,28 +1,14 @@
 public class TestAD {
     public  static  void testAddFirstLastRemove() {
         ArrayDeque a = new ArrayDeque();
-        a.addFirst(0);
-        a.addLast(1);
-        a.addFirst(3);
-        a.addLast(7);
-        a.addLast(9);
-        a.addLast(11);
-        a.addLast(12);
-        a.addFirst(13);
-        a.addFirst(14);
-        a.addFirst(15);
-        a.removeFirst();
-        a.addLast(20);
-        a.addLast(21);
-        /**
-        a.removeLast();
-        a.addFirst(7);
+        for (int i = 0; i < 20; i += 1){
+            a.addLast(i);
+        }
+        a.addFirst(100);
+        a.addFirst(101);
 
-        a.removeLast();
-        a.addFirst(10);
-        a.removeFirst(); */
         a.printDeque();
-        //System.out.print(a.get(9));
+        System.out.println("get" + a.get(21));
 
     }
 
