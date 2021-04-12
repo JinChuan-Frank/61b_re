@@ -1,11 +1,15 @@
 public class TestAD {
     public  static  void testAddFirstLastRemove() {
         ArrayDeque a = new ArrayDeque();
-        for (int i = 0; i < 20; i += 1){
+        for (int i = 0; i < 100; i += 1) {
             a.addLast(i);
         }
         a.addFirst(100);
-        a.addFirst(101);
+        a.removeFirst();
+        for (int j = 0; j < 80; j += 1) {
+            a.removeFirst();
+        }
+
 
         a.printDeque();
         System.out.println("get" + a.get(21));

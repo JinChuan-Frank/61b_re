@@ -4,12 +4,14 @@ public class ArrayDeque<T> {
     private int size;
     private int posNextFirst;
     private int posNextLast;
+    private double usageFactor;
 
     public ArrayDeque() {
         items = (T[])  new Object[8];
         size = 0;
         posNextFirst = items.length - 1;
         posNextLast = 0;
+        usageFactor = (double) size / items.length;
     }
 
     /** Resize the array if the Alist is getting too large to hold. */
@@ -20,10 +22,10 @@ public class ArrayDeque<T> {
         items = a;
     }
 
-    private T [] sortArray(T [] items) {
-        T [] a = (T []) new Object[items.length];
-        for (int i = 0; i < items.length; i += 1) {
-            System.arraycopy(items, getPos(i), a, i, 1);
+    private T [] sortArray(T [] x) {
+        T [] a = (T []) new Object[x.length];
+        for (int i = 0; i < x.length; i += 1) {
+            System.arraycopy(x, getPos(i), a, i, 1);
         }
         return a;
     }
@@ -101,6 +103,11 @@ public class ArrayDeque<T> {
         T a = items[posNextFirst];
         items[posNextFirst] = null;
         size -= 1;
+        if (usageFactor < 0.25) {
+            resize(size * 2);
+            posNextFirst = items.length - 1;
+            posNextLast = size;
+        }
         return a;
     }
 
@@ -114,6 +121,11 @@ public class ArrayDeque<T> {
         T a = items[posNextLast];
         items[posNextLast] = null;
         size -= 1;
+        if (usageFactor < 0.25) {
+            resize(size * 2);
+            posNextFirst = items.length - 1;
+            posNextLast = size;
+        }
         return a;
     }
 
