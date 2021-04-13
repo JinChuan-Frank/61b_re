@@ -1,17 +1,17 @@
 public class ArrayDeque<T> {
 
-    private T [] items;
-    private int size;
+    public T [] items;
+    public int size;
     private int posNextFirst;
     private int posNextLast;
-    private double usageFactor;
+    public double usageFactor;
 
     public ArrayDeque() {
         items = (T[])  new Object[8];
         size = 0;
         posNextFirst = items.length - 1;
         posNextLast = 0;
-        usageFactor = (double) size / items.length;
+        usageFactor = ((double) size) / items.length;
     }
 
     /** Resize the array if the Alist is getting too large to hold. */
@@ -20,11 +20,13 @@ public class ArrayDeque<T> {
         T [] itemsSorted = sortArray(items);
         System.arraycopy(itemsSorted, 0, a, 0, size);
         items = a;
+        posNextFirst = items.length - 1;
+        posNextLast = size;
     }
 
     private T [] sortArray(T [] x) {
-        T [] a = (T []) new Object[x.length];
-        for (int i = 0; i < x.length; i += 1) {
+        T [] a = (T []) new Object[size];
+        for (int i = 0; i < size; i += 1) {
             System.arraycopy(x, getPos(i), a, i, 1);
         }
         return a;
@@ -35,8 +37,6 @@ public class ArrayDeque<T> {
     public void addFirst(T x) {
         if (size == items.length) {
             resize(size * 2);
-            posNextFirst = items.length - 1;
-            posNextLast = size;
         }
         items [posNextFirst] = x;
         posNextFirst = firstForward(posNextFirst);
@@ -47,8 +47,6 @@ public class ArrayDeque<T> {
     public void addLast(T x) {
         if (size == items.length) {
             resize(size * 2);
-            posNextFirst = items.length - 1;
-            posNextLast = size;
         }
         items[posNextLast] = x;
         posNextLast = lastForward(posNextLast);
@@ -103,10 +101,8 @@ public class ArrayDeque<T> {
         T a = items[posNextFirst];
         items[posNextFirst] = null;
         size -= 1;
-        if (usageFactor < 0.25) {
-            resize(size * 2);
-            posNextFirst = items.length - 1;
-            posNextLast = size;
+        if (items.length >= 16 && usageFactor < 0.25) {
+            resize(items.length / 2);
         }
         return a;
     }
@@ -119,12 +115,10 @@ public class ArrayDeque<T> {
         }
         posNextLast = lastBackward(posNextLast);
         T a = items[posNextLast];
-        items[posNextLast] = null;
+        //items[posNextLast] = null;
         size -= 1;
-        if (usageFactor < 0.25) {
-            resize(size * 2);
-            posNextFirst = items.length - 1;
-            posNextLast = size;
+        if (items.length >= 16 && usageFactor < 0.25) {
+            resize(items.length / 2);
         }
         return a;
     }
