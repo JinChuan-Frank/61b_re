@@ -34,6 +34,25 @@ public class IntList {
     }
 
     /**
+     * Reverse all the elements in the list.
+     */
+    public static IntList reverse(IntList A) {
+        if (A == null || A.rest == null) {
+            return A;
+        }
+        IntList ptr = A.rest;
+        A.rest = null;
+        ptr.rest = A;
+        while (ptr.rest != null) {
+
+            IntList temp = ptr;
+            ptr = ptr.rest;
+            ptr.rest = temp;
+        }
+        return  ptr;
+    }
+
+    /**
      * Returns a list equal to L with all elements squared. Destructive.
      */
     public static void dSquareList(IntList L) {
