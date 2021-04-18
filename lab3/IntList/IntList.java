@@ -11,11 +11,11 @@ public class IntList {
     /**
      * First element of list.
      */
-    public int first;
+    private int first;
     /**
      * Remaining elements of list.
      */
-    public IntList rest;
+    private IntList rest;
 
     /**
      * A List with first FIRST0 and rest REST0.
@@ -42,14 +42,16 @@ public class IntList {
         }
         IntList ptr = A.rest;
         A.rest = null;
-        ptr.rest = A;
-        while (ptr.rest != null) {
-
-            IntList temp = ptr;
+        IntList newList = ptr;
+        ptr = ptr.rest;
+        newList.rest = A;
+        while (ptr != null) {
+            IntList temp = newList;
+            newList = ptr;
             ptr = ptr.rest;
-            ptr.rest = temp;
+            newList.rest = temp;
         }
-        return  ptr;
+        return  newList;
     }
 
     /**
@@ -104,7 +106,7 @@ public class IntList {
             return B;
         }
         IntList A1 = A;
-        while ( A1.rest != null){
+        while (A1.rest != null) {
             A1 = A1.rest;
         }
         A1.rest = B;
@@ -116,7 +118,7 @@ public class IntList {
      * * elements of B.  May NOT modify items of A.  Use 'new'.
      */
     public static IntList catenate(IntList A, IntList B) {
-        if ( A == null) {
+        if (A == null) {
             return B;
         }
         IntList cateAB = new IntList(A.first, null);

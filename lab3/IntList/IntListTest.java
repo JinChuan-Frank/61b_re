@@ -1,4 +1,5 @@
 import static org.junit.Assert.*;
+import static org.junit.Assert.assertNotEquals;
 
 import org.junit.Test;
 
@@ -70,11 +71,9 @@ public class IntListTest {
     @Test(timeout = 1000)
     public void testReverse() {
         IntList l1 = IntList.of(1,2,3,4);
-        IntList l1Copy = l1;
-        IntList l1Reversed = IntList.of(4,3,2,1);
-        assertEquals(l1Reversed,IntList.reverse(l1));
-        assertNotEquals(l1,l1Copy);
-        IntList l2 = new IntList();
+        assertEquals(IntList.of(4,3,2,1),IntList.reverse(l1));
+        assertNotEquals(l1,IntList.of(1,2,3,4));
+        IntList l2 = null;
         assertEquals(null,IntList.reverse(l2));
     }
 
