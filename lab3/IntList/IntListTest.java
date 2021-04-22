@@ -1,4 +1,5 @@
 import static org.junit.Assert.*;
+import static org.junit.Assert.assertNotEquals;
 
 import org.junit.Test;
 
@@ -9,6 +10,7 @@ public class IntListTest {
      * method. The main point of this is to convince you that
      * assertEquals knows how to handle IntLists just fine.
      */
+
 
     @Test
     public void testList() {
@@ -64,6 +66,15 @@ public class IntListTest {
         IntList exp = IntList.of(1, 2, 3, 4, 5, 6);
         assertEquals(exp, IntList.catenate(A, B));
         assertEquals(IntList.of(1, 2, 3), A);
+    }
+
+    @Test(timeout = 1000)
+    public void testReverse() {
+        IntList l1 = IntList.of(1, 2, 3, 4);
+        assertEquals(IntList.of(4, 3, 2, 1), IntList.reverse(l1));
+        assertNotEquals(l1, IntList.of(1, 2, 3, 4));
+        IntList l2 = null;
+        assertEquals(null, IntList.reverse(l2));
     }
 
     /** If you're running this from the command line, you'll need

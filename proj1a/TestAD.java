@@ -5,17 +5,13 @@ public class TestAD {
             a.addLast(i);
         }
         a.addFirst(100);
-        /**a.removeFirst();
+        a.removeFirst();
+        a.removeFirst();
         for (int j = 1; j < 80; j += 1) {
             a.removeFirst();
-        } */
+        }
 
-
-        //a.printDeque();
-        System.out.println("size/length:" + " " + a.size+ "/" + a.items.length);
-        System.out.println("usage:" + " " + a.usageFactor);
-        //System.out.println("rm" + " " + a.removeLast());
-
+        a.printDeque();
     }
 
     /**public  static  void testSort() {
