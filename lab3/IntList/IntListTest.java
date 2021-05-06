@@ -77,6 +77,17 @@ public class IntListTest {
         assertEquals(null, IntList.reverse(l2));
     }
 
+
+    public static void testSkip() {
+        IntList A = IntList.of(1, 2, 3, 4, 5, 6, 7, 8, 9, 10);
+        A.skippify();
+        System.out.println(A);
+    }
+
+    public static void main(String [] args) {
+        testSkip();
+    }
+
     /** If you're running this from the command line, you'll need
       * to add a main method. See ArithmeticTest.java for an
       * example. */
