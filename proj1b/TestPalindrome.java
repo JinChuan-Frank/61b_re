@@ -17,17 +17,16 @@ public class TestPalindrome {
     } /*Uncomment this class once you've created your Palindrome class. */
 
     //@Test
-    public void testIsPalindrome() {
+    /**public void testIsPalindrome() {
         String a = "a";
         String b = "racecar";
-        boolean x = palindrome.isPalindrome(a);
         String c = "";
         String d = "horse";
         String e = "rancor";
-        /**assertTrue(palindrome.isPalindrome(a));
+        assertTrue(palindrome.isPalindrome(a));
         assertTrue(palindrome.isPalindrome(b));
-        assertTrue(palindrome.isPalindrome(c));
+         assertTrue(palindrome.isPalindrome(c));
         assertFalse(palindrome.isPalindrome(d));
-        assertFalse(palindrome.isPalindrome(e));*/
-    }
+        assertFalse(palindrome.isPalindrome(e));
+    }*/
 }
