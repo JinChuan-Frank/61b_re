@@ -1,4 +1,4 @@
-public class ArrayDeque<T> {
+public class ArrayDeque<T> implements Deque<T> {
 
     private T [] items;
     private int size;
@@ -32,7 +32,7 @@ public class ArrayDeque<T> {
 
 
     /** Adds an T to the front of the list. */
-
+    @Override
     public void addFirst(T x) {
         if (size == items.length) {
             resize(size * 2);
@@ -43,6 +43,7 @@ public class ArrayDeque<T> {
     }
 
     /** Adds an T to the end of the list. */
+    @Override
     public void addLast(T x) {
         if (size == items.length) {
             resize(size * 2);
@@ -73,17 +74,20 @@ public class ArrayDeque<T> {
 
 
     /** Returns true if deque is empty, false otherwise.*/
+    @Override
     public boolean isEmpty() {
         return size == 0;
     }
 
     /** Returns the number of items in the list. */
+    @Override
     public int size() {
         return size;
     }
 
     /** Prints the items in the deque from first to last,
      * separated by a space. */
+    @Override
     public void printDeque() {
         for (int i = 0; i < size; i += 1) {
             System.out.print(items[getPos(i)] + " ");
@@ -92,6 +96,7 @@ public class ArrayDeque<T> {
 
     /** Removes and returns the T at the front of the deque.
      * If no such T exists, returns null.*/
+    @Override
     public T removeFirst() {
         if (size == 0) {
             return null;
@@ -109,6 +114,7 @@ public class ArrayDeque<T> {
 
     /** Removes and returns the T at the back of the deque.
      *  If no such T exists, returns null.*/
+    @Override
     public T removeLast() {
         if (size == 0) {
             return null;
@@ -144,6 +150,7 @@ public class ArrayDeque<T> {
     }
 
     /** Gets the ith T in the list (0 is the front). */
+    @Override
     public T get(int i) {
         return items[getPos(i)];
     }
