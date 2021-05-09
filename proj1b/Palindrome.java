@@ -12,10 +12,10 @@ public class Palindrome {
         Palindrome p = new Palindrome();
         Deque<Character> originalWordArray = p.wordToDeque(word);
         String reversedWord = "";
-        for (int i = 0; i < d.size(); i += 1) {
-            reversedWord += d.removeLast();
+        for (int i = 0; i < word.length(); i += 1) {
+            reversedWord += originalWordArray.removeLast();
         }
-        System.out.print(reversedWord + " ");
+        System.out.println(" reversed :" + reversedWord);
         if (reversedWord.equals(word) || word.length() == 0) {
             return true;
         } else {
@@ -23,8 +23,8 @@ public class Palindrome {
         }
     }
 
-    private String reverse(Deque<Character> d) {
+    public boolean isPalindrome() {
 
-        return reversedWord;
     }
+
 }
