@@ -23,8 +23,8 @@ public class Palindrome {
         }
     }
 
-    public boolean isPalindrome(String word, CharacterComparator cc) {
-
+    public boolean isPalindrome() {
+        return true;
     }
 
 }
