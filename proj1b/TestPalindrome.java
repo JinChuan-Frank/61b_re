@@ -25,8 +25,13 @@ public class TestPalindrome {
         String e = "rancor";
         assertTrue(palindrome.isPalindrome(a));
         assertTrue(palindrome.isPalindrome(b));
-         assertTrue(palindrome.isPalindrome(c));
+        assertTrue(palindrome.isPalindrome(c));
         assertFalse(palindrome.isPalindrome(d));
         assertFalse(palindrome.isPalindrome(e));
+    }
+
+    @Test
+    public void  testIsOffByOnePalindrome() {
+        String a = "flake";
     }
 }

@@ -15,7 +15,7 @@ public class Palindrome {
         for (int i = 0; i < word.length(); i += 1) {
             reversedWord += originalWordArray.removeLast();
         }
-        System.out.println(" reversed :" + reversedWord);
+        //System.out.println(" reversed :" + reversedWord);
         if (reversedWord.equals(word) || word.length() == 0) {
             return true;
         } else {
@@ -23,7 +23,7 @@ public class Palindrome {
         }
     }
 
-    public boolean isPalindrome() {
+    public boolean isPalindrome(String word, CharacterComparator cc) {
         return true;
     }
 
