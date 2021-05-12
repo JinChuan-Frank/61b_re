@@ -10,6 +10,6 @@ public class TestOffByN {
         char b = 'f';
         char c = 'h';
         assertTrue(offByFive.equalChars(a, b));
-        assertFalse(offByFive.equalChars(a,c));
+        assertFalse(offByFive.equalChars(a, c));
     }
 }

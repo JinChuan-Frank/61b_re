@@ -36,8 +36,8 @@ public class TestPalindrome {
         String b = "cake";
         String c = "acdb";
         OffByOne obo = new OffByOne();
-        assertTrue(palindrome.isPalindrome(a,obo));
-        assertTrue(palindrome.isPalindrome(c,obo));
-        assertFalse(palindrome.isPalindrome(b,obo));
+        assertTrue(palindrome.isPalindrome(a, obo));
+        assertTrue(palindrome.isPalindrome(c, obo));
+        assertFalse(palindrome.isPalindrome(b, obo));
     }
 }
