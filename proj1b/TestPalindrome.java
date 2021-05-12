@@ -33,5 +33,11 @@ public class TestPalindrome {
     @Test
     public void  testIsOffByOnePalindrome() {
         String a = "flake";
+        String b = "cake";
+        String c = "acdb";
+        OffByOne obo = new OffByOne();
+        assertTrue(palindrome.isPalindrome(a,obo));
+        assertTrue(palindrome.isPalindrome(c,obo));
+        assertFalse(palindrome.isPalindrome(b,obo));
     }
 }

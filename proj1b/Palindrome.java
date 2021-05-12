@@ -24,6 +24,26 @@ public class Palindrome {
     }
 
     public boolean isPalindrome(String word, CharacterComparator cc) {
+        Palindrome p = new Palindrome();
+        Deque<Character> d = p.wordToDeque(word);
+        int length = word.length();
+        if (length % 2 == 0) {
+            for (int i = 0; i < length / 2; i += 1) {
+                if (cc.equalChars(d.get(i),d.get(length - 1 - i)) == true) {
+                    continue;
+                } else {
+                    return false;
+                }
+            }
+        } else  {
+            for (int i = 0; i < ( length - 1 ) / 2; i += 1) {
+                if (cc.equalChars(d.get(i),d.get(length - 1 - i)) == true) {
+                    continue;
+                } else {
+                    return false;
+                }
+            }
+        }
         return true;
     }
 
