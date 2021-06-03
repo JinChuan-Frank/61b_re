@@ -15,15 +15,31 @@ public class Palindrome {
         for (int i = 0; i < word.length(); i += 1) {
             reversedWord += originalWordArray.removeLast();
         }
-        System.out.println(" reversed :" + reversedWord);
-        if (reversedWord.equals(word) || word.length() == 0) {
-            return true;
-        } else {
-            return false;
-        }
+        //System.out.println(" reversed :" + reversedWord);
+        return reversedWord.equals(word) || word.length() == 0;
     }
 
-    public boolean isPalindrome() {
+    public boolean isPalindrome(String word, CharacterComparator cc) {
+        Palindrome p = new Palindrome();
+        Deque<Character> d = p.wordToDeque(word);
+        int length = word.length();
+        if (length % 2 == 0) {
+            for (int i = 0; i < length / 2; i += 1) {
+                if (cc.equalChars(d.get(i), d.get(length - 1 - i))) {
+                    continue;
+                } else {
+                    return false;
+                }
+            }
+        } else  {
+            for (int i = 0; i < (length - 1) / 2; i += 1) {
+                if (cc.equalChars(d.get(i), d.get(length - 1 - i))) {
+                    continue;
+                } else {
+                    return false;
+                }
+            }
+        }
         return true;
     }
 
