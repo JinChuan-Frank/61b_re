@@ -1,6 +1,4 @@
 package byog.lab5;
-import org.junit.Test;
-import static org.junit.Assert.*;
 
 import byog.TileEngine.TERenderer;
 import byog.TileEngine.TETile;
@@ -26,16 +24,18 @@ public class HexWorld {
      * @return
      */
     public static int hexRowWidth(int s, int i) {
-        int rowwidth = s;
-        if ( i <= s) {
-            rowwidth = s + i * 2;
+        int rowWidth = s;
+        if ( i < s) {
+            rowWidth = s + i * 2;
         } else if (i == s) {
-            rowwidth = s + (i - 1) *2;
+            rowWidth = 3 * s - 2;
         } else {
-            rowwidth = ;
+            rowWidth = 3 * s - 2 - 2 * (i - s);
         }
-        return rowwidth;
+        return rowWidth;
     }
+
+
 
     public static void main(String[] args) {
         TERenderer ter = new TERenderer();
