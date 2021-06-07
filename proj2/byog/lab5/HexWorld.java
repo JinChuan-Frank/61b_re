@@ -24,7 +24,7 @@ public class HexWorld {
      * @return
      */
     public static int hexRowWidth(int s, int i) {
-        int rowWidth = s;
+        int rowWidth;
         if ( i < s) {
             rowWidth = s + i * 2;
         } else if (i == s) {
@@ -33,6 +33,21 @@ public class HexWorld {
             rowWidth = 3 * s - 2 - 2 * (i - s);
         }
         return rowWidth;
+    }
+
+    /**
+     * Computes the XOffset of a certain row relative to the leftmost point.
+     * @param i The row number where 0 is the bottom row.
+     * @param s The size of the hex.
+     */
+    public static int getXOffset(int s, int i) {
+        int xOffset = 0;
+        if (i == s || i == s - 1) {
+            xOffset = 0;
+        } else if (i < s - 1) {
+
+        }
+        return xOffset;
     }
 
 
