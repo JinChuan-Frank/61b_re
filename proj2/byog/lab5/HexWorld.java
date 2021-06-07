@@ -27,8 +27,12 @@ public class HexWorld {
      */
     public static int hexRowWidth(int s, int i) {
         int rowwidth = s;
-        if ( i < s) {
-
+        if ( i <= s) {
+            rowwidth = s + i * 2;
+        } else if (i == s) {
+            rowwidth = s + (i - 1) *2;
+        } else {
+            rowwidth = ;
         }
         return rowwidth;
     }
