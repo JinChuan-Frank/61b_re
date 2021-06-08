@@ -16,4 +16,14 @@ public class TestHexWorld {
         assertEquals(4,HexWorld.hexRowWidth(4,7));
         assertEquals(11,HexWorld.hexRowWidth(5,6));
     }
+
+    @Test
+    public void testGetXOffset() {
+        assertEquals(0, HexWorld.getXOffset(2,0));
+        assertEquals(-1, HexWorld.getXOffset(2,1));
+        assertEquals(-1, HexWorld.getXOffset(2,2));
+        assertEquals(0, HexWorld.getXOffset(2,3));
+        assertEquals(-2,HexWorld.getXOffset(3,3));
+        assertEquals(-3,HexWorld.getXOffset(5,6));
+    }
 }

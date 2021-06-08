@@ -13,7 +13,9 @@ public class HexWorld {
     private static final int WIDTH = 50;
     private static final int HEIGHT = 50;
 
-    public static void addHexgagon() {
+    public static void addHexagon(int s, int[][] p, TETile[][] tiles) {
+        TERenderer ter = new TERenderer();
+        ter.initialize(WIDTH, HEIGHT);
 
     }
 
@@ -42,19 +44,21 @@ public class HexWorld {
      */
     public static int getXOffset(int s, int i) {
         int xOffset = 0;
-        if (i == s || i == s - 1) {
-            xOffset = 0;
-        } else if (i < s - 1) {
-
+        if (i <= s - 1) {
+            xOffset = - i;
+        } else if (i == s) {
+            xOffset = - (i - 1);
+        } else {
+            xOffset = - (2 * s -1 - i);
         }
         return xOffset;
     }
 
 
 
-    public static void main(String[] args) {
+    /**public static void main(String[] args) {
         TERenderer ter = new TERenderer();
         ter.initialize(WIDTH, HEIGHT);
-    }
+    } */
 
 }
