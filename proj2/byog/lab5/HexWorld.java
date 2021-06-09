@@ -13,14 +13,14 @@ public class HexWorld {
     private static final int WIDTH = 50;
     private static final int HEIGHT = 50;
 
-    public void addHexagon(int size, int[][] p, TETile[][] tiles) {
+    public void addHexagon(int size, int px, int py, TETile[][] tiles) {
         for (int x = 0; x < WIDTH; x += 1) {
             for (int y = 0; y < HEIGHT; y += 1) {
                 tiles[x][y] = Tileset.NOTHING;
             }
         }
         int w = HexWorld.hexRowWidth(size, 0)
-        for (int x = p[0][0]; x < w; x++) {
+        for (int x = px; x < w; x++) {
             for (int j = 0, )
             tiles[][]
         }
