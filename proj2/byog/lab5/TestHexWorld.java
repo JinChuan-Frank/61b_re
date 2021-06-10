@@ -1,9 +1,15 @@
 package byog.lab5;
+import byog.TileEngine.TERenderer;
+import byog.TileEngine.TETile;
+import byog.TileEngine.Tileset;
 import org.junit.Test;
 import static org.junit.Assert.*;
 
 public class TestHexWorld {
-    @Test
+    private static final int WIDTH = 50;
+    private static final int HEIGHT = 50;
+
+    /**@Test
     public void testHexRwoWidth() {
         assertEquals(2,HexWorld.hexRowWidth(2,0));
         assertEquals(4,HexWorld.hexRowWidth(2,1));
@@ -25,5 +31,20 @@ public class TestHexWorld {
         assertEquals(0, HexWorld.getXOffset(2,3));
         assertEquals(-2,HexWorld.getXOffset(3,3));
         assertEquals(-3,HexWorld.getXOffset(5,6));
+    }*/
+
+    public static void main(String[] args) {
+        //TETile[][] world = new TETile[WIDTH][HEIGHT];
+        TERenderer ter = new TERenderer();
+        ter.initialize(WIDTH, HEIGHT);
+        TETile[][] world = new TETile[WIDTH][HEIGHT];
+        /**for (int x = 0; x < WIDTH; x += 1) {
+            for (int y = 0; y < HEIGHT; y += 1) {
+                world[x][y] = Tileset.NOTHING;
+            }
+        }*/
+        HexWorld w = new HexWorld();
+        w.addHexagon(2,15,15,world);
+        ter.renderFrame(world);
     }
 }

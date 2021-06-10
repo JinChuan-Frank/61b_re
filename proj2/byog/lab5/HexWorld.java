@@ -16,13 +16,13 @@ public class HexWorld {
     public void addHexagon(int size, int px, int py, TETile[][] tiles) {
         for (int x = 0; x < WIDTH; x += 1) {
             for (int y = 0; y < HEIGHT; y += 1) {
-                tiles[x][y] = Tileset.NOTHING;
+                tiles[x][y] = Tileset.FLOWER;
             }
         }
-        int w = HexWorld.hexRowWidth(size, 0)
-        for (int x = px; x < w; x++) {
-            for (int j = 0, )
-            tiles[][]
+        for (int y = py; y < py + size * 2; y++){
+            for (int x = px; x < px + HexWorld.hexRowWidth(size, y); x++) {
+                tiles[y][x] = Tileset.WALL;
+            }
         }
     }
 
@@ -63,14 +63,6 @@ public class HexWorld {
 
 
 
-    public static void main(String[] args) {
-        //TETile[][] world = new TETile[WIDTH][HEIGHT];
-        TERenderer ter = new TERenderer();
-        ter.initialize(WIDTH, HEIGHT);
-        TETile[][] world = new TETile[WIDTH][HEIGHT];
 
-        world[20][15] = Tileset.FLOWER;
-        ter.renderFrame(world);
-    }
 
 }
