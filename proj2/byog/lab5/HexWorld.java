@@ -19,10 +19,11 @@ public class HexWorld {
                 tiles[x][y] = Tileset.FLOWER;
             }
         }
-        for (int y = py; y < py + size * 2; y++){
-            for (int x = px; x < px + HexWorld.hexRowWidth(size, y); x++) {
-                tiles[y][x] = Tileset.WALL;
-            }
+
+        for (int y = py; y < py + size * 2; y++) {
+            for (int x = px + HexWorld.getXOffset(size, 0); x < px + HexWorld.hexRowWidth(size, 0); x++ )
+                tiles[x][y] = Tileset.WALL;
+
         }
     }
 
