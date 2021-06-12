@@ -21,7 +21,9 @@ public class HexWorld {
         }
 
         for (int y = py; y < py + size * 2; y++) {
-            for (int x = px + HexWorld.getXOffset(size, 0); x < px + HexWorld.hexRowWidth(size, 0); x++ )
+            for (int x = px + HexWorld.getXOffset(size, y - py);
+                 x < px + HexWorld.getXOffset(size, y - py)
+                         + HexWorld.hexRowWidth(size, y - py); x++ )
                 tiles[x][y] = Tileset.WALL;
 
         }

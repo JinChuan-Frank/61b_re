@@ -39,7 +39,7 @@ public class TestHexWorld {
         ter.initialize(WIDTH, HEIGHT);
         TETile[][] world = new TETile[WIDTH][HEIGHT];
         HexWorld w = new HexWorld();
-        w.addHexagon(2,15,15,world);
+        w.addHexagon(6,15,15,world);
         ter.renderFrame(world);
     }
 }
