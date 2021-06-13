@@ -34,6 +34,13 @@ public class TestHexWorld {
         assertEquals(0, HexWorld.getXOffset(2,3));
         assertEquals(-2,HexWorld.getXOffset(3,3));
         assertEquals(-3,HexWorld.getXOffset(5,6));
+    }
+
+    @Test
+    public void testVolumnNumber() {
+        assertEquals(3,HexWorld.getColumnNumber(0));
+        assertEquals(4,HexWorld.getColumnNumber(1));
+        assertEquals(5,HexWorld.getColumnNumber(2));
     }*/
 
     public static void main(String[] args) {
@@ -42,7 +49,7 @@ public class TestHexWorld {
         ter.initialize(WIDTH, HEIGHT);
         TETile[][] world = new TETile[WIDTH][HEIGHT];
         HexWorld w = new HexWorld();
-        int [] p = new int[]{15,15};
+        int [][] p = w.tesselateHex();
         w.addHexagon(5,p,world);
         ter.renderFrame(world);
     }

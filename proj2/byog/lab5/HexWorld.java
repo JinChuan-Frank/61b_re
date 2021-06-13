@@ -13,14 +13,42 @@ public class HexWorld {
     private static final int WIDTH = 50;
     private static final int HEIGHT = 50;
 
-    public void tesselateHex(int[][] pArrays, ) {
-
+    public void tesselateHex(int[][] pArrays, TETile[][] t) {
+        for (int i = 0; i < pArrays.length; i ++) {
+            addHexagon(3,pArrays[i],t);
+        }
     }
 
-    public int[][] getColumnsPosition(int[] s) {
-        int [][] rowOnePisition = new int[][] {s}
+    /**
+     *
+     * @param i The ith column. 0 is the leftmost.
+     * @param s The size of hex.
+     * @param p The starting position.
+     * @return
+     */
+    public int[][] getColumnsPosition(int i, int s, int[] p) {
+        int xp = p[0];
+        int yp = p[1];
+        int n = getColumnNumber(i);
+        int [][] hexPositions = new int[n][2];
+        for (int j = 0; i < n; i ++) {
+            hexPositions[0] = new int[]{xp, yp + s * j};
+        }
+        return hexPositions;
     }
 
+    public static int getColumnNumber(int i) {
+        switch (i) {
+            case 0 :
+            case 4 :
+                return  3;
+            case 1 :
+            case 3 :
+                return  4;
+            case 2 : return  5;
+            default: return 0;
+        }
+    }
     /**
      *
      * @param size The size of the hex.
