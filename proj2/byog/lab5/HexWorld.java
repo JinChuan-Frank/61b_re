@@ -13,17 +13,31 @@ public class HexWorld {
     private static final int WIDTH = 50;
     private static final int HEIGHT = 50;
 
-    public void addHexagon(int size, int px, int py, TETile[][] tiles) {
+    public void tesselateHex(int[][] pArrays, ) {
+
+    }
+
+    public int[][] getColumnsPosition(int[] s) {
+        int [][] rowOnePisition = new int[][] {s}
+    }
+
+    /**
+     *
+     * @param size The size of the hex.
+     * @param position The 0th number is x coordinates, the 1st is y coordinates.
+     * @param tiles
+     */
+    public void addHexagon(int size, int[] position, TETile[][] tiles) {
         for (int x = 0; x < WIDTH; x += 1) {
             for (int y = 0; y < HEIGHT; y += 1) {
-                tiles[x][y] = Tileset.FLOWER;
+                tiles[x][y] = Tileset.NOTHING;
             }
         }
 
-        for (int y = py; y < py + size * 2; y++) {
-            for (int x = px + HexWorld.getXOffset(size, y - py);
-                 x < px + HexWorld.getXOffset(size, y - py)
-                         + HexWorld.hexRowWidth(size, y - py); x++ )
+        for (int y = position[1]; y < position[1] + size * 2; y++) {
+            for (int x = position[0] + HexWorld.getXOffset(size, y - position[1]);
+                 x < position[0] + HexWorld.getXOffset(size, y - position[1])
+                         + HexWorld.hexRowWidth(size, y - position[1]); x++ )
                 tiles[x][y] = Tileset.WALL;
 
         }

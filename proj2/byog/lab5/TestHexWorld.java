@@ -3,6 +3,9 @@ import byog.TileEngine.TERenderer;
 import byog.TileEngine.TETile;
 import byog.TileEngine.Tileset;
 import org.junit.Test;
+
+import javax.swing.text.Position;
+
 import static org.junit.Assert.*;
 
 public class TestHexWorld {
@@ -39,7 +42,8 @@ public class TestHexWorld {
         ter.initialize(WIDTH, HEIGHT);
         TETile[][] world = new TETile[WIDTH][HEIGHT];
         HexWorld w = new HexWorld();
-        w.addHexagon(6,15,15,world);
+        int [] p = new int[]{15,15};
+        w.addHexagon(5,p,world);
         ter.renderFrame(world);
     }
 }
