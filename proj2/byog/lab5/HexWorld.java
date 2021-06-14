@@ -13,31 +13,53 @@ public class HexWorld {
     private static final int WIDTH = 50;
     private static final int HEIGHT = 50;
 
-    public void tesselateHex(int[][] pArrays, TETile[][] t) {
+    /**
+     *
+     * @param p
+     * @param size
+     * @param t
+
+    public void tesselateHex(int[] p, int size, TETile[][] t) {
+
         for (int i = 0; i < pArrays.length; i ++) {
-            addHexagon(3,pArrays[i],t);
+            addHexagon(size,pArrays[i],t);
         }
-    }
+    } */
+
+
 
     /**
      *
      * @param i The ith column. 0 is the leftmost.
      * @param s The size of hex.
-     * @param p The starting position.
+     * @param startPosition The starting position.
      * @return
-     */
-    public int[][] getColumnsPosition(int i, int s, int[] p) {
-        int xp = p[0];
-        int yp = p[1];
-        int n = getColumnNumber(i);
+
+    public int[][] getColumnsPosition(int i, int s, int[] startPosition) {
+        int n = getColumnHexNumber(i);
         int [][] hexPositions = new int[n][2];
-        for (int j = 0; i < n; i ++) {
-            hexPositions[0] = new int[]{xp, yp + s * j};
+        for (int j = 0; j < n; j ++) {
+            hexPositions[j] = new int[]{xp, yp + s * j};
         }
         return hexPositions;
+    }*/
+
+    /**
+     *
+     * @param p Starting position of the entire HexWorld.
+     * @param s Size of Hex.
+     * @param i The ith column in the HexWorld.
+     * @return
+     */
+    public static int[] getColumnStartingPosition(int[] p, int s, int i) {
+        if (i < 2) {
+            return new int[]{p[0] + i *(2 * s - 1), p[1] - (i * s) };
+        } else {
+            return new int[]{p[0] + i *(2 * s - 1), p[1] - ((i -2) * s)};
+        }
     }
 
-    public static int getColumnNumber(int i) {
+    public static int getColumnHexNumber(int i) {
         switch (i) {
             case 0 :
             case 4 :
