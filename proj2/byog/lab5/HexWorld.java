@@ -13,36 +13,28 @@ public class HexWorld {
     private static final int WIDTH = 50;
     private static final int HEIGHT = 50;
 
-    /**
-     *
-     * @param p
-     * @param size
-     * @param t
+    public void addOneColumn(int[] p, int i) {
 
-    public void tesselateHex(int[] p, int size, TETile[][] t) {
-
-        for (int i = 0; i < pArrays.length; i ++) {
-            addHexagon(size,pArrays[i],t);
-        }
-    } */
-
-
+    }
 
     /**
-     *
-     * @param i The ith column. 0 is the leftmost.
-     * @param s The size of hex.
-     * @param startPosition The starting position.
+     * Calculate starting positions of Hexagons in a certain column.
+     * @param p Starting position of the entire HexWorld.
+     * @param i The ith column.
+     * @param s Size of Hex.
      * @return
-
-    public int[][] getColumnsPosition(int i, int s, int[] startPosition) {
-        int n = getColumnHexNumber(i);
-        int [][] hexPositions = new int[n][2];
-        for (int j = 0; j < n; j ++) {
-            hexPositions[j] = new int[]{xp, yp + s * j};
+     */
+    public static int[][] getColumnPositions(int[] p, int s, int i) {
+        int numberOfHex = getColumnHexNumber(i);
+        int[] startPosition = getColumnStartingPosition(p, s, i);
+        int[][] positions = new int[numberOfHex][2];
+        int xp = startPosition[0];
+        int yp = startPosition[1];
+        for (int j = 0; j < numberOfHex; j++) {
+            positions[j] = new int[] {xp, yp + 2 * s * i};
         }
-        return hexPositions;
-    }*/
+        return positions;
+    }
 
     /**
      *
@@ -127,9 +119,5 @@ public class HexWorld {
         }
         return xOffset;
     }
-
-
-
-
 
 }

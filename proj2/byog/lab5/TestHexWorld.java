@@ -41,7 +41,7 @@ public class TestHexWorld {
         assertEquals(3,HexWorld.getColumnHexNumber(0));
         assertEquals(4,HexWorld.getColumnHexNumber(1));
         assertEquals(5,HexWorld.getColumnHexNumber(2));
-    }*/
+    }
 
     @Test
     public void testGetColumnStartingPosition() {
@@ -57,6 +57,14 @@ public class TestHexWorld {
         assertArrayEquals(expectedAtZero, columnZeroPos);
         assertArrayEquals(expectedAtOne, columnOnePos);
         assertArrayEquals(expectedAtTwo,columnTwoPos);
+    }*/
+
+    @Test
+    public void testColumnPositions() {
+        int[] t = new int[] {0, 0};
+        int[][] expectedColumnZero = new int[][] {{0, 0}, {0, 6}, {0, 12}};
+        int[][] actualColumnZero = HexWorld.getColumnPositions(t, 3, 0);
+        assertArrayEquals(expectedColumnZero, actualColumnZero);
     }
 
     /**public static void main(String[] args) {
