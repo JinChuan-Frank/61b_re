@@ -34,20 +34,29 @@ public class TestHexWorld {
         assertEquals(0, HexWorld.getXOffset(2,3));
         assertEquals(-2,HexWorld.getXOffset(3,3));
         assertEquals(-3,HexWorld.getXOffset(5,6));
-    }*/
+    }
 
     @Test
     public void testColumnNumber() {
         assertEquals(3,HexWorld.getColumnHexNumber(0));
         assertEquals(4,HexWorld.getColumnHexNumber(1));
         assertEquals(5,HexWorld.getColumnHexNumber(2));
-    }
+    }*/
 
     @Test
     public void testGetColumnStartingPosition() {
-        int[] t = new int[]{0,0};
-        int [] columnZeroPos = HexWorld.getColumnStartingPosition(t,3,0);
-        assertEquals(new int[] {0,0},columnZeroPos);
+        int[] t = new int[]{0, 0};
+        int[] expectedAtZero = new int[] {0, 0};
+        int[] expectedAtOne = new int[] {5, -3};
+        int[] expectedAtTwo = new int[] {10, -6};
+        int[] expectedAtFour = new int[] {20, 0};
+        int[] columnZeroPos = HexWorld.getColumnStartingPosition(t,3,0);
+        int[] columnOnePos = HexWorld.getColumnStartingPosition(t,3,1);
+        int[] columnTwoPos = HexWorld.getColumnStartingPosition(t,3,2);
+        int[] columnFourPos = HexWorld.getColumnStartingPosition(t,3,4);
+        assertArrayEquals(expectedAtZero, columnZeroPos);
+        assertArrayEquals(expectedAtOne, columnOnePos);
+        assertArrayEquals(expectedAtTwo,columnTwoPos);
     }
 
     /**public static void main(String[] args) {

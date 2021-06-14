@@ -52,7 +52,7 @@ public class HexWorld {
      * @return
      */
     public static int[] getColumnStartingPosition(int[] p, int s, int i) {
-        if (i < 2) {
+        if (i <= 2) {
             return new int[]{p[0] + i *(2 * s - 1), p[1] - (i * s) };
         } else {
             return new int[]{p[0] + i *(2 * s - 1), p[1] - ((i -2) * s)};
