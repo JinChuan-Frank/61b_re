@@ -57,7 +57,7 @@ public class TestHexWorld {
         assertArrayEquals(expectedAtZero, columnZeroPos);
         assertArrayEquals(expectedAtOne, columnOnePos);
         assertArrayEquals(expectedAtTwo,columnTwoPos);
-    }*/
+    }
 
     @Test
     public void testColumnPositions() {
@@ -65,16 +65,26 @@ public class TestHexWorld {
         int[][] expectedColumnZero = new int[][] {{0, 0}, {0, 6}, {0, 12}};
         int[][] actualColumnZero = HexWorld.getColumnPositions(t, 3, 0);
         assertArrayEquals(expectedColumnZero, actualColumnZero);
-    }
+        int[][]  expectedColumnOne = new int[][] {{5, -3}, {5, 3}, {5, 9}, {5, 15}};
+        int[][] actualColumnOne = HexWorld.getColumnPositions(t,3,1);
+        assertArrayEquals(expectedColumnOne, actualColumnOne);
+    }*/
 
-    /**public static void main(String[] args) {
-        //TETile[][] world = new TETile[WIDTH][HEIGHT];
+    public static void main(String[] args) {
         TERenderer ter = new TERenderer();
         ter.initialize(WIDTH, HEIGHT);
         TETile[][] world = new TETile[WIDTH][HEIGHT];
-        HexWorld w = new HexWorld();
-        int [][] p = w.tesselateHex();
-        w.addHexagon(5,p,world);
+        for (int x = 0; x < WIDTH; x += 1) {
+            for (int y = 0; y < HEIGHT; y += 1) {
+                world[x][y] = Tileset.NOTHING;
+            }
+        }
+        TETile type = Tileset.FLOWER;
+        int[] start = new int[] {5,5};
+        int size = 3;
+        int row = 0;
+        HexWorld.addOneColumn(start, size, row, world, type);
         ter.renderFrame(world);
-    }*/
+
+    }
 }
