@@ -13,16 +13,45 @@ public class HexWorld {
     private static final int WIDTH = 50;
     private static final int HEIGHT = 50;
 
+    private static final long SEED = 2873123;
+    private static final Random RANDOM = new Random(SEED);
+
+    public static void initializeWorld(TETile[][] t) {
+        for (int x = 0; x < WIDTH; x += 1) {
+            for (int y = 0; y < HEIGHT; y += 1) {
+                t[x][y] = Tileset.NOTHING;
+            }
+        }
+    }
+
+    public static void tesselateHexagon(int[] p, int s, int i, TETile[][] tiles) {
+        for (int j = 0; j < i; j++) {
+            HexWorld.addOneColumn(p, s, j, tiles);
+        }
+    }
+
+    private static TETile randomTile() {
+        int tileNum = RANDOM.nextInt(5);
+        switch (tileNum) {
+            case 0: return Tileset.WALL;
+            case 1: return Tileset.FLOWER;
+            case 2: return Tileset.SAND;
+            case 3: return Tileset.TREE;
+            case 4: return Tileset.MOUNTAIN;
+            default: return Tileset.WATER;
+        }
+    }
+
     /**
      * Add one column of Hexagons.
      * @param p Starting position of the entire HexWorld.
      * @param s Size of Hex.
      * @param i Size of Hex.
      */
-    public static void addOneColumn(int[] p, int s, int i, TETile[][] tiles, TETile t) {
+    public static void addOneColumn(int[] p, int s, int i, TETile[][] tiles) {
         int[][] positions = getColumnPositions(p, s, i);
         for (int j = 0; j < positions.length; j++) {
-            addHexagon(s, positions[j], tiles, t);
+            addHexagon(s, positions[j], tiles);
         }
     }
 
@@ -54,9 +83,9 @@ public class HexWorld {
      */
     public static int[] getColumnStartingPosition(int[] p, int s, int i) {
         if (i <= 2) {
-            return new int[]{p[0] + i *(2 * s - 1), p[1] - (i * s) };
+            return new int[] {p[0] + i *(2 * s - 1), p[1] - (i * s) };
         } else {
-            return new int[]{p[0] + i *(2 * s - 1), p[1] - ((i -2) * s)};
+            return new int[] {p[0] + i *(2 * s - 1), p[1] - (4 - i) * s};
         }
     }
 
@@ -78,7 +107,8 @@ public class HexWorld {
      * @param position The 0th number is x coordinates, the 1st is y coordinates.
      * @param tiles
      */
-    public static void addHexagon(int size, int[] position, TETile[][] tiles, TETile t) {
+    public static void addHexagon(int size, int[] position, TETile[][] tiles) {
+        TETile t = randomTile();
         for (int y = position[1]; y < position[1] + size * 2; y++) {
             for (int x = position[0] + HexWorld.getXOffset(size, y - position[1]);
                  x < position[0] + HexWorld.getXOffset(size, y - position[1])
@@ -125,18 +155,12 @@ public class HexWorld {
         TERenderer ter = new TERenderer();
         ter.initialize(WIDTH, HEIGHT);
         TETile[][] world = new TETile[WIDTH][HEIGHT];
-        for (int x = 0; x < WIDTH; x += 1) {
-            for (int y = 0; y < HEIGHT; y += 1) {
-                world[x][y] = Tileset.NOTHING;
-            }
-        }
-        TETile type = Tileset.FLOWER;
-        int[] start = new int[] {5,5};
-        int size = 3;
-        int row = 0;
-        HexWorld.addOneColumn(start, size, row, world, type);
+        HexWorld.initializeWorld(world);
+        int[] start = new int[] {5, 14};
+        int size = 4;
+        HexWorld.tesselateHexagon(start, size, 5, world);
         ter.renderFrame(world);
-
     }
-
 }
+
+
