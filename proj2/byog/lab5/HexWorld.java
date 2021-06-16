@@ -10,8 +10,8 @@ import java.util.Random;
  * Draws a world consisting of hexagonal regions.
  */
 public class HexWorld {
-    private static final int WIDTH = 50;
-    private static final int HEIGHT = 50;
+    private static final int WIDTH = 70;
+    private static final int HEIGHT = 60;
 
     private static final long SEED = 2873123;
     private static final Random RANDOM = new Random(SEED);
@@ -156,8 +156,8 @@ public class HexWorld {
         ter.initialize(WIDTH, HEIGHT);
         TETile[][] world = new TETile[WIDTH][HEIGHT];
         HexWorld.initializeWorld(world);
-        int[] start = new int[] {5, 14};
-        int size = 4;
+        int[] start = new int[] {5, 12};
+        int size = 5;
         HexWorld.tesselateHexagon(start, size, 5, world);
         ter.renderFrame(world);
     }
