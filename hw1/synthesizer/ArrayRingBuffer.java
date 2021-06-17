@@ -20,7 +20,9 @@ public class ArrayRingBuffer<T> extends AbstractBoundedQueue<T> {
         //       this.capacity should be set appropriately. Note that the local variable
         //       here shadows the field we inherit from AbstractBoundedQueue, so
         //       you'll need to use this.capacity to set the capacity.
+
         this.capacity = capacity;
+        rb = (T[]) new Object[this.capacity];
         first = 0;
         last = 0;
         fillCount = 0;
@@ -37,6 +39,7 @@ public class ArrayRingBuffer<T> extends AbstractBoundedQueue<T> {
         rb[last] = x;
         fillCount += 1;
         last += 1;
+        checkIndex();
     }
 
     /**
@@ -45,7 +48,12 @@ public class ArrayRingBuffer<T> extends AbstractBoundedQueue<T> {
      * covered Monday.
      */
     public T dequeue() {
-        // TODO: Dequeue the first item. Don't forget to decrease fillCount and update 
+        // TODO: Dequeue the first item. Don't forget to decrease fillCount and update
+        T temp = rb[first];
+        first += 1;
+        fillCount -= 1;
+        checkIndex();
+        return temp;
     }
 
     /**
@@ -53,11 +61,15 @@ public class ArrayRingBuffer<T> extends AbstractBoundedQueue<T> {
      */
     public T peek() {
         // TODO: Return the first item. None of your instance variables should change.
+        return rb[first];
     }
 
     private void checkIndex() {
         if (last == capacity) {
-
+            last = 0;
+        }
+        if (first == capacity) {
+            first = 0;
         }
     }
 
