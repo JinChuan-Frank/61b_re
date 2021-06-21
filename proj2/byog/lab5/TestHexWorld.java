@@ -3,9 +3,6 @@ import byog.TileEngine.TERenderer;
 import byog.TileEngine.TETile;
 import byog.TileEngine.Tileset;
 import org.junit.Test;
-
-import javax.swing.text.Position;
-
 import static org.junit.Assert.*;
 
 public class TestHexWorld {
