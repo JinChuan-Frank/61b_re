@@ -14,20 +14,20 @@ public class MapGenerator {
         }
     }
 
-    public void drawSingleRoom(Position startingPoint, int width, int height, TETile[][] world) {
+    public static void drawSingleRoom(Position startingPoint, int width, int height, TETile[][] world) {
         Position endPoint = calEndingPosition(startingPoint, width, height);
         drawRoomWalls(startingPoint, endPoint, world);
         drawRoomFloors(startingPoint, endPoint, world);
     }
 
-    private Position calEndingPosition(Position startingPoint, int width, int height) {
+    private static Position calEndingPosition(Position startingPoint, int width, int height) {
         int xPositionEnd = startingPoint.xPos + width - 1;
         int yPositionEnd = startingPoint.yPos + height - 1;
         return new Position(xPositionEnd, yPositionEnd);
     }
 
-    private void drawRoomWalls(Position startingPoint, Position endPoint, TETile[][] world) {
-        for (int i = startingPoint.xPos; i <= endPoint.yPos; i++) {
+    public static void drawRoomWalls(Position startingPoint, Position endPoint, TETile[][] world) {
+        for (int i = startingPoint.xPos; i <= endPoint.xPos; i++) {
             world[i][startingPoint.yPos] = Tileset.WALL;
             world[i][endPoint.yPos] = Tileset.WALL;
         }
@@ -37,7 +37,7 @@ public class MapGenerator {
         }
     }
 
-    private void drawRoomFloors(Position startingPoint, Position endPoint, TETile[][] world) {
+    public static void drawRoomFloors(Position startingPoint, Position endPoint, TETile[][] world) {
         int floorStartX = startingPoint.xPos + 1;
         int floorStartY = startingPoint.yPos + 1;
         int floorEndX = endPoint.xPos - 1;
