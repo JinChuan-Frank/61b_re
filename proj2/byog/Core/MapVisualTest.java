@@ -10,11 +10,13 @@ public class MapVisualTest {
 
 
     public static void testDrawSingleRoom() {
+        TERenderer ter = new TERenderer();
+        ter.initialize(WIDTH, HEIGHT);
         TETile[][] world = new TETile[WIDTH][HEIGHT];
         initializeWorld(world);
         MapGenerator.Position start = new MapGenerator.Position(2,2);
-        MapGenerator.Position end = new MapGenerator.Position(7,6);
-        MapGenerator.drawRoomFloors(start, end, world);
+        MapGenerator.drawSingleRoom(start, 15, 10, world);
+        ter.renderFrame(world);
     }
 
     private static void initializeWorld(TETile[][] t) {
@@ -26,9 +28,9 @@ public class MapVisualTest {
     }
 
     public static void main(String[] args){
-        TERenderer ter = new TERenderer();
-        ter.initialize(WIDTH, HEIGHT);
+
         testDrawSingleRoom();
+
     }
 
 
