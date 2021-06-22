@@ -36,11 +36,18 @@ public class MapGenerator {
         }
     }
 
+    private static Position calNeighborRoomPosition(Room current, Position exit, int width, int height) {
+        Position end = calEndingPosition(current.position, current.width, current.height);
+        if (exit.xPos == current.position.xPos) {
+            int neighborRoomXPos = exit.xPos - (width - 1);
+            int neighborRoomYPos = exit.yPos - 1;
+        } else if (exit.xPos == end.xPos) {
 
-    private static void drawExits(Position[] exits, TETile[][] world) {
-        for (Position p : exits) {
-            world[p.xPos][p.yPos] = Tileset.FLOOR;
         }
+    }
+
+    private static void drawExit(Position exit, TETile[][] world) {
+
     }
 
     public static void drawSingleRoom(Position startingPoint, int width, int height, TETile[][] world) {
