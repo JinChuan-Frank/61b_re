@@ -26,17 +26,13 @@ public class MapGenerator {
     }
 
     public static void drawNeighboringRoom(Room current, Position exitPoint, int width, int height, TETile[][] world) {
-        Position start = current.position;
-        int currentWidth = current.width;
-        int currentHeight = current.height;
-        Position end = calEndingPosition(start, currentWidth, currentHeight);
-        if (exitPoint.xPos == end.xPos) {
-            drawSingleRoom(exitPoint, width, height, world);
-
+        Position neighboringRoomPos = calNeighborRoomPosition(current, exitPoint, width, height);
+        drawSingleRoom(neighboringRoomPos, width, height, world);
+        drawExit(exitPoint, world);
         }
-    }
 
-    private static Position calNeighborRoomPosition(Room current, Position exit, int width, int height) {
+
+    public static Position calNeighborRoomPosition(Room current, Position exit, int width, int height) {
         Position end = calEndingPosition(current.position, current.width, current.height);
         int neighborRoomXPos = 0;
         int neighborRoomYPos = 0;
@@ -57,7 +53,7 @@ public class MapGenerator {
     }
 
     private static void drawExit(Position exit, TETile[][] world) {
-
+        world[exit.xPos][exit.yPos] = Tileset.FLOOR;
     }
 
     public static void drawSingleRoom(Position startingPoint, int width, int height, TETile[][] world) {
