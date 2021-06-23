@@ -38,12 +38,22 @@ public class MapGenerator {
 
     private static Position calNeighborRoomPosition(Room current, Position exit, int width, int height) {
         Position end = calEndingPosition(current.position, current.width, current.height);
+        int neighborRoomXPos = 0;
+        int neighborRoomYPos = 0;
         if (exit.xPos == current.position.xPos) {
-            int neighborRoomXPos = exit.xPos - (width - 1);
-            int neighborRoomYPos = exit.yPos - 1;
+             neighborRoomXPos = exit.xPos - (width - 1);
+             neighborRoomYPos = exit.yPos - 1;
         } else if (exit.xPos == end.xPos) {
-
+             neighborRoomXPos = exit.xPos;
+             neighborRoomYPos = exit.yPos - 1;
+        } else if (exit.yPos == current.position.yPos) {
+            neighborRoomXPos = exit.xPos - 1;
+            neighborRoomYPos = exit.yPos - (height - 1);
+        } else if(exit.yPos == end.yPos) {
+            neighborRoomXPos = exit.xPos - 1;
+            neighborRoomYPos =exit.yPos + (height - 1);
         }
+        return new Position(neighborRoomXPos,neighborRoomYPos);
     }
 
     private static void drawExit(Position exit, TETile[][] world) {
