@@ -15,9 +15,9 @@ public class MapVisualTest {
         initializeWorld(world);
         MapGenerator.Position start = new MapGenerator.Position(2,2);
         MapGenerator.Room current = new MapGenerator.Room(start, 4, 4);
-        MapGenerator.Position exit = new MapGenerator.Position(3,5);
-        MapGenerator.drawSingleRoom(start, 4, 4, world);
-        MapGenerator.drawNeighboringRoom(current, exit, 3, 5, world );
+        MapGenerator.Position exit = new MapGenerator.Position(5,4);
+        MapGenerator.drawSingleRoom(current, world);
+        MapGenerator.drawNeighboringRoom(current, exit, 3, 3, world );
         //MapGenerator.Position p = MapGenerator.calNeighborRoomPosition(current, exit, )
         ter.renderFrame(world);
     }
@@ -28,7 +28,8 @@ public class MapVisualTest {
         TETile[][] world = new TETile[WIDTH][HEIGHT];
         initializeWorld(world);
         MapGenerator.Position start = new MapGenerator.Position(0,0);
-        MapGenerator.drawSingleRoom(start, 10, 4, world);
+        MapGenerator.Room room = new MapGenerator.Room(start,4,5);
+        MapGenerator.drawSingleRoom(room, world);
         ter.renderFrame(world);
     }
 
