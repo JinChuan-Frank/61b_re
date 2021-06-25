@@ -8,6 +8,18 @@ public class MapVisualTest {
     private static final int WIDTH = 50;
     private static final int HEIGHT = 35;
 
+    public static void testGenerateRandomRoom() {
+        TERenderer ter = new TERenderer();
+        ter.initialize(WIDTH, HEIGHT);
+        TETile[][] world = new TETile[WIDTH][HEIGHT];
+        initializeWorld(world);
+        MapGenerator.Room room = MapGenerator.generateRandomRoom();
+        System.out.print("Position:" + room.position.xPos + "*" + room.position.yPos + " " + "Width" + room.width + " " + "Height" + room.height);
+        MapGenerator.drawSingleRoom(room, world);
+        ter.renderFrame(world);
+
+    }
+
     public static void testDrawNeighborRoom() {
         TERenderer ter = new TERenderer();
         ter.initialize(WIDTH, HEIGHT);
@@ -42,9 +54,7 @@ public class MapVisualTest {
     }
 
     public static void main(String[] args){
-
-        testDrawNeighborRoom();
-
+        testGenerateRandomRoom();
     }
 
 

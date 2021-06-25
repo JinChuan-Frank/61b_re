@@ -3,10 +3,16 @@ package byog.Core;
 import byog.TileEngine.TETile;
 import byog.TileEngine.Tileset;
 
+import java.util.Random;
+
 public class MapGenerator {
+
+    private static final int WIDTH = 50;
+    private static final int HEIGHT = 35;
+
     public static class Position {
-        private int xPos;
-        private int yPos;
+        public int xPos;
+        public int yPos;
 
         public Position(int x, int y) {
             xPos = x;
@@ -14,14 +20,44 @@ public class MapGenerator {
         }
     }
     public static class Room {
-        private Position position;
-        private int width;
-        private int height;
+        public Position position;
+        public int width;
+        public int height;
 
         public Room(Position p, int w, int h) {
             position = p;
             width = w;
             height = h;
+        }
+    }
+
+    public static Room generateRandomRoom() {
+        RandomUtils randomUtils = new RandomUtils();
+        Random random = new Random();
+        boolean isEligible = false;
+        Room room = new Room(new Position(0,0), 0, 0);
+        while (isEligible == false) {
+            int xPos = randomUtils.uniform(random, WIDTH);
+            int yPos = randomUtils.uniform(random, HEIGHT);
+            Position position = new Position(xPos, yPos);
+            int width = randomUtils.uniform(random, 3, WIDTH);
+            int height = randomUtils.uniform(random, 3, HEIGHT);
+            room = new Room(position, width, height);
+            isEligible = isEligibleRoom(room);
+
+        }
+        return room;
+    }
+
+    private static boolean isEligibleRoom(Room room) {
+        Position position = room.position;
+        int width = room.width;
+        int height = room.height;
+        Position end = calEndingPosition(position, width, height);
+        if (end.xPos <= WIDTH && end.yPos <= HEIGHT) {
+            return true;
+        } else {
+            return false;
         }
     }
 
@@ -31,7 +67,6 @@ public class MapGenerator {
         drawSingleRoom(neighborRoom, world);
         drawExit(exitPoint, world);
     }
-
 
     public static Position calNeighborRoomPosition(Room current, Position exit, int width, int height) {
         Position end = calEndingPosition(current.position, current.width, current.height);
@@ -72,7 +107,7 @@ public class MapGenerator {
         return new Position(xPositionEnd, yPositionEnd);
     }
 
-    public static void drawRoomWalls(Position startingPoint, Position endPoint, TETile[][] world) {
+    private static void drawRoomWalls(Position startingPoint, Position endPoint, TETile[][] world) {
         for (int i = startingPoint.xPos; i <= endPoint.xPos; i++) {
             world[i][startingPoint.yPos] = Tileset.WALL;
             world[i][endPoint.yPos] = Tileset.WALL;
@@ -83,7 +118,7 @@ public class MapGenerator {
         }
     }
 
-    public static void drawRoomFloors(Position startingPoint, Position endPoint, TETile[][] world) {
+    private static void drawRoomFloors(Position startingPoint, Position endPoint, TETile[][] world) {
         int floorStartX = startingPoint.xPos + 1;
         int floorStartY = startingPoint.yPos + 1;
         int floorEndX = endPoint.xPos - 1;
