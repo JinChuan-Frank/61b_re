@@ -39,8 +39,8 @@ public class MapVisualTest {
         ter.initialize(WIDTH, HEIGHT);
         TETile[][] world = new TETile[WIDTH][HEIGHT];
         initializeWorld(world);
-        MapGenerator.Position start = new MapGenerator.Position(0,0);
-        MapGenerator.Room room = new MapGenerator.Room(start,4,5);
+        MapGenerator.Position start = new MapGenerator.Position(8, 19);
+        MapGenerator.Room room = new MapGenerator.Room(start, 38, 16);
         MapGenerator.drawSingleRoom(room, world);
         ter.renderFrame(world);
     }

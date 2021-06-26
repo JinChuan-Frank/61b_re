@@ -54,7 +54,7 @@ public class MapGenerator {
         int width = room.width;
         int height = room.height;
         Position end = calEndingPosition(position, width, height);
-        if (end.xPos <= WIDTH && end.yPos <= HEIGHT) {
+        if (end.xPos < WIDTH && end.yPos < HEIGHT) {
             return true;
         } else {
             return false;
