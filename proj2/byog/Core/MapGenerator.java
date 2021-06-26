@@ -68,6 +68,13 @@ public class MapGenerator {
         drawExit(exitPoint, world);
     }
 
+    public static Position GenerateRandomExit(Room current) {
+        int width = current.width;;
+        int height = current.height;
+        int numberOfPositions = 2 *(width + height) - 4;
+        Position[] positions = new Position[numberOfPositions];
+    }
+
     public static Position calNeighborRoomPosition(Room current, Position exit, int width, int height) {
         Position end = calEndingPosition(current.position, current.width, current.height);
         int neighborRoomXPos = 0;
