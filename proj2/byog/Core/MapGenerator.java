@@ -3,6 +3,8 @@ package byog.Core;
 import byog.TileEngine.TETile;
 import byog.TileEngine.Tileset;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Random;
 
 public class MapGenerator {
@@ -71,8 +73,25 @@ public class MapGenerator {
     public static Position GenerateRandomExit(Room current) {
         int width = current.width;;
         int height = current.height;
-        int numberOfPositions = 2 *(width + height) - 4;
-        Position[] positions = new Position[numberOfPositions];
+        Position start = current.position;
+        Position end = calEndingPosition(start, current.width, current.height);
+        int numberOfPositions = 2 * (width + height - 4);
+        List<Position> positions= new ArrayList<Position>();
+        for (int j = start.xPos + 1; j < end.xPos; j ++) {
+            Position lower = new Position(j, start.yPos);
+            Position upper = new Position(j, end.yPos);
+            positions.add(lower);
+            positions.add(upper);
+        }
+        for (int k = start.yPos + 1; k < end.yPos; k++) {
+            Position left = new Position(start.xPos, k);
+            Position right = new Position(end.xPos, k);
+            positions.add(left);
+            positions.add(right);
+        }
+        Random random = new Random();
+        int i = RandomUtils.uniform(random, numberOfPositions);
+        return positions.get(i);
     }
 
     public static Position calNeighborRoomPosition(Room current, Position exit, int width, int height) {
