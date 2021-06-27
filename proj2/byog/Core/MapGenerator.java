@@ -63,11 +63,15 @@ public class MapGenerator {
         }
     }
 
-    public static void drawNeighboringRoom(Room current, Position exitPoint, int width, int height, TETile[][] world) {
-        Position neighboringRoomPos = calNeighborRoomPosition(current, exitPoint, width, height);
+    public static void generateRandomHallWay(Room current, Position exit, int width, int height, TETile[][] world) {
+        Position neighboringRoomPos = calNeighborRoomPosition(current, exit, width, height);
         Room neighborRoom = new Room(neighboringRoomPos, width, height);
         drawSingleRoom(neighborRoom, world);
-        drawExit(exitPoint, world);
+        drawExit(exit, world);
+    }
+
+    public static Room GenerateRandomNeighborRoom(Room current, Position exit) {
+
     }
 
     public static Position GenerateRandomExit(Room current) {

@@ -29,7 +29,7 @@ public class MapVisualTest {
         System.out.print("Exit:" + exit.xPos + "*" + exit.yPos) ;
     }
 
-    public static void testDrawNeighborRoom() {
+    public static void testGenerateRandomHallWay() {
         TERenderer ter = new TERenderer();
         ter.initialize(WIDTH, HEIGHT);
         TETile[][] world = new TETile[WIDTH][HEIGHT];
@@ -38,7 +38,7 @@ public class MapVisualTest {
         MapGenerator.Room current = new MapGenerator.Room(start, 4, 4);
         MapGenerator.Position exit = new MapGenerator.Position(5,4);
         MapGenerator.drawSingleRoom(current, world);
-        MapGenerator.drawNeighboringRoom(current, exit, 3, 3, world );
+        MapGenerator.generateRandomHallWay(current, exit, 3, 3, world );
         //MapGenerator.Position p = MapGenerator.calNeighborRoomPosition(current, exit, )
         ter.renderFrame(world);
     }
