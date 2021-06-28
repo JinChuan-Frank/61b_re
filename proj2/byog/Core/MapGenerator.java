@@ -11,6 +11,8 @@ public class MapGenerator {
 
     private static final int WIDTH = 50;
     private static final int HEIGHT = 35;
+    private static Random random = new Random();
+    private static RandomUtils randomUtils = new RandomUtils();
 
     public static class Position {
         public int xPos;
@@ -34,8 +36,7 @@ public class MapGenerator {
     }
 
     public static Room generateRandomRoom() {
-        RandomUtils randomUtils = new RandomUtils();
-        Random random = new Random();
+
         boolean isEligible = false;
         Room room = new Room(new Position(0,0), 0, 0);
         while (isEligible == false) {
@@ -63,14 +64,24 @@ public class MapGenerator {
         }
     }
 
-    public static void generateRandomHallWay(Room current, Position exit, int width, int height, TETile[][] world) {
+    public static void drawHallWay(Room current, Position exit, int width, int height, TETile[][] world) {
         Position neighboringRoomPos = calNeighborRoomPosition(current, exit, width, height);
         Room neighborRoom = new Room(neighboringRoomPos, width, height);
         drawSingleRoom(neighborRoom, world);
         drawExit(exit, world);
     }
 
-    public static Room GenerateRandomNeighborRoom(Room current, Position exit) {
+    public static Room generateRandomNeighborRoom(Room current, Position exit) {
+        int width = randomUtils.uniform(random, 3, WIDTH);
+        int height = randomUtils.uniform(random, 3, HEIGHT);
+        if (exit.xPos == current.position.xPos + 1) {
+            int xPos = current.position.xPos - 2;
+            int yPos = current.position.yPos - height + 1;
+        } else if (exit.xPos == )
+        else if (exit.yPos == current.position.yPos + 1) {
+
+        }
+
 
     }
 
