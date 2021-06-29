@@ -71,7 +71,7 @@ public class MapGenerator {
         drawExit(exit, world);
     }
 
-    public static Room generateRandomNeighborRoom(Room current, Position exit) {
+    public static void generateRandomNeighborRoom(Room current, Position exit, TETile[][] world) {
         boolean isEligible = false;
         Room room = new Room(new Position(0,0), 0, 0);
         while (isEligible == false) {
@@ -98,7 +98,8 @@ public class MapGenerator {
             room = new Room(new Position(xPos, yPos), width, height);
             isEligible = room.isEligibleRoom();
         }
-        return room;
+        drawSingleRoom(room, world);
+        drawExit(exit, world);
     }
 
     public static Position GenerateRandomExit(Room current) {

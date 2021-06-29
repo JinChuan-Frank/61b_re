@@ -11,7 +11,16 @@ public class MapVisualTest {
     private static final int HEIGHT = 35;
 
     public static void testGenerateRandomNeighborRoom() {
-
+        TERenderer ter = new TERenderer();
+        ter.initialize(WIDTH, HEIGHT);
+        TETile[][] world = new TETile[WIDTH][HEIGHT];
+        initializeWorld(world);
+        MapGenerator.Position position = new MapGenerator.Position(5, 5);
+        MapGenerator.Room room = new MapGenerator.Room(position, 6, 3);
+        MapGenerator.drawSingleRoom(room, world);
+        MapGenerator.Position exit = new MapGenerator.Position(10, 5);
+        MapGenerator.generateRandomNeighborRoom(room, exit, world);
+        ter.renderFrame(world);
     }
 
     public static void testGenerateRandomRoom() {
@@ -67,7 +76,7 @@ public class MapVisualTest {
     }
 
     public static void main(String[] args){
-        testGenerateRandomExit();
+        testGenerateRandomNeighborRoom();
     }
 
 
