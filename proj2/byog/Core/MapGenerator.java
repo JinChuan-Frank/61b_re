@@ -61,7 +61,18 @@ public class MapGenerator {
         }
     }
 
-    public static Room[] generateRooms() {
+    /**
+     * Generate random rooms in the map.
+     *
+     * @param i the number of rooms to be generated.
+     * @return
+     */
+    public static Room[] generateRooms(int i) {
+        Room room = generateRandomRoom();
+        Position[] exits = new Position[i - 1];
+        for (int j = 1; j <= i; j++) {
+            Position exit = generateRandomExit(room);
+        }
         return null;
     }
 
@@ -121,7 +132,7 @@ public class MapGenerator {
         return room;
     }
 
-    public static Position GenerateRandomExit(Room current) {
+    public static Position generateRandomExit(Room current) {
         int width = current.width;;
         int height = current.height;
         Position start = current.position;

@@ -49,7 +49,7 @@ public class MapVisualTest {
     public static void testGenerateRandomExit() {
         MapGenerator.Position position = new MapGenerator.Position(2,2);
         MapGenerator.Room room = new MapGenerator.Room(position, 4, 4);
-        MapGenerator.Position exit = MapGenerator.GenerateRandomExit(room);
+        MapGenerator.Position exit = MapGenerator.generateRandomExit(room);
         System.out.print("Exit:" + exit.xPos + "*" + exit.yPos) ;
     }
 
