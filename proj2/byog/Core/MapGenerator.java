@@ -70,8 +70,13 @@ public class MapGenerator {
     public static Room[] generateRooms(int i) {
         Room room = generateRandomRoom();
         Position[] exits = new Position[i - 1];
+        Room[] rooms = new Room[i];
+        rooms[0] = room;
         for (int j = 1; j <= i; j++) {
             Position exit = generateRandomExit(room);
+            if (room.width > 3 && room.height > 3) {
+                Room temp = generateRandomHallWay(room, exit, room.width, room.height);
+            }
         }
         return null;
     }
