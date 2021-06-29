@@ -4,22 +4,33 @@ import byog.TileEngine.TETile;
 import byog.TileEngine.Tileset;
 
 import javax.swing.*;
+import java.util.Random;
 
 
 public class MapVisualTest {
     private static final int WIDTH = 50;
     private static final int HEIGHT = 35;
 
+    public static void testIsOverlap() {
+        MapGenerator.Position position = new MapGenerator.Position(4,4);
+        MapGenerator.Position newRoomPosition = new MapGenerator.Position(7,3);
+        MapGenerator.Room oldRoom = new MapGenerator.Room(position, 5, 5);
+        MapGenerator.Room newRoom = new MapGenerator.Room(newRoomPosition, 2, 2);
+        boolean isOverlap = newRoom.isOverlap(oldRoom);
+        System.out.print(isOverlap);
+    }
+
     public static void testGenerateRandomNeighborRoom() {
         TERenderer ter = new TERenderer();
         ter.initialize(WIDTH, HEIGHT);
         TETile[][] world = new TETile[WIDTH][HEIGHT];
         initializeWorld(world);
-        MapGenerator.Position position = new MapGenerator.Position(5, 5);
-        MapGenerator.Room room = new MapGenerator.Room(position, 6, 3);
+        MapGenerator.Position position = new MapGenerator.Position(10, 10);
+        MapGenerator.Room room = new MapGenerator.Room(position, 3, 8);
         MapGenerator.drawSingleRoom(room, world);
-        MapGenerator.Position exit = new MapGenerator.Position(10, 5);
-        //MapGenerator.generateRandomNeighborRoom(room, exit, world);
+        MapGenerator.Position exit = new MapGenerator.Position(11, 17);
+        MapGenerator.Room neighborRoom = MapGenerator.generateRandomNeighborRoom(room, exit);
+        MapGenerator.drawNeighborRoom(neighborRoom, exit, world);
         ter.renderFrame(world);
     }
 
@@ -51,7 +62,7 @@ public class MapVisualTest {
         MapGenerator.Room current = new MapGenerator.Room(start, 4, 4);
         MapGenerator.Position exit = new MapGenerator.Position(5,4);
         MapGenerator.drawSingleRoom(current, world);
-        MapGenerator.generateRandomHallWay(current, exit, 3, 3, world );
+        MapGenerator.generateRandomHallWay(current, exit, 3, 3);
         //MapGenerator.Position p = MapGenerator.calNeighborRoomPosition(current, exit, )
         ter.renderFrame(world);
     }
@@ -76,7 +87,7 @@ public class MapVisualTest {
     }
 
     public static void main(String[] args){
-        testGenerateRandomNeighborRoom();
+        testIsOverlap();
     }
 
 
