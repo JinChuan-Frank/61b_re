@@ -19,7 +19,7 @@ public class MapVisualTest {
         MapGenerator.Room room = new MapGenerator.Room(position, 6, 3);
         MapGenerator.drawSingleRoom(room, world);
         MapGenerator.Position exit = new MapGenerator.Position(10, 5);
-        MapGenerator.generateRandomNeighborRoom(room, exit, world);
+        //MapGenerator.generateRandomNeighborRoom(room, exit, world);
         ter.renderFrame(world);
     }
 
