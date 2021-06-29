@@ -33,10 +33,21 @@ public class MapGenerator {
             width = w;
             height = h;
         }
+
+        private boolean isEligibleRoom() {
+            Position position = this.position;
+            int width = this.width;
+            int height = this.height;
+            Position end = calEndingPosition(position, width, height);
+            if (end.xPos < WIDTH && end.yPos < HEIGHT) {
+                return true;
+            } else {
+                return false;
+            }
+        }
     }
 
     public static Room generateRandomRoom() {
-
         boolean isEligible = false;
         Room room = new Room(new Position(0,0), 0, 0);
         while (isEligible == false) {
@@ -46,25 +57,14 @@ public class MapGenerator {
             int width = randomUtils.uniform(random, 3, WIDTH);
             int height = randomUtils.uniform(random, 3, HEIGHT);
             room = new Room(position, width, height);
-            isEligible = isEligibleRoom(room);
-
+            isEligible = room.isEligibleRoom();
         }
         return room;
     }
 
-    private static boolean isEligibleRoom(Room room) {
-        Position position = room.position;
-        int width = room.width;
-        int height = room.height;
-        Position end = calEndingPosition(position, width, height);
-        if (end.xPos < WIDTH && end.yPos < HEIGHT) {
-            return true;
-        } else {
-            return false;
-        }
-    }
 
-    public static void drawHallWay(Room current, Position exit, int width, int height, TETile[][] world) {
+
+    public static void generateRandomHallWay(Room current, Position exit, int width, int height, TETile[][] world) {
         Position neighboringRoomPos = calNeighborRoomPosition(current, exit, width, height);
         Room neighborRoom = new Room(neighboringRoomPos, width, height);
         drawSingleRoom(neighborRoom, world);
@@ -72,17 +72,33 @@ public class MapGenerator {
     }
 
     public static Room generateRandomNeighborRoom(Room current, Position exit) {
-        int width = randomUtils.uniform(random, 3, WIDTH);
-        int height = randomUtils.uniform(random, 3, HEIGHT);
-        if (exit.xPos == current.position.xPos + 1) {
-            int xPos = current.position.xPos - 2;
-            int yPos = current.position.yPos - height + 1;
-        } else if (exit.xPos == )
-        else if (exit.yPos == current.position.yPos + 1) {
-
+        boolean isEligible = false;
+        Room room = new Room(new Position(0,0), 0, 0);
+        while (isEligible == false) {
+            int width = randomUtils.uniform(random, 3, WIDTH);
+            int height = randomUtils.uniform(random, 3, HEIGHT);
+            int xOff = randomUtils.uniform(random, 0, width - 2);
+            int yOff = randomUtils.uniform(random, 0, height - 2);
+            int xPos = 0;
+            int yPos = 0;
+            Position currentEnd = calEndingPosition(current.position, current.width, current.height);
+            if (exit.xPos == current.position.xPos + 1 && exit.yPos == current.position.yPos) {
+                xPos = current.position.xPos - xOff;
+                yPos = current.position.yPos - height + 1;
+            } else if (exit.xPos == current.position.xPos + 1 && exit.yPos == currentEnd.yPos) {
+                xPos = current.position.xPos - xOff;
+                yPos = currentEnd.yPos;
+            } else if (exit.yPos == current.position.yPos + 1 && exit.xPos == current.position.xPos) {
+                xPos = current.position.xPos - (width - 1);
+                yPos = current.position.yPos - yOff;
+            } else if (exit.yPos == current.position.yPos + 1 && exit.xPos == currentEnd.xPos) {
+                xPos = currentEnd.xPos;
+                yPos = currentEnd.yPos - yOff;
+            }
+            room = new Room(new Position(xPos, yPos), width, height);
+            isEligible = room.isEligibleRoom();
         }
-
-
+        return room;
     }
 
     public static Position GenerateRandomExit(Room current) {

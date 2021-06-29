@@ -10,6 +10,10 @@ public class MapVisualTest {
     private static final int WIDTH = 50;
     private static final int HEIGHT = 35;
 
+    public static void testGenerateRandomNeighborRoom() {
+
+    }
+
     public static void testGenerateRandomRoom() {
         TERenderer ter = new TERenderer();
         ter.initialize(WIDTH, HEIGHT);
