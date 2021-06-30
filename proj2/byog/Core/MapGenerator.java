@@ -76,7 +76,11 @@ public class MapGenerator {
             Position exit = generateRandomExit(room);
             if (room.width > 3 && room.height > 3) {
                 Room temp = generateRandomHallWay(room, exit, room.width, room.height);
+            } else if ((room.width == 3 && exit.xPos == room.position.xPos + 1)
+                    || (room.height == 3 && exit.yPos == room.position.yPos + 1)) {
+                Room temp = generateRandomNeighborRoom(room, exit);
             }
+
         }
         return null;
     }
