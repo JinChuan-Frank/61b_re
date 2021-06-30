@@ -11,6 +11,18 @@ public class MapVisualTest {
     private static final int WIDTH = 50;
     private static final int HEIGHT = 35;
 
+    public static void testGenerateRooms() {
+        TERenderer ter = new TERenderer();
+        ter.initialize(WIDTH, HEIGHT);
+        TETile[][] world = new TETile[WIDTH][HEIGHT];
+        initializeWorld(world);
+        MapGenerator.Room [] rooms = MapGenerator.generateRooms(5);
+        for (int a = 0; a < rooms.length; a++) {
+            MapGenerator.drawSingleRoom(rooms[a], world);
+        }
+        ter.renderFrame(world);
+    }
+
     public static void testIsOverlap() {
         MapGenerator.Position position = new MapGenerator.Position(4,4);
         MapGenerator.Position newRoomPosition = new MapGenerator.Position(7,3);
@@ -61,9 +73,9 @@ public class MapVisualTest {
         MapGenerator.Position start = new MapGenerator.Position(10,10);
         MapGenerator.Room current = new MapGenerator.Room(start, 7, 8);
         MapGenerator.Position exit = MapGenerator.generateRandomExit(current);
-        //MapGenerator.Room room = MapGenerator.generateRandomHallWay(current, exit);
+        MapGenerator.Room room = MapGenerator.generateRandomHallWay(current, exit);
         MapGenerator.drawSingleRoom(current, world);
-        //MapGenerator.drawSingleRoom(room, world);
+        MapGenerator.drawSingleRoom(room, world);
         ter.renderFrame(world);
     }
 
@@ -87,7 +99,7 @@ public class MapVisualTest {
     }
 
     public static void main(String[] args){
-        testGenerateRandomHallWay();
+        testGenerateRooms();
     }
 
 

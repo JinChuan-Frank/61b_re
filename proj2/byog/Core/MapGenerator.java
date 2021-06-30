@@ -11,7 +11,7 @@ public class MapGenerator {
 
     private static final int WIDTH = 50;
     private static final int HEIGHT = 35;
-    private static final long SEED = 73123;
+    private static final long SEED = 998877;
     private static final Random RANDOM = new Random(SEED);
     private static RandomUtils randomUtils = new RandomUtils();
 
@@ -40,7 +40,7 @@ public class MapGenerator {
             int width = this.width;
             int height = this.height;
             Position end = calEndingPosition(position, width, height);
-            if (position.xPos >= 0 && position.xPos < width && position.yPos >= 0 && position.yPos < height &&
+            if (position.xPos >= 0 && position.xPos < WIDTH && position.yPos >= 0 && position.yPos < HEIGHT &&
                     end.xPos >= 0 && end.xPos < WIDTH && end.yPos >= 0 && end.yPos < HEIGHT) {
                 return true;
             } else {
@@ -73,19 +73,21 @@ public class MapGenerator {
         Position[] exits = new Position[i - 1];
         Room[] rooms = new Room[i];
         rooms[0] = room;
-        for (int j = 1; j <= i; j++) {
+        Room temp = new Room(new Position(0, 0),0,0);
+        for (int j = 1; j < i; j++) {
             Position exit = generateRandomExit(room);
             if (room.width > 3 && room.height > 3) {
-                Room temp = generateRandomHallWay(room, exit);
+                temp = generateRandomHallWay(room, exit);
             } else if ((room.width == 3 && exit.xPos == room.position.xPos + 1)
                     || (room.height == 3 && exit.yPos == room.position.yPos + 1)) {
-                Room temp = generateRandomNeighborRoom(room, exit);
+                temp = generateRandomNeighborRoom(room, exit);
             } else {
-
+                temp = generateRandomHallWay(room, exit);
             }
-
+        room = temp;
+        rooms[j] = room;
         }
-        return null;
+        return rooms;
     }
 
     public static Room generateRandomRoom() {
@@ -114,11 +116,11 @@ public class MapGenerator {
         Position start = current.position;
         Position end = calEndingPosition(start, current.width, current.height);
         boolean isEligible = false;
-        Room neighborRoom = new Room(new Position(0,0), 0, 0);
+        Room neighborRoom = new Room(new Position(0,0), 2, 2);
         while (isEligible == false) {
             if (exit.yPos == start.yPos || exit.yPos == end.yPos) {
                 width = 3;
-                height = randomUtils.uniform(RANDOM, 3, HEIGHT);
+                height = randomUtils.uniform(RANDOM, 3, HEIGHT);;
             } else  {
                 height = 3;
                 width = randomUtils.uniform(RANDOM, 3, WIDTH);
