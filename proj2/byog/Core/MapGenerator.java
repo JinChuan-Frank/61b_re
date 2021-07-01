@@ -69,28 +69,24 @@ public class MapGenerator {
      * @return
      */
 
-    public static Room[] generateRooms(int i) {
+    public static ArrayList<Room> generateRooms(int i) {
         Room room = generateRandomRoom();
         Position[] exits = new Position[i - 1];
-        Room[] rooms = new Room[i];
-        rooms[0] = room;
+        ArrayList<Room> rooms = new ArrayList<Room>();
+        rooms.add(0, room);
         Room temp = new Room(new Position(0, 0),0,0);
-        boolean isEligibleRoom = false;
         for (int j = 1; j < i; j++) {
             Position exit = generateRandomExit(room);
-            while (isEligibleRoom == false) {
-                if (room.width > 3 && room.height > 3) {
-                    temp = generateRandomHallWay(room, exit);
-                } else if ((room.width == 3 && exit.xPos == room.position.xPos + 1)
-                        || (room.height == 3 && exit.yPos == room.position.yPos + 1)) {
-                    temp = generateRandomNeighborRoom(room, exit);
-                } else {
-                    temp = generateRandomHallWay(room, exit);
-                }
-                isEligibleRoom = temp.isEligibleRoom();
-                room = temp;
-                rooms[j] = room;
+            if (room.width > 3 && room.height > 3) {
+                temp = generateRandomHallWay(room, exit, j, rooms);
+            } else if ((room.width == 3 && exit.xPos == room.position.xPos + 1)
+                    || (room.height == 3 && exit.yPos == room.position.yPos + 1)) {
+                temp = generateRandomNeighborRoom(room, exit, j, rooms);
+            } else {
+                temp = generateRandomHallWay(room, exit, j, rooms);
             }
+            room = temp;
+            rooms.add(j, room);
         }
         return rooms;
     }
@@ -117,7 +113,7 @@ public class MapGenerator {
     }
 
     // TODO Avoid overlapping
-    public static Room generateRandomHallWay(Room current, Position exit) {
+    public static Room generateRandomHallWay(Room current, Position exit, int i, ArrayList<Room> rooms) {
         int width = 0;
         int height = 0;
         Position start = current.position;
@@ -136,11 +132,12 @@ public class MapGenerator {
             neighborRoom = new Room(neighboringRoomPos, width, height);
             isEligible = neighborRoom.isEligibleRoom();
         }
+        checkOverlap(neighborRoom, i, exit, rooms);
         return neighborRoom;
     }
 
     // TODO Avoid overlapping
-    public static Room generateRandomNeighborRoom(Room current, Position exit) {
+    public static Room generateRandomNeighborRoom(Room current, Position exit, int i, ArrayList<Room> rooms) {
         boolean isEligible = false;
         Room room = new Room(new Position(0,0), 0, 0);
         while (isEligible == false) {
@@ -167,7 +164,29 @@ public class MapGenerator {
             room = new Room(new Position(xPos, yPos), width, height);
             isEligible = room.isEligibleRoom();
         }
+        checkOverlap(room, i, exit, rooms);
         return room;
+    }
+
+    public static void checkOverlap(Room room, int i, Position exit, ArrayList<Room> rooms) {
+        if (room.width == 3 || room.height == 3) {
+            for (int j = 0; j < rooms.size(); j++) {
+                if (room.isOverlap(rooms.get(j)) == true) {
+                    generateRandomHallWay(rooms.get(i - 1), exit, i, rooms);
+                } else {
+                    return;
+                }
+            }
+        }
+        else {
+            for (int j = 0; j < rooms.size(); j++) {
+                if (room.isOverlap(rooms.get(j)) == true) {
+                    generateRandomHallWay(rooms.get(i - 1), exit, i, rooms);
+                } else {
+                    return;
+                }
+            }
+        }
     }
 
     public static Position generateRandomExit(Room current) {

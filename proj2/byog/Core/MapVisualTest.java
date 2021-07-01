@@ -4,6 +4,7 @@ import byog.TileEngine.TETile;
 import byog.TileEngine.Tileset;
 
 import javax.swing.*;
+import java.util.ArrayList;
 import java.util.Random;
 
 
@@ -16,10 +17,10 @@ public class MapVisualTest {
         ter.initialize(WIDTH, HEIGHT);
         TETile[][] world = new TETile[WIDTH][HEIGHT];
         initializeWorld(world);
-        MapGenerator.Room [] rooms = MapGenerator.generateRooms(8);
-        for (int a = 0; a < rooms.length; a++) {
-            MapGenerator.drawSingleRoom(rooms[a], world);
-        }
+        ArrayList<MapGenerator.Room> rooms = MapGenerator.generateRooms(5);
+                MapGenerator.drawSingleRoom(rooms.get(0), world);
+        MapGenerator.drawSingleRoom(rooms.get(1), world);
+        MapGenerator.drawSingleRoom(rooms.get(2), world);
         ter.renderFrame(world);
     }
 
@@ -41,8 +42,8 @@ public class MapVisualTest {
         MapGenerator.Room room = new MapGenerator.Room(position, 3, 8);
         MapGenerator.drawSingleRoom(room, world);
         MapGenerator.Position exit = new MapGenerator.Position(11, 17);
-        MapGenerator.Room neighborRoom = MapGenerator.generateRandomNeighborRoom(room, exit);
-        MapGenerator.drawNeighborRoom(neighborRoom, exit, world);
+        //MapGenerator.Room neighborRoom = MapGenerator.generateRandomNeighborRoom(room, exit);
+        //MapGenerator.drawNeighborRoom(neighborRoom, exit, world);
         ter.renderFrame(world);
     }
 
@@ -73,9 +74,9 @@ public class MapVisualTest {
         MapGenerator.Position start = new MapGenerator.Position(10,10);
         MapGenerator.Room current = new MapGenerator.Room(start, 7, 8);
         MapGenerator.Position exit = MapGenerator.generateRandomExit(current);
-        MapGenerator.Room room = MapGenerator.generateRandomHallWay(current, exit);
+        //MapGenerator.Room room = MapGenerator.generateRandomHallWay(current, exit);
         MapGenerator.drawSingleRoom(current, world);
-        MapGenerator.drawSingleRoom(room, world);
+        //MapGenerator.drawSingleRoom(room, world);
         ter.renderFrame(world);
     }
 
