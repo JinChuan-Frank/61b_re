@@ -68,6 +68,7 @@ public class MapGenerator {
      * @param i the number of rooms to be generated.
      * @return
      */
+
     public static Room[] generateRooms(int i) {
         Room room = generateRandomRoom();
         Position[] exits = new Position[i - 1];
@@ -110,6 +111,7 @@ public class MapGenerator {
         drawExit(exit, world);
     }
 
+    // TODO Avoid overlapping
     public static Room generateRandomHallWay(Room current, Position exit) {
         int width = 0;
         int height = 0;
@@ -132,6 +134,7 @@ public class MapGenerator {
         return neighborRoom;
     }
 
+    // TODO Avoid overlapping
     public static Room generateRandomNeighborRoom(Room current, Position exit) {
         boolean isEligible = false;
         Room room = new Room(new Position(0,0), 0, 0);
@@ -183,7 +186,19 @@ public class MapGenerator {
         }
         Random random = new Random();
         int i = RandomUtils.uniform(random, numberOfPositions);
-        return positions.get(i);
+        Position exit = positions.get(i);
+        checkValidExit(exit);
+        return exit;
+    }
+
+    public static void checkValidExit(Position position) {
+        int xPos = position.xPos;
+        int yPos = position.yPos;
+        if ( xPos>= 4 &&  yPos>= 4 && xPos <= WIDTH - 4 && yPos<= HEIGHT - 4) {
+            return;
+        } else {
+            generateRandomRoom();
+        }
     }
 
     public static Position calNeighborRoomPosition(Room current, Position exit, int width, int height) {
