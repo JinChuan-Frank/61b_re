@@ -75,21 +75,26 @@ public class MapGenerator {
         Room[] rooms = new Room[i];
         rooms[0] = room;
         Room temp = new Room(new Position(0, 0),0,0);
+        boolean isEligibleRoom = false;
         for (int j = 1; j < i; j++) {
             Position exit = generateRandomExit(room);
-            if (room.width > 3 && room.height > 3) {
-                temp = generateRandomHallWay(room, exit);
-            } else if ((room.width == 3 && exit.xPos == room.position.xPos + 1)
-                    || (room.height == 3 && exit.yPos == room.position.yPos + 1)) {
-                temp = generateRandomNeighborRoom(room, exit);
-            } else {
-                temp = generateRandomHallWay(room, exit);
+            while (isEligibleRoom == false) {
+                if (room.width > 3 && room.height > 3) {
+                    temp = generateRandomHallWay(room, exit);
+                } else if ((room.width == 3 && exit.xPos == room.position.xPos + 1)
+                        || (room.height == 3 && exit.yPos == room.position.yPos + 1)) {
+                    temp = generateRandomNeighborRoom(room, exit);
+                } else {
+                    temp = generateRandomHallWay(room, exit);
+                }
+                isEligibleRoom = temp.isEligibleRoom();
+                room = temp;
+                rooms[j] = room;
             }
-        room = temp;
-        rooms[j] = room;
         }
         return rooms;
     }
+
 
     public static Room generateRandomRoom() {
         boolean isEligible = false;
