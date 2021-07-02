@@ -17,11 +17,22 @@ public class MapVisualTest {
         ter.initialize(WIDTH, HEIGHT);
         TETile[][] world = new TETile[WIDTH][HEIGHT];
         initializeWorld(world);
-        ArrayList<MapGenerator.Room> rooms = MapGenerator.generateRooms(5);
-                MapGenerator.drawSingleRoom(rooms.get(0), world);
-        MapGenerator.drawSingleRoom(rooms.get(1), world);
-        MapGenerator.drawSingleRoom(rooms.get(2), world);
+        ArrayList<MapGenerator.RoomWithExits> rooms = MapGenerator.generateRooms(5);
+
         ter.renderFrame(world);
+    }
+
+    public static void testCheckOverlap() {
+        MapGenerator.Room room1 = new MapGenerator.Room(new MapGenerator.Position(2,2),3,3);
+        MapGenerator.Room room2 = new MapGenerator.Room(new MapGenerator.Position(5,2),3,3);
+        MapGenerator.Room room3 = new MapGenerator.Room(new MapGenerator.Position(5,5),3,3);
+        MapGenerator.Room room4 = new MapGenerator.Room(new MapGenerator.Position(2,3),6,8);
+        ArrayList<MapGenerator.Room> rooms = new ArrayList<>();
+        rooms.add(0,room1);
+        rooms.add(1,room2);
+        rooms.add(2,room3);
+        boolean isOverlap = MapGenerator.checkOverlap(room4,rooms);
+        System.out.print(isOverlap);
     }
 
     public static void testIsOverlap() {
@@ -39,11 +50,13 @@ public class MapVisualTest {
         TETile[][] world = new TETile[WIDTH][HEIGHT];
         initializeWorld(world);
         MapGenerator.Position position = new MapGenerator.Position(10, 10);
-        MapGenerator.Room room = new MapGenerator.Room(position, 3, 8);
-        MapGenerator.drawSingleRoom(room, world);
-        MapGenerator.Position exit = new MapGenerator.Position(11, 17);
-        //MapGenerator.Room neighborRoom = MapGenerator.generateRandomNeighborRoom(room, exit);
-        //MapGenerator.drawNeighborRoom(neighborRoom, exit, world);
+        MapGenerator.Room room1 = new MapGenerator.Room(position, 3, 8);
+        ArrayList<MapGenerator.Room> rooms = new ArrayList<>();
+        rooms.add(0, room1);
+        MapGenerator.Position exit = MapGenerator.generateRandomExit(room1);
+        MapGenerator.Room room2 = MapGenerator.generateRandomHallWay(room1, exit, rooms);
+        MapGenerator.drawSingleRoom(room1, world);
+        MapGenerator.drawSingleRoom(room2, world);
         ter.renderFrame(world);
     }
 
