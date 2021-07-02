@@ -92,14 +92,14 @@ public class MapGenerator {
         Room room = generateRandomRoom();
         ArrayList<Room> rooms = new ArrayList<>();
         rooms.add(0, room);
-        RoomWithExits roomWithExits = new RoomWithExits(room, generateRandomExit(room));
+        Position exit = generateRandomExit(room);
+        RoomWithExits roomWithExits = new RoomWithExits(room, exit);
         ArrayList<RoomWithExits> roomWithExitsList = new ArrayList<>();
         roomWithExitsList.add(0, roomWithExits);
         Room temp = new Room(new Position(0, 0),0,0);
         for (int j = 1; j < i; j++) {
             int k = RandomUtils.uniform(RANDOM, rooms.size());
             room = rooms.get(k);
-            Position exit = generateRandomExit(room);
             if (room.width > 3 && room.height > 3) {
                 temp = generateRandomHallWay(room, exit,rooms);
             } else if ((room.width == 3 && exit.xPos == room.position.xPos + 1)
@@ -109,7 +109,10 @@ public class MapGenerator {
                 temp = generateRandomHallWay(room, exit,rooms);
             }
             room = temp;
+            exit = generateRandomExit(room);
+            roomWithExits = new RoomWithExits(room, exit);
             rooms.add(j, room);
+            roomWithExitsList.add(j,roomWithExits);
         }
         return roomWithExitsList;
     }
