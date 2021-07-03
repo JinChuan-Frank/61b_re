@@ -18,7 +18,7 @@ public class MapVisualTest {
         TETile[][] world = new TETile[WIDTH][HEIGHT];
         initializeWorld(world);
         ArrayList<MapGenerator.RoomWithExits> rooms = MapGenerator.generateRooms(5);
-
+        MapGenerator.drawRooms(rooms, world);
         ter.renderFrame(world);
     }
 

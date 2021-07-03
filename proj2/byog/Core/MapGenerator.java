@@ -13,7 +13,7 @@ public class MapGenerator {
     private static final int HEIGHT = 35;
     private static final long SEED = 998877;
     private static final Random RANDOM = new Random(SEED);
-    private static RandomUtils randomUtils = new RandomUtils();
+    private static final RandomUtils randomUtils = new RandomUtils();
 
     public static class Position {
         public int xPos;
@@ -51,12 +51,8 @@ public class MapGenerator {
             int width = this.width;
             int height = this.height;
             Position end = calEndingPosition(position, width, height);
-            if (position.xPos >= 0 && position.xPos < WIDTH && position.yPos >= 0 && position.yPos < HEIGHT &&
-                    end.xPos >= 0 && end.xPos < WIDTH && end.yPos >= 0 && end.yPos < HEIGHT) {
-                return true;
-            } else {
-                return false;
-            }
+            return position.xPos >= 0 && position.xPos < WIDTH && position.yPos >= 0 && position.yPos < HEIGHT &&
+                    end.xPos >= 0 && end.xPos < WIDTH && end.yPos >= 0 && end.yPos < HEIGHT;
         }
 
         public boolean isOverlap(Room oldRoom) {
@@ -75,11 +71,19 @@ public class MapGenerator {
 
 
 
-    public static void drawRooms(ArrayList<Room> rooms, TETile[][] world) {
-        drawSingleRoom(rooms.get(0), world);
-        for (int i = 1; i< rooms.size(); i++) {
-            drawNeighborRoom();
+    public static void drawRooms(ArrayList<RoomWithExits> roomWithExitsList, TETile[][] world) {
+        drawSingleRoom(roomWithExitsList.get(0).room, world);
+        int size = roomWithExitsList.size();
+        for (int i = 1; i< size; i++) {
+            drawRoomWithExits(roomWithExitsList.get(i), world);
         }
+    }
+
+    public static void drawRoomWithExits(RoomWithExits roomWithExits, TETile[][] world) {
+        Position exit = roomWithExits.exit;
+        Room room = roomWithExits.room;
+        drawExit(exit, world);
+        drawSingleRoom(room, world);
     }
 
     /**
@@ -100,6 +104,7 @@ public class MapGenerator {
         for (int j = 1; j < i; j++) {
             int k = RandomUtils.uniform(RANDOM, rooms.size());
             room = rooms.get(k);
+            exit = generateRandomExit(room);
             if (room.width > 3 && room.height > 3) {
                 temp = generateRandomHallWay(room, exit,rooms);
             } else if ((room.width == 3 && exit.xPos == room.position.xPos + 1)
@@ -109,7 +114,6 @@ public class MapGenerator {
                 temp = generateRandomHallWay(room, exit,rooms);
             }
             room = temp;
-            exit = generateRandomExit(room);
             roomWithExits = new RoomWithExits(room, exit);
             rooms.add(j, room);
             roomWithExitsList.add(j,roomWithExits);
@@ -131,11 +135,6 @@ public class MapGenerator {
             isEligible = room.isEligibleRoom();
         }
         return room;
-    }
-
-    public static void drawNeighborRoom(Room room, Position exit, TETile[][] world) {
-        drawSingleRoom(room, world);
-        drawExit(exit, world);
     }
 
     // TODO Avoid overlapping
