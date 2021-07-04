@@ -9,11 +9,13 @@ import java.util.Random;
 
 public class MapGenerator {
 
-    private static final int WIDTH = 50;
-    private static final int HEIGHT = 35;
-    private static final long SEED = 998877;
+    private static final int WIDTH = 65;
+    private static final int HEIGHT = 36;
+    private static final long SEED = 908754;
     private static final Random RANDOM = new Random(SEED);
     private static final RandomUtils randomUtils = new RandomUtils();
+    public static ArrayList<Position> exits = new ArrayList<>();
+    public static ArrayList<Room> rooms = new ArrayList<>();
 
     public static class Position {
         public int xPos;
@@ -22,16 +24,6 @@ public class MapGenerator {
         public Position(int x, int y) {
             xPos = x;
             yPos = y;
-        }
-    }
-
-    public static class RoomWithExits{
-        public Room room;
-        public Position exit;
-
-        public RoomWithExits(Room r, Position p) {
-            room = r;
-            exit = p;
         }
     }
 
@@ -60,8 +52,8 @@ public class MapGenerator {
             Position oldRoomPosition = oldRoom.position;
             Position thisRoomEnd = calEndingPosition(position, this.width, this.height);
             Position oldRoomEnd = calEndingPosition(oldRoomPosition, oldRoom.width, oldRoom.height);
-            if (thisRoomEnd.xPos <= oldRoomPosition.xPos || thisRoomPosition.xPos >= oldRoomEnd.xPos
-                    || thisRoomPosition.yPos >= oldRoomEnd.yPos || thisRoomEnd.yPos <= oldRoomPosition.yPos) {
+            if (thisRoomEnd.xPos < oldRoomPosition.xPos || thisRoomPosition.xPos > oldRoomEnd.xPos
+                    || thisRoomPosition.yPos > oldRoomEnd.yPos || thisRoomEnd.yPos < oldRoomPosition.yPos) {
                 return false;
             } else {
                 return true;
@@ -69,21 +61,16 @@ public class MapGenerator {
         }
     }
 
-
-
-    public static void drawRooms(ArrayList<RoomWithExits> roomWithExitsList, TETile[][] world) {
-        drawSingleRoom(roomWithExitsList.get(0).room, world);
-        int size = roomWithExitsList.size();
-        for (int i = 1; i< size; i++) {
-            drawRoomWithExits(roomWithExitsList.get(i), world);
+    public static void drawRooms(ArrayList<Room> roomsToDraw, TETile[][] world) {
+        for (Room room : roomsToDraw) {
+            drawSingleRoom(room, world);
         }
     }
 
-    public static void drawRoomWithExits(RoomWithExits roomWithExits, TETile[][] world) {
-        Position exit = roomWithExits.exit;
-        Room room = roomWithExits.room;
-        drawExit(exit, world);
-        drawSingleRoom(room, world);
+    public static void drawExits(ArrayList<Position> exitsToDraw, TETile[][] world) {
+        for (Position exit : exitsToDraw) {
+            drawExit(exit, world);
+        }
     }
 
     /**
@@ -92,15 +79,11 @@ public class MapGenerator {
      * @param i the number of rooms to be generated.
      * @return
      */
-    public static ArrayList<RoomWithExits> generateRooms(int i) {
+    public static void generateRooms(int i) {
         Room room = generateRandomRoom();
-        ArrayList<Room> rooms = new ArrayList<>();
         rooms.add(0, room);
-        Position exit = generateRandomExit(room);
-        RoomWithExits roomWithExits = new RoomWithExits(room, exit);
-        ArrayList<RoomWithExits> roomWithExitsList = new ArrayList<>();
-        roomWithExitsList.add(0, roomWithExits);
-        Room temp = new Room(new Position(0, 0),0,0);
+        Position exit;
+        Room temp;
         for (int j = 1; j < i; j++) {
             int k = RandomUtils.uniform(RANDOM, rooms.size());
             room = rooms.get(k);
@@ -114,11 +97,9 @@ public class MapGenerator {
                 temp = generateRandomHallWay(room, exit,rooms);
             }
             room = temp;
-            roomWithExits = new RoomWithExits(room, exit);
             rooms.add(j, room);
-            roomWithExitsList.add(j,roomWithExits);
+            exits.add(j - 1, exit);
         }
-        return roomWithExitsList;
     }
 
 
@@ -129,8 +110,8 @@ public class MapGenerator {
             int xPos = randomUtils.uniform(RANDOM, WIDTH);
             int yPos = randomUtils.uniform(RANDOM, HEIGHT);
             Position position = new Position(xPos, yPos);
-            int width = randomUtils.uniform(RANDOM, 3, WIDTH);
-            int height = randomUtils.uniform(RANDOM, 3, HEIGHT);
+            int width = randomUtils.uniform(RANDOM, 3, WIDTH - xPos);
+            int height = randomUtils.uniform(RANDOM, 3, HEIGHT - yPos);
             room = new Room(position, width, height);
             isEligible = room.isEligibleRoom();
         }
@@ -139,27 +120,27 @@ public class MapGenerator {
 
     // TODO Avoid overlapping
     public static Room generateRandomHallWay(Room current, Position exit, ArrayList<Room> rooms) {
-        int width = 0;
-        int height = 0;
+        int width;
+        int height;
         Position start = current.position;
         Position end = calEndingPosition(start, current.width, current.height);
         boolean isEligible = false;
         boolean isOverlap = true;
-        Room neighborRoom = new Room(new Position(0,0), 2, 2);
+        Room hallWay = new Room(new Position(0,0), 2, 2);
         while (isEligible == false || isOverlap == true) {
             if (exit.yPos == start.yPos || exit.yPos == end.yPos) {
                 width = 3;
-                height = randomUtils.uniform(RANDOM, 3, HEIGHT);;
+                height = randomUtils.uniform(RANDOM, 4, HEIGHT);;
             } else  {
                 height = 3;
-                width = randomUtils.uniform(RANDOM, 3, WIDTH);
+                width = randomUtils.uniform(RANDOM, 4, WIDTH);
             }
-            Position neighboringRoomPos = calNeighborRoomPosition(current, exit, width, height);
-            neighborRoom = new Room(neighboringRoomPos, width, height);
-            isEligible = neighborRoom.isEligibleRoom();
-            isOverlap = checkOverlap(neighborRoom,rooms);
+            Position neighboringRoomPos = calHallwayPosition(current, exit, width, height);
+            hallWay = new Room(neighboringRoomPos, width, height);
+            isEligible = hallWay.isEligibleRoom();
+            isOverlap = checkOverlap(hallWay,rooms);
         }
-        return neighborRoom;
+        return hallWay;
     }
 
     // TODO Avoid overlapping
@@ -167,10 +148,10 @@ public class MapGenerator {
         boolean isEligible = false;
         Room room = new Room(new Position(0,0), 0, 0);
         while (isEligible == false) {
-            int width = randomUtils.uniform(RANDOM, 3, WIDTH);
-            int height = randomUtils.uniform(RANDOM, 3, HEIGHT);
-            int xOff = randomUtils.uniform(RANDOM, 0, width - 2);
-            int yOff = randomUtils.uniform(RANDOM, 0, height - 2);
+            int width = randomUtils.uniform(RANDOM, 4, WIDTH);
+            int height = randomUtils.uniform(RANDOM, 4, HEIGHT);
+            int xOff = randomUtils.uniform(RANDOM, 1, width - 2);
+            int yOff = randomUtils.uniform(RANDOM, 1, height - 2);
             int xPos = 0;
             int yPos = 0;
             Position currentEnd = calEndingPosition(current.position, current.width, current.height);
@@ -199,7 +180,10 @@ public class MapGenerator {
 
     public static boolean checkOverlap(Room room, ArrayList<Room> rooms) {
         boolean isOverlap = true;
-        for (int i = 0; i < rooms.size(); i++) {
+        if (rooms.size() == 1) {
+            return false;
+        }
+        for (int i = 0; i < rooms.size() - 1; i++) {
             if (room.isOverlap(rooms.get(i))) {
                 isOverlap = true;
             } else {
@@ -209,6 +193,11 @@ public class MapGenerator {
         return isOverlap;
     }
 
+    /** Generate random exit for the given room.
+     *
+     * @param current the given room.
+     * @return exit generated at this room for creation of a new room.
+     */
     public static Position generateRandomExit(Room current) {
         int width = current.width;;
         int height = current.height;
@@ -231,38 +220,54 @@ public class MapGenerator {
         Random random = new Random();
         int i = RandomUtils.uniform(random, numberOfPositions);
         Position exit = positions.get(i);
-        checkValidExit(exit);
+        checkValidExit(current, exit);
         return exit;
     }
 
-    public static void checkValidExit(Position position) {
+    /**
+     * Check if a given exit is eligible.
+     * @param room the room where the exit is generated.
+     * @param position the exit to be checked.
+     */
+    public static void checkValidExit(Room room, Position position) {
+        if (exits.contains(position)) {
+            generateRandomExit(room);
+        }
         int xPos = position.xPos;
         int yPos = position.yPos;
         if ( xPos>= 4 &&  yPos>= 4 && xPos <= WIDTH - 4 && yPos<= HEIGHT - 4) {
             return;
         } else {
-            generateRandomRoom();
+            generateRandomExit(room);
         }
     }
 
-    public static Position calNeighborRoomPosition(Room current, Position exit, int width, int height) {
+    /**
+     * Calculate hallway position for the given room.
+     * @param current the current room where the hallway is branching off.
+     * @param exit exit connecting the current room and the new hallway.
+     * @param width width of the hallway.
+     * @param height height of the hallway.
+     * @return position of the hallway.
+     */
+    public static Position calHallwayPosition(Room current, Position exit, int width, int height) {
         Position end = calEndingPosition(current.position, current.width, current.height);
-        int neighborRoomXPos = 0;
-        int neighborRoomYPos = 0;
+        int hallwayXPos = 0;
+        int hallwayYPos = 0;
         if (exit.xPos == current.position.xPos) {
-             neighborRoomXPos = exit.xPos - (width - 1);
-             neighborRoomYPos = exit.yPos - 1;
+            hallwayXPos = exit.xPos - (width - 1);
+            hallwayYPos = exit.yPos - 1;
         } else if (exit.xPos == end.xPos) {
-             neighborRoomXPos = exit.xPos;
-             neighborRoomYPos = exit.yPos - 1;
+            hallwayXPos = exit.xPos;
+            hallwayYPos = exit.yPos - 1;
         } else if (exit.yPos == current.position.yPos) {
-            neighborRoomXPos = exit.xPos - 1;
-            neighborRoomYPos = exit.yPos - (height - 1);
+            hallwayXPos = exit.xPos - 1;
+            hallwayYPos = exit.yPos - (height - 1);
         } else if(exit.yPos == end.yPos) {
-            neighborRoomXPos = exit.xPos - 1;
-            neighborRoomYPos =exit.yPos;
+            hallwayXPos = exit.xPos - 1;
+            hallwayYPos =exit.yPos;
         }
-        return new Position(neighborRoomXPos,neighborRoomYPos);
+        return new Position(hallwayXPos,hallwayYPos);
     }
 
     private static void drawExit(Position exit, TETile[][] world) {

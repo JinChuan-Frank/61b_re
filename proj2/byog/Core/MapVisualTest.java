@@ -9,16 +9,17 @@ import java.util.Random;
 
 
 public class MapVisualTest {
-    private static final int WIDTH = 50;
-    private static final int HEIGHT = 35;
+    private static final int WIDTH = 65;
+    private static final int HEIGHT = 36;
 
     public static void testGenerateRooms() {
         TERenderer ter = new TERenderer();
         ter.initialize(WIDTH, HEIGHT);
         TETile[][] world = new TETile[WIDTH][HEIGHT];
         initializeWorld(world);
-        ArrayList<MapGenerator.RoomWithExits> rooms = MapGenerator.generateRooms(5);
-        MapGenerator.drawRooms(rooms, world);
+        MapGenerator.generateRooms(4);
+        MapGenerator.drawRooms(MapGenerator.rooms, world);
+        MapGenerator.drawExits(MapGenerator.exits, world);
         ter.renderFrame(world);
     }
 
@@ -98,8 +99,8 @@ public class MapVisualTest {
         ter.initialize(WIDTH, HEIGHT);
         TETile[][] world = new TETile[WIDTH][HEIGHT];
         initializeWorld(world);
-        MapGenerator.Position start = new MapGenerator.Position(8, 19);
-        MapGenerator.Room room = new MapGenerator.Room(start, 38, 16);
+        MapGenerator.Position start = new MapGenerator.Position(0, 0);
+        MapGenerator.Room room = new MapGenerator.Room(start, 20, 16);
         MapGenerator.drawSingleRoom(room, world);
         ter.renderFrame(world);
     }
@@ -115,6 +116,5 @@ public class MapVisualTest {
     public static void main(String[] args){
         testGenerateRooms();
     }
-
 
 }
