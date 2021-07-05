@@ -15,7 +15,7 @@ public class MapVisualTest {
         ter.initialize(WIDTH, HEIGHT);
         TETile[][] world = new TETile[WIDTH][HEIGHT];
         initializeWorld(world);
-        MapGenerator.generateRooms(3);
+        MapGenerator.generateRooms(6);
         MapGenerator.drawRooms(MapGenerator.rooms, world);
         MapGenerator.drawExits(MapGenerator.exits, world);
         ter.renderFrame(world);
@@ -30,7 +30,7 @@ public class MapVisualTest {
         rooms.add(0,room1);
         rooms.add(1,room2);
         rooms.add(2,room3);
-        boolean isOverlap = MapGenerator.checkOverlap(room4);
+        boolean isOverlap = MapGenerator.checkOverlap(room4, room3);
         System.out.print(isOverlap);
     }
 
