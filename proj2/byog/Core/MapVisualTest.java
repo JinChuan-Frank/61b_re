@@ -2,10 +2,8 @@ package byog.Core;
 import byog.TileEngine.TERenderer;
 import byog.TileEngine.TETile;
 import byog.TileEngine.Tileset;
-
-import javax.swing.*;
 import java.util.ArrayList;
-import java.util.Random;
+
 
 
 public class MapVisualTest {
@@ -17,7 +15,7 @@ public class MapVisualTest {
         ter.initialize(WIDTH, HEIGHT);
         TETile[][] world = new TETile[WIDTH][HEIGHT];
         initializeWorld(world);
-        MapGenerator.generateRooms(4);
+        MapGenerator.generateRooms(3);
         MapGenerator.drawRooms(MapGenerator.rooms, world);
         MapGenerator.drawExits(MapGenerator.exits, world);
         ter.renderFrame(world);
@@ -32,7 +30,7 @@ public class MapVisualTest {
         rooms.add(0,room1);
         rooms.add(1,room2);
         rooms.add(2,room3);
-        boolean isOverlap = MapGenerator.checkOverlap(room4,rooms);
+        boolean isOverlap = MapGenerator.checkOverlap(room4);
         System.out.print(isOverlap);
     }
 
@@ -55,7 +53,7 @@ public class MapVisualTest {
         ArrayList<MapGenerator.Room> rooms = new ArrayList<>();
         rooms.add(0, room1);
         MapGenerator.Position exit = MapGenerator.generateRandomExit(room1);
-        MapGenerator.Room room2 = MapGenerator.generateRandomHallWay(room1, exit, rooms);
+        MapGenerator.Room room2 = MapGenerator.generateRandomHallWay(room1, exit);
         MapGenerator.drawSingleRoom(room1, world);
         MapGenerator.drawSingleRoom(room2, world);
         ter.renderFrame(world);
