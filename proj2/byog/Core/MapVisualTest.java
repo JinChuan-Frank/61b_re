@@ -116,7 +116,7 @@ public class MapVisualTest {
     }
 
     public static void main(String[] args){
-        testGenerateRandomExit();
+        testGenerateRooms();
     }
 
 }

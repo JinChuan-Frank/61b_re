@@ -208,6 +208,8 @@ public class MapGenerator {
     public static Position generateRandomExit(Room current) {
         int width = current.width;;
         int height = current.height;
+        boolean isValidExit = false;
+        Position exit = new Position(0,0);
         Position start = current.position;
         Position end = calEndingPosition(start, current.width, current.height);
         int numberOfPositions = 2 * (width + height - 4);
@@ -225,29 +227,30 @@ public class MapGenerator {
             positions.add(right);
         }
         Random random = new Random();
-        int i = RandomUtils.uniform(random, numberOfPositions);
-        Position exit = positions.get(i);
-        checkValidExit(current, exit);
+        while (isValidExit == false) {
+            int i = RandomUtils.uniform(random, numberOfPositions);
+            exit = positions.get(i);
+            isValidExit = checkValidExit(exit);
+        }
         return exit;
     }
 
     /**
      * Check if a given exit is eligible.
-     * @param room the room where the exit is generated.
      * @param position the exit to be checked.
      */
-    // TODO fix the bug when exit is (3, y).
-    public static void checkValidExit(Room room, Position position) {
+    // FIXME fix the bug when exit is (3, y).
+    public static boolean checkValidExit(Position position) {
+        boolean isValidExit = false;
         if (exits.contains(position)) {
-            generateRandomExit(room);
+            isValidExit = false;
         }
         int xPos = position.xPos;
         int yPos = position.yPos;
         if ( xPos >= 4 &&  yPos >= 4 && xPos <= WIDTH - 4 && yPos<= HEIGHT - 4) {
-            return;
-        } else {
-            generateRandomExit(room);
+            isValidExit = true;
         }
+        return isValidExit;
     }
 
     /**
