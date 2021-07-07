@@ -16,11 +16,10 @@ public class MapVisualTest {
         TETile[][] world = new TETile[WIDTH][HEIGHT];
         initializeWorld(world);
         MapGenerator.generateRooms();
-        MapGenerator.drawRooms(MapGenerator.ROOMS, world);
         ter.renderFrame(world);
     }
 
-    public static void testBranchOffThisRoom() {
+    /**public static void testBranchOffThisRoom() {
         TERenderer ter = new TERenderer();
         ter.initialize(WIDTH, HEIGHT);
         TETile[][] world = new TETile[WIDTH][HEIGHT];
@@ -35,14 +34,12 @@ public class MapVisualTest {
         MapGenerator.Position position2 = MapGenerator.generateRandomExit(start);
         MapGenerator.Room room2 = MapGenerator.branchOffThisRoom(start, position2);
         rooms.add(room2);
-        System.out.println("Exit:" + position1.xPos + "*" + position1.xPos);
-        System.out.println("Exit:" + position2.xPos + "*" + position2.xPos);
         MapGenerator.drawSingleRoom(rooms.get(0), world);
         for (int i = 1; i < rooms.size(); i++) {
             MapGenerator.drawRoomAndExit(rooms.get(i), world);
         }
         ter.renderFrame(world);
-    }
+    } */
 
     public static void testGenerateRandomRoom() {
         TERenderer ter = new TERenderer();
