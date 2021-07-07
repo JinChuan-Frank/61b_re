@@ -14,8 +14,8 @@ public class MapGenerator {
     private static final long SEED = 34573445;
     private static final Random RANDOM = new Random(SEED);
     private static final RandomUtils randomUtils = new RandomUtils();
-    public static ArrayList<Position> exits = new ArrayList<>();
-    public static ArrayList<Room> rooms = new ArrayList<>();
+    public static ArrayList<Position> EXITS = new ArrayList<>();
+    public static ArrayList<Room> ROOMS = new ArrayList<>();
 
     public static class Position {
         public int xPos;
@@ -77,33 +77,34 @@ public class MapGenerator {
 
     public static void generateRooms() {
         generateStartRoom();
-        generateNewRoom(6);
+        generateNewRoom(20);
     }
 
     public static void generateStartRoom() {
-        boolean isEligible = false;
+        boolean isEligibleRoom = false;
         Room room = new Room(new Position(0,0), 0, 0,new Position(0,0));
-        while (isEligible == false) {
-            int xPos = randomUtils.uniform(RANDOM, WIDTH / 4);
-            int yPos = randomUtils.uniform(RANDOM, HEIGHT / 3);
+        while (isEligibleRoom == false) {
+            int xPos = randomUtils.uniform(RANDOM, WIDTH / 6);
+            int yPos = randomUtils.uniform(RANDOM, HEIGHT/ 5);
             Position position = new Position(xPos, yPos);
-            int width = randomUtils.uniform(RANDOM, 3, (WIDTH - xPos) / 3);
-            int height = randomUtils.uniform(RANDOM, 3, (HEIGHT - yPos) / 2);
+            int width = randomUtils.uniform(RANDOM, 3,WIDTH - xPos);
+            int height = randomUtils.uniform(RANDOM, 3,HEIGHT - yPos);
             room = new Room(position, width, height, new Position(position.xPos + 1, position.yPos));
-            isEligible = room.isEligibleRoom();
+            isEligibleRoom = room.isEligibleRoom();
         }
-        rooms.add(0, room);
+        ROOMS.add(0, room);
     }
 
 
     public static void generateNewRoom(int times) {
         for (int i = 0; i < times; i ++) {
-            int k = RandomUtils.uniform(RANDOM, rooms.size());
-            Room room = rooms.get(k);
+            int k = RandomUtils.uniform(RANDOM, ROOMS.size());
+            Room room = ROOMS.get(k);
             Position exit = generateRandomExit(room);
             Room newRoom = branchOffThisRoom(room, exit);
             if (newRoom.isEligibleRoom() && checkOverlap(newRoom, room) == false){
-                rooms.add(newRoom);
+                ROOMS.add(newRoom);
+                EXITS.add(exit);
             }
         }
     }
@@ -159,8 +160,8 @@ public class MapGenerator {
         int times = 0;
         Room room = new Room(new Position(0,0), 0, 0, new Position(0,0));
         while ( (isEligible == false || isOverlap == true) && times <= 10 ) {
-            int width = randomUtils.uniform(RANDOM, 4, WIDTH);
-            int height = randomUtils.uniform(RANDOM, 4, HEIGHT);
+            int width = randomUtils.uniform(RANDOM, 4, 10);
+            int height = randomUtils.uniform(RANDOM, 4, 8);
             int xOff = randomUtils.uniform(RANDOM, 1, width - 2);
             int yOff = randomUtils.uniform(RANDOM, 1, height - 2);
             int xPos = 0;
@@ -188,18 +189,16 @@ public class MapGenerator {
     }
 
     public static boolean checkOverlap(Room newRoom, Room oldRoom) {
-        boolean isOverlap = true;
-        if (rooms.size() == 1) {
+        boolean isOverlap = false;
+        if (ROOMS.size() == 1) {
             return false;
         }
-        for (Room room : rooms) {
+        for (Room room : ROOMS) {
             if (room.equals(oldRoom)) {
                 continue;
             }
             if ( newRoom.isOverlap(room)) {
                 isOverlap = true;
-            } else {
-                isOverlap =false;
             }
         }
         return isOverlap;
@@ -246,8 +245,10 @@ public class MapGenerator {
      */
     public static boolean checkValidExit(Position position) {
         boolean isValidExit = false;
-        if (exits.contains(position)) {
-            isValidExit = false;
+        for (Position exit : EXITS) {
+            if (exit.xPos == position.xPos && exit.yPos == position.yPos) {
+                isValidExit = false;
+            }
         }
         int xPos = position.xPos;
         int yPos = position.yPos;
@@ -278,7 +279,7 @@ public class MapGenerator {
         } else if (exit.yPos == current.position.yPos) {
             hallwayXPos = exit.xPos - 1;
             hallwayYPos = exit.yPos - (height - 1);
-        } else if(exit.yPos == end.yPos) {
+        } else if (exit.yPos == end.yPos) {
             hallwayXPos = exit.xPos - 1;
             hallwayYPos = exit.yPos;
         }
