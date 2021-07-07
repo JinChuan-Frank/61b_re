@@ -15,9 +15,8 @@ public class MapVisualTest {
         ter.initialize(WIDTH, HEIGHT);
         TETile[][] world = new TETile[WIDTH][HEIGHT];
         initializeWorld(world);
-        MapGenerator.generateRooms(6);
+        MapGenerator.generateRooms();
         MapGenerator.drawRooms(MapGenerator.rooms, world);
-        MapGenerator.drawExits(MapGenerator.exits, world);
         ter.renderFrame(world);
     }
 
@@ -34,14 +33,8 @@ public class MapVisualTest {
         ter.initialize(WIDTH, HEIGHT);
         TETile[][] world = new TETile[WIDTH][HEIGHT];
         initializeWorld(world);
-        MapGenerator.Room room = MapGenerator.generateRandomRoom();
-        System.out.print("Position:" + room.position.xPos + "*" + room.position.yPos + " " + "Width" + room.width + " " + "Height" + room.height);
-        MapGenerator.drawSingleRoom(room, world);
-        ter.renderFrame(world);
 
     }
-
-
 
     private static void initializeWorld(TETile[][] t) {
         for (int x = 0; x < WIDTH; x += 1) {
