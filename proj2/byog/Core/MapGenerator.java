@@ -280,7 +280,7 @@ public class MapGenerator {
             hallwayYPos = exit.yPos - (height - 1);
         } else if(exit.yPos == end.yPos) {
             hallwayXPos = exit.xPos - 1;
-            hallwayYPos =exit.yPos;
+            hallwayYPos = exit.yPos;
         }
         return new Position(hallwayXPos,hallwayYPos);
     }
