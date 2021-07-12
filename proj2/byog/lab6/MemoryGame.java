@@ -51,11 +51,21 @@ public class MemoryGame {
         //TODO: Generate random string of letters of length n
         StringBuilder stringBuilder = new StringBuilder(n);
         for (int i = 0; i < n; i++) {
-            Character character =
+            Character character = CHARACTERS[rand.nextInt(CHARACTERS.length)];
+            stringBuilder.append(character);
         }
+        return stringBuilder.toString();
     }
 
     public void drawFrame(String s) {
+        for (int i = 0; i < s.length(); i ++ ) {
+            char c = s.charAt(i);
+            Font font = new Font("Arial", Font.BOLD, 30);
+            StdDraw.setFont(font);
+            StdDraw.clear(Color.BLACK);
+            StdDraw.text(15, 10, String.valueOf(c));
+            StdDraw.show();
+        }
         //TODO: Take the string and display it in the center of the screen
         //TODO: If game is not over, display relevant game information at the top of the screen
     }
