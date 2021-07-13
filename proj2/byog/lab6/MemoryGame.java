@@ -58,27 +58,37 @@ public class MemoryGame {
     }
 
     public void drawFrame(String s) {
-        for (int i = 0; i < s.length(); i ++ ) {
-            StdDraw.pause(500);
-            char c = s.charAt(i);
-            Font font = new Font("Arial", Font.BOLD, 30);
-            StdDraw.setFont(font);
-            StdDraw.clear(Color.black);
-            StdDraw.setPenColor(Color.white);
-            StdDraw.text(15, 10, Character.toString(c));
-            StdDraw.show();
-        }
+        int halfWidth = width / 2;
+        int halfHeight = height / 2;
+        Font font = new Font("Arial", Font.BOLD, 30);
+        StdDraw.setFont(font);
+        StdDraw.clear(Color.black);
+        StdDraw.setPenColor(Color.white);
+        StdDraw.text(halfWidth, halfHeight, s);
+        StdDraw.show();
         //TODO: Take the string and display it in the center of the screen
         //TODO: If game is not over, display relevant game information at the top of the screen
     }
 
     public void flashSequence(String letters) {
+        for (int i = 0; i < letters.length(); i ++ ) {
+            StdDraw.pause(500);
+            char c = letters.charAt(i);
+            drawFrame(Character.toString(c));
+            StdDraw.pause(1000);
+        }
+        StdDraw.clear(Color.black);
+        StdDraw.show();
         //TODO: Display each character in letters, making sure to blank the screen between letters
     }
 
-    public String solicitNCharsInput(int n) {
+    public String solicitNCharsInput() {
+        StringBuilder stringBuilder = new StringBuilder();
+        while (StdDraw.hasNextKeyTyped()) {
+            stringBuilder.append(StdDraw.nextKeyTyped());
+        }
         //TODO: Read n letters of player input
-        return null;
+        return stringBuilder.toString();
     }
 
     public void startGame() {

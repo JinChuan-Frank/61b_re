@@ -1,16 +1,26 @@
 package byog.lab6;
 
 public class TestMemoryGame {
-    public static void testGenerateRandomString() {
-        MemoryGame memoryGame = new MemoryGame(50, 50, 909867);
+    MemoryGame memoryGame = new MemoryGame(50, 50, 909867);
+    public void testGenerateRandomString() {
+
         System.out.println(memoryGame.generateRandomString(5));
     }
 
-    private static void testDrawFrame() {
-        MemoryGame memoryGame = new MemoryGame(50, 30, 909867);
+    private void testDrawFrame() {
         memoryGame.drawFrame("sdjfhg");
     }
+
+    public void testFlashSequence() {
+        memoryGame.flashSequence("lkjhg");
+    }
+
+    public void testSolicitNCharString() {
+
+    }
+
     public static void main(String[] args) {
-        testDrawFrame();
+        TestMemoryGame testMemoryGame = new TestMemoryGame();
+        testMemoryGame.testFlashSequence();
     }
 }
