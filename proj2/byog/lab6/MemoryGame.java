@@ -59,11 +59,13 @@ public class MemoryGame {
 
     public void drawFrame(String s) {
         for (int i = 0; i < s.length(); i ++ ) {
+            StdDraw.pause(500);
             char c = s.charAt(i);
             Font font = new Font("Arial", Font.BOLD, 30);
             StdDraw.setFont(font);
-            StdDraw.clear(Color.BLACK);
-            StdDraw.text(15, 10, String.valueOf(c));
+            StdDraw.clear(Color.black);
+            StdDraw.setPenColor(Color.white);
+            StdDraw.text(15, 10, Character.toString(c));
             StdDraw.show();
         }
         //TODO: Take the string and display it in the center of the screen
