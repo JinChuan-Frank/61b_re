@@ -41,12 +41,10 @@ public class MemoryGame {
         StdDraw.setYscale(0, this.height);
         StdDraw.clear(Color.BLACK);
         StdDraw.enableDoubleBuffering();
-
         rand = new Random(seed);
     }
 
     public String generateRandomString(int n) {
-        //TODO: Generate random string of letters of length n
         StringBuilder stringBuilder = new StringBuilder(n);
         for (int i = 0; i < n; i++) {
             Character character = CHARACTERS[rand.nextInt(CHARACTERS.length)];
@@ -62,10 +60,19 @@ public class MemoryGame {
     public void drawFrame(String s) {
         int halfWidth = width / 2;
         int halfHeight = height / 2;
-        Font font = new Font("Arial", Font.BOLD, 30);
-        StdDraw.setFont(font);
         StdDraw.clear(Color.black);
         StdDraw.setPenColor(Color.white);
+
+        if (!gameOver) {
+            Font smallFont = new Font("Times New Roman", Font.CENTER_BASELINE, 20);
+            StdDraw.setFont(smallFont);
+            StdDraw.textLeft(1, height - 1, "Round:" + round);
+            StdDraw.text(halfWidth, height - 1, "Watch");
+            StdDraw.textRight(width - 1, height - 1, ENCOURAGEMENT[rand.nextInt(ENCOURAGEMENT.length)]);
+        }
+
+        Font bigFont = new Font("Arial", Font.BOLD, 30);
+        StdDraw.setFont(bigFont);
         StdDraw.text(halfWidth, halfHeight, s);
         StdDraw.show();
 
@@ -111,12 +118,19 @@ public class MemoryGame {
     public void startGame() {
         this.round = 1;
         this.gameOver = false;
+        this.playerTurn = false;
         while (!gameOver) {
             drawFrame("Round:" + " " + round);
-            generateRandomString(round);
-
-            round += 1;
+            String string = generateRandomString(round);
+            flashSequence(string);
+            String userInput = solicitNCharsInput(round);
+            if (userInput.equals(string)) {
+                round += 1;
+            } else {
+                this.gameOver = true;
+            }
         }
+        drawFrame("Game Over! You made it to round:" + " " + round);
         //TODO: Set any relevant variables before the game starts
 
         //TODO: Establish Game loop
