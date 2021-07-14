@@ -67,7 +67,11 @@ public class MemoryGame {
             Font smallFont = new Font("Times New Roman", Font.CENTER_BASELINE, 20);
             StdDraw.setFont(smallFont);
             StdDraw.textLeft(1, height - 1, "Round:" + round);
-            StdDraw.text(halfWidth, height - 1, "Watch");
+            if (!playerTurn) {
+                StdDraw.text(halfWidth, height - 1, "Watch!");
+            } else if (playerTurn) {
+                StdDraw.text(halfWidth, height - 1, "Type!");
+            }
             StdDraw.textRight(width - 1, height - 1, ENCOURAGEMENT[rand.nextInt(ENCOURAGEMENT.length)]);
         }
 
@@ -75,8 +79,6 @@ public class MemoryGame {
         StdDraw.setFont(bigFont);
         StdDraw.text(halfWidth, halfHeight, s);
         StdDraw.show();
-
-        //TODO: If game is not over, display relevant game information at the top of the screen
     }
 
     /**
@@ -110,30 +112,35 @@ public class MemoryGame {
             input = input + key;
             drawFrame(input);
             StdDraw.pause(500);
-
         }
         return input;
     }
 
     public void startGame() {
-        this.round = 1;
-        this.gameOver = false;
-        this.playerTurn = false;
+        round = 1;
+        gameOver = false;
+        playerTurn = false;
+        drawFrame("Good Luck!");
+        StdDraw.pause(1500);
         while (!gameOver) {
-            drawFrame("Round:" + " " + round);
+            playerTurn = false;
+            drawFrame("Round: " + round);
+            StdDraw.pause(1500);
             String string = generateRandomString(round);
             flashSequence(string);
+            playerTurn = true;
             String userInput = solicitNCharsInput(round);
             if (userInput.equals(string)) {
+                drawFrame("Hey Bao Haomao! Well done !");
+                StdDraw.pause(1500);
                 round += 1;
             } else {
-                this.gameOver = true;
+                gameOver = true;
+                drawFrame("Bao Haomao! Game over!");
+                StdDraw.pause(1500);
+                drawFrame("You achieved round " + round);
             }
         }
-        drawFrame("Game Over! You made it to round:" + " " + round);
-        //TODO: Set any relevant variables before the game starts
-
-        //TODO: Establish Game loop
     }
 
 }
