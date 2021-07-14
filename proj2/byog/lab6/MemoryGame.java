@@ -111,7 +111,8 @@ public class MemoryGame {
     public void startGame() {
         this.round = 1;
         this.gameOver = false;
-
+        while (!gameOver) {
+        }
         //TODO: Set any relevant variables before the game starts
 
         //TODO: Establish Game loop
