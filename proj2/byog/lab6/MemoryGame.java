@@ -112,6 +112,10 @@ public class MemoryGame {
         this.round = 1;
         this.gameOver = false;
         while (!gameOver) {
+            drawFrame("Round:" + " " + round);
+            generateRandomString(round);
+
+            round += 1;
         }
         //TODO: Set any relevant variables before the game starts
 
