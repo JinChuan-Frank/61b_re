@@ -23,10 +23,8 @@ public class MemoryGame {
             System.out.println("Please enter a seed");
             return;
         }
-
         long seed = Integer.parseInt(args[0]);
         MemoryGame game = new MemoryGame(40, 40, seed);
-
         game.startGame();
     }
 
@@ -57,6 +55,10 @@ public class MemoryGame {
         return stringBuilder.toString();
     }
 
+    /**
+     * Take the string and display it in the center of the screen
+     * @param s the string to be displayed
+     */
     public void drawFrame(String s) {
         int halfWidth = width / 2;
         int halfHeight = height / 2;
@@ -66,10 +68,14 @@ public class MemoryGame {
         StdDraw.setPenColor(Color.white);
         StdDraw.text(halfWidth, halfHeight, s);
         StdDraw.show();
-        //TODO: Take the string and display it in the center of the screen
+
         //TODO: If game is not over, display relevant game information at the top of the screen
     }
 
+    /**
+     * Display each character in letters, making sure to blank the screen between letters
+     * @param letters the string to be displayed in its single letters one by one.
+     */
     public void flashSequence(String letters) {
         for (int i = 0; i < letters.length(); i ++ ) {
             StdDraw.pause(500);
@@ -79,19 +85,33 @@ public class MemoryGame {
         }
         StdDraw.clear(Color.black);
         StdDraw.show();
-        //TODO: Display each character in letters, making sure to blank the screen between letters
     }
 
-    public String solicitNCharsInput() {
-        StringBuilder stringBuilder = new StringBuilder();
-        while (StdDraw.hasNextKeyTyped()) {
-            stringBuilder.append(StdDraw.nextKeyTyped());
+    /**
+     * Read n letters of player input
+     * @param n length of input allowed, equals the length of string displayed.
+     * @return
+     */
+    public String solicitNCharsInput(int n) {
+        String input = "";
+        drawFrame(input);
+        while (input.length() < n) {
+            if (!StdDraw.hasNextKeyTyped()) {
+                continue;
+            }
+            char key = StdDraw.nextKeyTyped();
+            input = input + key;
+            drawFrame(input);
+            StdDraw.pause(500);
+
         }
-        //TODO: Read n letters of player input
-        return stringBuilder.toString();
+        return input;
     }
 
     public void startGame() {
+        this.round = 1;
+        this.gameOver = false;
+
         //TODO: Set any relevant variables before the game starts
 
         //TODO: Establish Game loop

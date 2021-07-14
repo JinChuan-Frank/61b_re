@@ -16,11 +16,11 @@ public class TestMemoryGame {
     }
 
     public void testSolicitNCharString() {
-
+        memoryGame.solicitNCharsInput(5);
     }
 
     public static void main(String[] args) {
         TestMemoryGame testMemoryGame = new TestMemoryGame();
-        testMemoryGame.testFlashSequence();
+        testMemoryGame.testSolicitNCharString();
     }
 }
