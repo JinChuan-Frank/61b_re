@@ -2,17 +2,54 @@ package byog.Core;
 
 import byog.TileEngine.TERenderer;
 import byog.TileEngine.TETile;
+import edu.princeton.cs.introcs.StdDraw;
+
+import java.awt.*;
+import java.net.PortUnreachableException;
+
 
 public class Game {
     TERenderer ter = new TERenderer();
     /* Feel free to change the width and height. */
     public static final int WIDTH = 80;
-    public static final int HEIGHT = 30;
+    public static final int HEIGHT = 60;
 
     /**
      * Method used for playing a fresh game. The game should start from the main menu.
      */
     public void playWithKeyboard() {
+        displayMainMenu();
+    }
+
+    private void displayMainMenu() {
+        int halfWidth = WIDTH / 2;
+        int halfHeight = HEIGHT / 2;
+        StdDraw.enableDoubleBuffering();
+        StdDraw.setCanvasSize(WIDTH * 16, HEIGHT * 16);
+        StdDraw.setXscale(0, WIDTH);
+        StdDraw.setYscale(0, HEIGHT);
+        StdDraw.clear(Color.BLACK);
+        StdDraw.setPenColor(Color.white);
+        Font bigFont = new Font("Arial", Font.BOLD, 60);
+        Font smallFont = new Font("Arial", Font.BOLD, 40);
+        StdDraw.setFont(bigFont);
+        StdDraw.text(halfWidth, HEIGHT / 3 * 2, "CS 61B : THE GAME");
+        StdDraw.setFont(smallFont);
+        StdDraw.text(halfWidth, halfHeight, "New Game (N)");
+        StdDraw.text(halfWidth, halfHeight - 5, "Load Game (L)");
+        StdDraw.text(halfWidth, halfHeight - 10, "Quit (Q)");
+        StdDraw.show();
+    }
+
+    private void solicitUserInput() {
+        char key = StdDraw.nextKeyTyped();
+        if (key == 'N' || key == 'n') {
+            newGame();
+        }
+    }
+
+    private void newGame() {
+
     }
 
     /**
@@ -34,5 +71,10 @@ public class Game {
 
         TETile[][] finalWorldFrame = null;
         return finalWorldFrame;
+    }
+
+    public static void main(String[] args) {
+        Game game = new Game();
+        game.displayMainMenu();
     }
 }

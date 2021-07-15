@@ -91,9 +91,8 @@ public class MemoryGame {
             char c = letters.charAt(i);
             drawFrame(Character.toString(c));
             StdDraw.pause(1000);
+            drawFrame(" ");
         }
-        StdDraw.clear(Color.black);
-        StdDraw.show();
     }
 
     /**
@@ -125,7 +124,7 @@ public class MemoryGame {
         while (!gameOver) {
             playerTurn = false;
             drawFrame("Round: " + round);
-            StdDraw.pause(1500);
+            StdDraw.pause(2000);
             String string = generateRandomString(round);
             flashSequence(string);
             playerTurn = true;
