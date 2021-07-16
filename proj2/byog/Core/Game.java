@@ -27,6 +27,8 @@ public class Game {
 
     private void displayMainMenu() {
         setCanvas();
+        StdDraw.clear(Color.BLACK);
+        StdDraw.setPenColor(Color.white);
         Font bigFont = new Font("Arial", Font.BOLD, 60);
         Font smallFont = new Font("Arial", Font.BOLD, 40);
         StdDraw.setFont(bigFont);
@@ -44,8 +46,6 @@ public class Game {
         StdDraw.setCanvasSize(WIDTH * 16, HEIGHT * 16);
         StdDraw.setXscale(0, WIDTH);
         StdDraw.setYscale(0, HEIGHT);
-        StdDraw.clear(Color.BLACK);
-        StdDraw.setPenColor(Color.white);
     }
 
     private void solicitUserInput() {
@@ -63,7 +63,8 @@ public class Game {
     }
 
     private void newGame() {
-        setCanvas();
+        StdDraw.clear(Color.BLACK);
+        StdDraw.setPenColor(Color.white);
         Font bigFont = new Font("Arial", Font.BOLD, 60);
         StdDraw.setFont(bigFont);
         StdDraw.text(halfWidth, halfHeight, "Please enter seed, press 'S' to end");
@@ -71,21 +72,35 @@ public class Game {
         readSeed();
     }
 
-    private void readSeed() {
+    private String readSeed() {
+        StdDraw.setPenColor(Color.white);
         isPlayerTurn = true;
         String input = "";
-        StdDraw.text(halfWidth, halfHeight - 5, input);
         while (isPlayerTurn) {
             if (!StdDraw.hasNextKeyTyped()) {
                 continue;
             }
+            StdDraw.clear(Color.BLACK);
             char key = StdDraw.nextKeyTyped();
+            if (key == 'S') {
+                break;
+            }
             input = input + key;
-            setCanvas();
-            StdDraw.text(halfWidth, halfHeight - 5, input);
-            StdDraw.show();
-            setCanvas();
+            drawFrame(input);
+            StdDraw.pause(500);
+
         }
+        isPlayerTurn = false;
+        System.out.println(input);
+        return input;
+
+    }
+
+    public void drawFrame(String s) {
+        Font bigFont = new Font("Arial", Font.BOLD, 30);
+        StdDraw.setFont(bigFont);
+        StdDraw.text(halfWidth, halfHeight, s);
+        StdDraw.show();
     }
 
     /**
