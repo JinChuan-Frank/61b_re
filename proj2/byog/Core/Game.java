@@ -13,6 +13,10 @@ public class Game {
     /* Feel free to change the width and height. */
     public static final int WIDTH = 80;
     public static final int HEIGHT = 60;
+    int halfWidth = WIDTH / 2;
+    int halfHeight = HEIGHT / 2;
+    boolean isPlayerTurn;
+
 
     /**
      * Method used for playing a fresh game. The game should start from the main menu.
@@ -22,14 +26,7 @@ public class Game {
     }
 
     private void displayMainMenu() {
-        int halfWidth = WIDTH / 2;
-        int halfHeight = HEIGHT / 2;
-        StdDraw.enableDoubleBuffering();
-        StdDraw.setCanvasSize(WIDTH * 16, HEIGHT * 16);
-        StdDraw.setXscale(0, WIDTH);
-        StdDraw.setYscale(0, HEIGHT);
-        StdDraw.clear(Color.BLACK);
-        StdDraw.setPenColor(Color.white);
+        setCanvas();
         Font bigFont = new Font("Arial", Font.BOLD, 60);
         Font smallFont = new Font("Arial", Font.BOLD, 40);
         StdDraw.setFont(bigFont);
@@ -39,17 +36,56 @@ public class Game {
         StdDraw.text(halfWidth, halfHeight - 5, "Load Game (L)");
         StdDraw.text(halfWidth, halfHeight - 10, "Quit (Q)");
         StdDraw.show();
+        solicitUserInput();
+    }
+
+    private void setCanvas() {
+        StdDraw.enableDoubleBuffering();
+        StdDraw.setCanvasSize(WIDTH * 16, HEIGHT * 16);
+        StdDraw.setXscale(0, WIDTH);
+        StdDraw.setYscale(0, HEIGHT);
+        StdDraw.clear(Color.BLACK);
+        StdDraw.setPenColor(Color.white);
     }
 
     private void solicitUserInput() {
-        char key = StdDraw.nextKeyTyped();
-        if (key == 'N' || key == 'n') {
-            newGame();
+        isPlayerTurn = true;
+        while (isPlayerTurn) {
+            if (!StdDraw.hasNextKeyTyped()) {
+                continue;
+            }
+            char key = StdDraw.nextKeyTyped();
+            if (key == 'N' || key == 'n') {
+                isPlayerTurn = false;
+                newGame();
+            }
         }
     }
 
     private void newGame() {
+        setCanvas();
+        Font bigFont = new Font("Arial", Font.BOLD, 60);
+        StdDraw.setFont(bigFont);
+        StdDraw.text(halfWidth, halfHeight, "Please enter seed, press 'S' to end");
+        StdDraw.show();
+        readSeed();
+    }
 
+    private void readSeed() {
+        isPlayerTurn = true;
+        String input = "";
+        StdDraw.text(halfWidth, halfHeight - 5, input);
+        while (isPlayerTurn) {
+            if (!StdDraw.hasNextKeyTyped()) {
+                continue;
+            }
+            char key = StdDraw.nextKeyTyped();
+            input = input + key;
+            setCanvas();
+            StdDraw.text(halfWidth, halfHeight - 5, input);
+            StdDraw.show();
+            setCanvas();
+        }
     }
 
     /**
