@@ -324,4 +324,10 @@ public class MapGenerator {
             }
         }
     }
+
+    public static TETile[][] representSingleRoom(Room r) {
+        TETile[][] tiles = new TETile[r.width][r.height];
+        char c = tiles[r.position.xPos][r.position.yPos].character();
+
+    }
 }
