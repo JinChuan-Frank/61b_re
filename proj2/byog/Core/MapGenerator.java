@@ -17,10 +17,10 @@ public class MapGenerator {
     private static ArrayList<Room> ROOMS = new ArrayList<>();
 
     public static class Position {
-        private int xPos;
-        private int yPos;
+        int xPos;
+        int yPos;
 
-        private Position(int x, int y) {
+        Position(int x, int y) {
             xPos = x;
             yPos = y;
         }
@@ -325,9 +325,4 @@ public class MapGenerator {
         }
     }
 
-    public static TETile[][] representSingleRoom(Room r) {
-        TETile[][] tiles = new TETile[r.width][r.height];
-        char c = tiles[r.position.xPos][r.position.yPos].character();
-
-    }
 }

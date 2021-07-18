@@ -41,13 +41,18 @@ public class MapVisualTest {
         ter.renderFrame(world);
     } */
 
-    public static void testGenerateRandomRoom() {
+    /**public static void testGenerateRandomRoom() {
         TERenderer ter = new TERenderer();
         ter.initialize(WIDTH, HEIGHT);
         TETile[][] world = new TETile[WIDTH][HEIGHT];
         initializeWorld(world);
-
-    }
+        MapGenerator.Position position = new MapGenerator.Position(0,0);
+        MapGenerator.Room room = new MapGenerator.Room(position, 3, 5, position);
+        MapGenerator.drawSingleRoom(room, world);
+        ter.renderFrame(world);
+        char c = world[0][3].character();
+        System.out.println(c);
+    }*/
 
     private static void initializeWorld(TETile[][] t) {
         for (int x = 0; x < WIDTH; x += 1) {
@@ -58,7 +63,7 @@ public class MapVisualTest {
     }
 
     public static void main(String[] args){
-        testGenerateRooms();
+
     }
 
 }
