@@ -15,7 +15,7 @@ public class MapVisualTest {
         ter.initialize(WIDTH, HEIGHT);
         TETile[][] world = new TETile[WIDTH][HEIGHT];
         initializeWorld(world);
-        MapGenerator.generateRooms();
+
         ter.renderFrame(world);
     }
 

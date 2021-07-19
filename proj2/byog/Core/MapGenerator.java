@@ -11,10 +11,15 @@ public class MapGenerator {
 
     private static final int WIDTH = 65;
     private static final int HEIGHT = 36;
-    private static final long SEED = 679874675;
-    private static final Random RANDOM = new Random(SEED);
+    private long SEED;
+    private Random RANDOM;
     private static ArrayList<Position> EXITS = new ArrayList<>();
     private static ArrayList<Room> ROOMS = new ArrayList<>();
+
+    MapGenerator(long l) {
+        SEED = l;
+        RANDOM = new Random(SEED)
+    }
 
     public static class Position {
         int xPos;
@@ -60,6 +65,22 @@ public class MapGenerator {
         }
     }
 
+    public static TETile[][] generateWorld(long l) {
+        MapGenerator mapGenerator = new MapGenerator(l);
+        TETile[][] world = new TETile[WIDTH][HEIGHT];
+
+        initializeWorld(world);
+
+    }
+
+    private static void initializeWorld(TETile[][] tiles) {
+        for (int x = 0; x < WIDTH; x += 1) {
+            for (int y = 0; y < HEIGHT; y += 1) {
+                tiles[x][y] = Tileset.NOTHING;
+            }
+        }
+    }
+
     public static void drawRooms(ArrayList<Room> rooms, TETile[][] world) {
         drawSingleRoom(rooms.get(0), world);
         for (int i = 1; i < rooms.size(); i++) {
@@ -72,9 +93,9 @@ public class MapGenerator {
         drawExit(room.exit, world);
     }
 
-    public static void generateRooms() {
+    private void generateRooms() {
         generateStartRoom();
-        generateNewRoom(789);
+        generateNewRoom(RandomUtils.uniform(this.RANDOM, 20, 100));
     }
 
     private static void generateStartRoom() {
