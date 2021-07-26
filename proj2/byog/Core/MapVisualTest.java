@@ -10,6 +10,12 @@ public class MapVisualTest {
     private static final int WIDTH = 65;
     private static final int HEIGHT = 36;
 
+    public static void testMapGenerator() {
+        TETile[][] teTiles = MapGenerator.generateWorld(2379);
+        TERenderer teRenderer = new TERenderer();
+        teRenderer.renderFrame(teTiles);
+    }
+
     public static void testGenerateRooms() {
         TERenderer ter = new TERenderer();
         ter.initialize(WIDTH, HEIGHT);
@@ -63,7 +69,7 @@ public class MapVisualTest {
     }
 
     public static void main(String[] args){
-
+        testMapGenerator();
     }
 
 }

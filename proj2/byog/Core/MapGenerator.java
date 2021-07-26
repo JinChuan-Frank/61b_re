@@ -9,7 +9,7 @@ import java.util.Random;
 
 public class MapGenerator {
 
-    private static final int WIDTH = 65;
+    private static final int WIDTH = 80;
     private static final int HEIGHT = 36;
     private long SEED;
     private Random RANDOM;
@@ -97,7 +97,7 @@ public class MapGenerator {
 
     private void generateRooms() {
         generateStartRoom();
-        generateNewRoom(RandomUtils.uniform(this.RANDOM, 20, 100));
+        generateNewRoom(RandomUtils.uniform(RANDOM, 20, 100));
     }
 
     private void generateStartRoom() {
