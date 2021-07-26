@@ -7,12 +7,13 @@ import byog.TileEngine.Tileset;
 
 
 public class MapVisualTest {
-    private static final int WIDTH = 65;
+    private static final int WIDTH = 80;
     private static final int HEIGHT = 36;
 
     public static void testMapGenerator() {
-        TETile[][] teTiles = MapGenerator.generateWorld(2379);
+        TETile[][] teTiles = MapGenerator.generateWorld(90987665);
         TERenderer teRenderer = new TERenderer();
+        teRenderer.initialize(WIDTH, HEIGHT);
         teRenderer.renderFrame(teTiles);
     }
 

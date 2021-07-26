@@ -10,15 +10,17 @@ import java.util.Random;
 public class MapGenerator {
 
     private static final int WIDTH = 80;
-    private static final int HEIGHT = 36;
+    private static final int HEIGHT = 45;
     private long SEED;
     private Random RANDOM;
-    private ArrayList<Position> EXITS = new ArrayList<>();
-    private ArrayList<Room> ROOMS = new ArrayList<>();
+    private ArrayList<Position> EXITS;
+    private ArrayList<Room> ROOMS;
 
     MapGenerator(long l) {
         SEED = l;
         RANDOM = new Random(SEED);
+        EXITS = new ArrayList<>();
+        ROOMS = new ArrayList<>();
     }
 
     public static class Position {

@@ -6,13 +6,14 @@ import edu.princeton.cs.introcs.StdDraw;
 
 import java.awt.*;
 import java.net.PortUnreachableException;
+import java.util.Locale;
 
 
 public class Game {
     TERenderer ter = new TERenderer();
     /* Feel free to change the width and height. */
     public static final int WIDTH = 80;
-    public static final int HEIGHT = 60;
+    public static final int HEIGHT = 36;
     int halfWidth = WIDTH / 2;
     int halfHeight = HEIGHT / 2;
     boolean isPlayerTurn;
@@ -119,8 +120,9 @@ public class Game {
         // TODO: Fill out this method to run the game using the input passed in,
         // and return a 2D tile representation of the world that would have been
         // drawn if the same inputs had been given to playWithKeyboard().
-
-        TETile[][] finalWorldFrame = null;
+        input = input.toLowerCase(Locale.ROOT);
+        String substring = input.substring(input.indexOf('s' ), input.indexOf('n'));
+        TETile[][] finalWorldFrame = MapGenerator.generateWorld(Long.parseLong(substring));
         return finalWorldFrame;
     }
 
