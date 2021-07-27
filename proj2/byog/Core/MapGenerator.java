@@ -23,7 +23,7 @@ public class MapGenerator {
         ROOMS = new ArrayList<>();
     }
 
-    public static class Position {
+    private static class Position {
         int xPos;
         int yPos;
 
@@ -33,13 +33,13 @@ public class MapGenerator {
         }
     }
 
-    public static class Room {
+    private static class Room {
         private Position position;
         private int width;
         private int height;
         private Position exit;
 
-        public Room(Position p, int w, int h, Position e) {
+        private Room(Position p, int w, int h, Position e) {
             position = p;
             width = w;
             height = h;
@@ -85,7 +85,7 @@ public class MapGenerator {
         }
     }
 
-    public static void drawRooms(ArrayList<Room> rooms, TETile[][] world) {
+    private static void drawRooms(ArrayList<Room> rooms, TETile[][] world) {
         drawSingleRoom(rooms.get(0), world);
         for (int i = 1; i < rooms.size(); i++) {
             drawRoomAndExit(rooms.get(i), world);
