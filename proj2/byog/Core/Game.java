@@ -121,13 +121,16 @@ public class Game {
         // and return a 2D tile representation of the world that would have been
         // drawn if the same inputs had been given to playWithKeyboard().
         input = input.toLowerCase();
-        String substring = input.substring(input.indexOf('s' ), input.indexOf('n'));
+        String substring = input.substring(input.indexOf('s' ) + 1, input.indexOf('n') - 1);
         TETile[][] finalWorldFrame = MapGenerator.generateWorld(Long.parseLong(substring));
         return finalWorldFrame;
     }
 
     public static void main(String[] args) {
         Game game = new Game();
-        game.displayMainMenu();
+        TETile[][] tiles = game.playWithInputString("s09877997n");
+        TERenderer teRenderer = new TERenderer();
+        teRenderer.initialize(WIDTH, HEIGHT);
+        teRenderer.renderFrame(tiles);
     }
 }
