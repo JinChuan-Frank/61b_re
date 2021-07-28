@@ -120,7 +120,7 @@ public class Game {
         // TODO: Fill out this method to run the game using the input passed in,
         // and return a 2D tile representation of the world that would have been
         // drawn if the same inputs had been given to playWithKeyboard().
-        input = input.toLowerCase(Locale.ROOT);
+        input = input.toLowerCase();
         String substring = input.substring(input.indexOf('s' ), input.indexOf('n'));
         TETile[][] finalWorldFrame = MapGenerator.generateWorld(Long.parseLong(substring));
         return finalWorldFrame;
