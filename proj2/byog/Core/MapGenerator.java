@@ -49,8 +49,8 @@ public class MapGenerator {
         private boolean isEligibleRoom() {
             Position end = calEndingPosition(position, width, height);
             return position.xPos >= 0 && position.xPos < WIDTH && position.yPos >= 0
-                    && position.yPos < HEIGHT && end.xPos >= 0 && end.xPos < WIDTH
-                    && end.yPos >= 0 && end.yPos < HEIGHT;
+                    && position.yPos < HEIGHT && end.xPos >= 0 && end.xPos < WIDTH - 1
+                    && end.yPos >= 0 && end.yPos < HEIGHT - 1;
         }
 
         private boolean isOverlap(Room oldRoom) {
