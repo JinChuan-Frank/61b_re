@@ -127,10 +127,6 @@ public class Game {
     }
 
     public static void main(String[] args) {
-        Game game = new Game();
-        TETile[][] tiles = game.playWithInputString("n659854s");
-        TERenderer teRenderer = new TERenderer();
-        teRenderer.initialize(WIDTH, HEIGHT);
-        teRenderer.renderFrame(tiles);
+
     }
 }
