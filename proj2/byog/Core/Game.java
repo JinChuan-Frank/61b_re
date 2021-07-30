@@ -126,7 +126,4 @@ public class Game {
         return finalWorldFrame;
     }
 
-    public static void main(String[] args) {
-
-    }
 }
