@@ -74,7 +74,7 @@ public class MapVisualTest {
         initializeWorld(world);
         MapGenerator mapGenerator = new MapGenerator(658952);
         mapGenerator.generateStartRoom();
-        MapGenerator.drawSingleRoom(mapGenerator.ROOMS.get(0), world);
+        //MapGenerator.drawSingleRoom(mapGenerator.ROOMS.get(0), world);
         TERenderer teRenderer = new TERenderer();
         teRenderer.initialize(WIDTH, HEIGHT);
         teRenderer.renderFrame(world);

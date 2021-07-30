@@ -14,7 +14,7 @@ public class MapGenerator {
     private long SEED;
     private Random RANDOM;
     private ArrayList<Position> EXITS;
-    public ArrayList<Room> ROOMS;
+    private ArrayList<Room> ROOMS;
 
     MapGenerator(long l) {
         SEED = l;
@@ -33,7 +33,7 @@ public class MapGenerator {
         }
     }
 
-    public static class Room {
+    private static class Room {
         private Position position;
         private int width;
         private int height;

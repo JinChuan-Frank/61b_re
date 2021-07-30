@@ -121,14 +121,14 @@ public class Game {
         // and return a 2D tile representation of the world that would have been
         // drawn if the same inputs had been given to playWithKeyboard().
         input = input.toLowerCase();
-        String substring = input.substring(input.indexOf('n' ) + 1, input.indexOf('s') - 1);
+        String substring = input.substring(input.indexOf('n') + 1, input.indexOf('s') - 1);
         TETile[][] finalWorldFrame = MapGenerator.generateWorld(Long.parseLong(substring));
         return finalWorldFrame;
     }
 
     public static void main(String[] args) {
         Game game = new Game();
-        TETile[][] tiles = game.playWithInputString("n09877997s");
+        TETile[][] tiles = game.playWithInputString("n659854s");
         TERenderer teRenderer = new TERenderer();
         teRenderer.initialize(WIDTH, HEIGHT);
         teRenderer.renderFrame(tiles);
