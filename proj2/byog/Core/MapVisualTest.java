@@ -69,8 +69,19 @@ public class MapVisualTest {
         }
     }
 
+    public static void testGenerateStartRoom() {
+        TETile[][] world = new TETile[WIDTH][HEIGHT];
+        initializeWorld(world);
+        MapGenerator mapGenerator = new MapGenerator(658952);
+        mapGenerator.generateStartRoom();
+        MapGenerator.drawSingleRoom(mapGenerator.ROOMS.get(0), world);
+        TERenderer teRenderer = new TERenderer();
+        teRenderer.initialize(WIDTH, HEIGHT);
+        teRenderer.renderFrame(world);
+    }
+
     public static void main(String[] args){
-        testMapGenerator();
+        testGenerateStartRoom();
     }
 
 }

@@ -10,11 +10,11 @@ import java.util.Random;
 public class MapGenerator {
 
     private static final int WIDTH = 80;
-    private static final int HEIGHT = 45;
+    private static final int HEIGHT = 36;
     private long SEED;
     private Random RANDOM;
     private ArrayList<Position> EXITS;
-    private ArrayList<Room> ROOMS;
+    public ArrayList<Room> ROOMS;
 
     MapGenerator(long l) {
         SEED = l;
@@ -33,7 +33,7 @@ public class MapGenerator {
         }
     }
 
-    private static class Room {
+    public static class Room {
         private Position position;
         private int width;
         private int height;
@@ -99,10 +99,10 @@ public class MapGenerator {
 
     private void generateRooms() {
         generateStartRoom();
-        generateNewRoom(RandomUtils.uniform(RANDOM, 20, 100));
+        generateNewRoom(RANDOM.nextInt(100));
     }
 
-    private void generateStartRoom() {
+    public void generateStartRoom() {
         boolean isEligibleRoom = false;
         Room room = new Room(new Position(0,0), 0, 0,new Position(0,0));
         while (isEligibleRoom == false) {
@@ -120,11 +120,11 @@ public class MapGenerator {
 
     private void generateNewRoom(int times) {
         for (int i = 0; i < times; i ++) {
-            int k = RandomUtils.uniform(RANDOM, ROOMS.size());
+            int k = RANDOM.nextInt(ROOMS.size());
             Room room = ROOMS.get(k);
             Position exit = generateRandomExit(room);
             Room newRoom = branchOffThisRoom(room, exit);
-            if (newRoom.isEligibleRoom() && checkOverlap(newRoom, room) == false){
+            if (newRoom.isEligibleRoom() && !checkOverlap(newRoom, room)){
                 ROOMS.add(newRoom);
                 EXITS.add(exit);
             }
@@ -254,7 +254,7 @@ public class MapGenerator {
         }
         Random random = new Random();
         while (isValidExit == false) {
-            int i = RandomUtils.uniform(random, numberOfPositions);
+            int i = RANDOM.nextInt(positions.size());
             exit = positions.get(i);
             isValidExit = checkValidExit(exit);
         }
@@ -312,7 +312,7 @@ public class MapGenerator {
         world[exit.xPos][exit.yPos] = Tileset.FLOOR;
     }
 
-    private static void drawSingleRoom(Room room, TETile[][] world) {
+    public static void drawSingleRoom(Room room, TETile[][] world) {
         Position startingPoint = room.position;
         int width = room.width;
         int height = room.height;
