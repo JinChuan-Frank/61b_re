@@ -99,7 +99,7 @@ public class MapGenerator {
 
     private void generateRooms() {
         generateStartRoom();
-        generateNewRoom(RANDOM.nextInt(100));
+        generateNewRoom(RANDOM.nextInt(50));
     }
 
     public void generateStartRoom() {
@@ -153,7 +153,7 @@ public class MapGenerator {
         Position start = current.position;
         Position end = calEndingPosition(start, current.width, current.height);
         Room hallWay = new Room(new Position(0,0), 0, 0, new Position(0,0));
-        while ( (isEligible == false || isOverlap == true) && times <= 10 ) {
+        while ( (isEligible == false || isOverlap == true) && times <= 5 ) {
             if (exit.yPos == start.yPos) {
                 width = 3;
                 height = RandomUtils.uniform(RANDOM, 3, start.yPos);
