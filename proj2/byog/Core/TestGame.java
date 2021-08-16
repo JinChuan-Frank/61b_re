@@ -17,10 +17,8 @@ public class TestGame {
     }
 
     public static void main(String [] args) {
-        TETile[][] world = new TETile[WIDTH][HEIGHT];
-        initializeWorld(world);
         Game game = new Game();
-        TETile[][] tiles = game.playWithInputString("n897656554s");
+        TETile[][] tiles = game.playWithInputString("n92233720368547758s");
         TERenderer teRenderer = new TERenderer();
         teRenderer.initialize(WIDTH, HEIGHT);
         teRenderer.renderFrame(tiles);

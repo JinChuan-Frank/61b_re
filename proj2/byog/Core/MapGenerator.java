@@ -74,7 +74,6 @@ public class MapGenerator {
         mapGenerator.generateRooms();
         drawRooms(mapGenerator.ROOMS, world);
         return world;
-
     }
 
     private static void initializeWorld(TETile[][] tiles) {
