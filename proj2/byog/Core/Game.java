@@ -71,15 +71,25 @@ public class Game {
         StdDraw.text(halfWidth, halfHeight, "Please enter seed, press 'S' to end");
         StdDraw.show();
         long seed = Long.parseLong(readSeed());
-        TETile[][] world = MapGenerator.generateWorld(seed);
-        displayMap(world);
-        trackMovement(world);
+        MapGenerator mapGenerator = new MapGenerator(seed);
+        TETile[][] world = mapGenerator.generateWorld();
+        isPlayerTurn = true;
+        showMapAndTrackMovement(mapGenerator, world);
     }
 
-    private void trackMovement(TETile[][] world) {
-        char input = readInput();
-        Character.toLowerCase(input);
-
+    private void showMapAndTrackMovement(MapGenerator mapGenerator, TETile[][] world) {
+        TERenderer teRenderer = new TERenderer();
+        teRenderer.initialize(WIDTH, HEIGHT);
+        teRenderer.renderFrame(world);
+        while (isPlayerTurn) {
+            if (!StdDraw.hasNextKeyTyped()) {
+                continue;
+            }
+            char input = StdDraw.nextKeyTyped();
+            Character.toLowerCase(input);
+            mapGenerator.movePlayer(input, world);
+            teRenderer.renderFrame(world);
+        }
     }
 
     private char readInput() {
@@ -93,12 +103,6 @@ public class Game {
             isPlayerTurn = false;
         }
         return input;
-    }
-
-    private static void displayMap(TETile[][] world) {
-        TERenderer teRenderer = new TERenderer();
-        teRenderer.initialize(WIDTH, HEIGHT);
-        teRenderer.renderFrame(world);
     }
 
     private String readSeed() {
@@ -151,7 +155,7 @@ public class Game {
         input = input.toLowerCase();
         String substring = input.substring(input.indexOf('n') + 1, input.indexOf('s') - 1);
         MapGenerator mapGenerator = new MapGenerator(Long.parseLong(substring));
-        TETile[][] finalWorldFrame = mapGenerator.generateWorld(Long.parseLong(substring));
+        TETile[][] finalWorldFrame = mapGenerator.generateWorld();
         return finalWorldFrame;
     }
 

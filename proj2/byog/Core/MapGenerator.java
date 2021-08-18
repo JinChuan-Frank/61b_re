@@ -68,17 +68,41 @@ public class MapGenerator {
         }
     }
 
-    public void movePlayer(char c, Position p, TETile[][] world) {
-
+    public void movePlayer(char c, TETile[][] world) {
+        Position p1 = playerPosition;
+        Position p2 = calPlayerPosition(c, world);
+        world[p1.xPos][p1.yPos] = Tileset.FLOOR;
+        world[p2.xPos][p2.yPos] = Tileset.PLAYER;
+        playerPosition = p2;
     }
 
-    public TETile[][] generateWorld(long l) {
-        MapGenerator mapGenerator = new MapGenerator(l);
+    private Position calPlayerPosition(char c, TETile[][] world) {
+        Position newPlayerPosition = new Position(0,0);
+        if (c == 'w') {
+            newPlayerPosition.yPos = playerPosition.yPos + 1;
+            newPlayerPosition.xPos = playerPosition.xPos;
+        } else if (c == 'a') {
+            newPlayerPosition.xPos = playerPosition.xPos - 1;
+            newPlayerPosition.yPos = playerPosition.yPos;
+        } else if (c == 's') {
+            newPlayerPosition.yPos = playerPosition.yPos - 1;
+            newPlayerPosition.xPos = playerPosition.xPos;
+        } else if (c == 'd') {
+            newPlayerPosition.xPos = playerPosition.xPos + 1;
+            newPlayerPosition.yPos = playerPosition.yPos;
+        }
+        if (world[newPlayerPosition.xPos][newPlayerPosition.yPos] == Tileset.WALL) {
+            return playerPosition;
+        }
+        return newPlayerPosition;
+    }
+
+    public TETile[][] generateWorld() {
         TETile[][] world = new TETile[WIDTH][HEIGHT];
         initializeWorld(world);
-        mapGenerator.generateRooms();
-        drawRooms(mapGenerator.ROOMS, world);
-        setPlayer(mapGenerator.ROOMS, world);
+        generateRooms();
+        drawRooms(ROOMS, world);
+        setPlayer(ROOMS, world);
         return world;
     }
 

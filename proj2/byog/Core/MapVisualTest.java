@@ -11,7 +11,8 @@ public class MapVisualTest {
     private static final int HEIGHT = 36;
 
     public static void testMapGenerator() {
-        TETile[][] teTiles = MapGenerator.generateWorld(90987665);
+        MapGenerator mapGenerator = new MapGenerator(90987665);
+        TETile[][] teTiles = mapGenerator.generateWorld();
         TERenderer teRenderer = new TERenderer();
         teRenderer.initialize(WIDTH, HEIGHT);
         teRenderer.renderFrame(teTiles);
