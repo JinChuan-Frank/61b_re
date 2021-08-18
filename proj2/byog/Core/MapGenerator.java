@@ -15,6 +15,7 @@ public class MapGenerator {
     private Random RANDOM;
     private ArrayList<Position> EXITS;
     private ArrayList<Room> ROOMS;
+    private Position playerPosition;
 
     MapGenerator(long l) {
         SEED = l;
@@ -67,12 +68,17 @@ public class MapGenerator {
         }
     }
 
-    public static TETile[][] generateWorld(long l) {
+    public void movePlayer(char c, Position p, TETile[][] world) {
+
+    }
+
+    public TETile[][] generateWorld(long l) {
         MapGenerator mapGenerator = new MapGenerator(l);
         TETile[][] world = new TETile[WIDTH][HEIGHT];
         initializeWorld(world);
         mapGenerator.generateRooms();
         drawRooms(mapGenerator.ROOMS, world);
+        setPlayer(mapGenerator.ROOMS, world);
         return world;
     }
 
@@ -82,6 +88,11 @@ public class MapGenerator {
                 tiles[x][y] = Tileset.NOTHING;
             }
         }
+    }
+
+    private void setPlayer(ArrayList<Room> rooms, TETile[][] world) {
+        playerPosition = new Position(rooms.get(0).position.xPos + 1, rooms.get(0).position.yPos + 1);
+        world[playerPosition.xPos][playerPosition.yPos] = Tileset.PLAYER;
     }
 
     private static void drawRooms(ArrayList<Room> rooms, TETile[][] world) {

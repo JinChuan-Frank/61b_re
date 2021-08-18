@@ -56,7 +56,7 @@ public class Game {
                 continue;
             }
             char key = StdDraw.nextKeyTyped();
-            if (key == 'N' || key == 'n') {
+            if (Character.toLowerCase(key) == 'n' ) {
                 isPlayerTurn = false;
                 newGame();
             }
@@ -70,7 +70,35 @@ public class Game {
         StdDraw.setFont(bigFont);
         StdDraw.text(halfWidth, halfHeight, "Please enter seed, press 'S' to end");
         StdDraw.show();
-        readSeed();
+        long seed = Long.parseLong(readSeed());
+        TETile[][] world = MapGenerator.generateWorld(seed);
+        displayMap(world);
+        trackMovement(world);
+    }
+
+    private void trackMovement(TETile[][] world) {
+        char input = readInput();
+        Character.toLowerCase(input);
+
+    }
+
+    private char readInput() {
+        isPlayerTurn = true;
+        char input = ' ';
+        while (isPlayerTurn) {
+            if (!StdDraw.hasNextKeyTyped()) {
+                continue;
+            }
+            input = StdDraw.nextKeyTyped();
+            isPlayerTurn = false;
+        }
+        return input;
+    }
+
+    private static void displayMap(TETile[][] world) {
+        TERenderer teRenderer = new TERenderer();
+        teRenderer.initialize(WIDTH, HEIGHT);
+        teRenderer.renderFrame(world);
     }
 
     private String readSeed() {
@@ -83,21 +111,21 @@ public class Game {
             }
             StdDraw.clear(Color.BLACK);
             char key = StdDraw.nextKeyTyped();
-            if (key == 'S') {
+            Character.toLowerCase(key);
+            if (key == 's') {
                 break;
             }
             input = input + key;
             drawFrame(input);
-            StdDraw.pause(500);
-
         }
+
         isPlayerTurn = false;
         System.out.println(input);
         return input;
 
     }
 
-    public void drawFrame(String s) {
+    private void drawFrame(String s) {
         Font bigFont = new Font("Arial", Font.BOLD, 30);
         StdDraw.setFont(bigFont);
         StdDraw.text(halfWidth, halfHeight, s);
@@ -122,7 +150,8 @@ public class Game {
         // drawn if the same inputs had been given to playWithKeyboard().
         input = input.toLowerCase();
         String substring = input.substring(input.indexOf('n') + 1, input.indexOf('s') - 1);
-        TETile[][] finalWorldFrame = MapGenerator.generateWorld(Long.parseLong(substring));
+        MapGenerator mapGenerator = new MapGenerator(Long.parseLong(substring));
+        TETile[][] finalWorldFrame = mapGenerator.generateWorld(Long.parseLong(substring));
         return finalWorldFrame;
     }
 

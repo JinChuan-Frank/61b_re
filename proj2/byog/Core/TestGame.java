@@ -18,10 +18,12 @@ public class TestGame {
 
     public static void main(String [] args) {
         Game game = new Game();
-        TETile[][] tiles = game.playWithInputString("N3659452656666S");
-        TERenderer teRenderer = new TERenderer();
-        teRenderer.initialize(WIDTH, HEIGHT);
-        teRenderer.renderFrame(tiles);
+        game.playWithKeyboard();
+
+        //TETile[][] tiles = game.playWithInputString("N3659452656456123S");
+        //TERenderer teRenderer = new TERenderer();
+        //teRenderer.initialize(WIDTH, HEIGHT);
+        //teRenderer.renderFrame(tiles);
     }
 
 
