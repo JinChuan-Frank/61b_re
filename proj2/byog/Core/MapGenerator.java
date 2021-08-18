@@ -98,7 +98,7 @@ public class MapGenerator {
 
     private void generateRooms() {
         generateStartRoom();
-        generateNewRoom(RANDOM.nextInt(50));
+        generateNewRoom(RandomUtils.uniform(RANDOM, 10, 100));
     }
 
     public void generateStartRoom() {
