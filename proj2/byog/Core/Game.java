@@ -87,6 +87,7 @@ public class Game {
             double x = StdDraw.mouseX();
             double y = StdDraw.mouseY();
             headUpDisplay(x, y, world);
+            teRenderer.renderFrame(world);
             if (StdDraw.mouseX() != x || StdDraw.mouseY() != y) {
                 continue;
             }
@@ -119,6 +120,7 @@ public class Game {
             StdDraw.setPenColor(Color.WHITE);
             StdDraw.textLeft(1, HEIGHT - 1, text);
             StdDraw.show();
+
         } catch (IndexOutOfBoundsException e) {
 
         }
