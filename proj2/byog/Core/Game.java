@@ -82,9 +82,15 @@ public class Game {
         TERenderer teRenderer = new TERenderer();
         teRenderer.initialize(WIDTH, HEIGHT);
         teRenderer.renderFrame(world);
+
         while (isPlayerTurn) {
-            HUD(world);
-            if (!StdDraw.hasNextKeyTyped() || ) {
+            double x = StdDraw.mouseX();
+            double y = StdDraw.mouseY();
+            headUpDisplay(x, y, world);
+            if (StdDraw.mouseX() != x || StdDraw.mouseY() != y) {
+                continue;
+            }
+            if (!StdDraw.hasNextKeyTyped()) {
                 continue;
             }
             char input = StdDraw.nextKeyTyped();
@@ -95,29 +101,26 @@ public class Game {
 
     }
 
-    private void HUD(TETile[][] world) {
-        while (!StdDraw.hasNextKeyTyped()) {
-            try {
-                String text = "";
-                int xOffSet = (int) StdDraw.mouseX();
-                int yOffSet = (int) StdDraw.mouseY();
-                TETile teTile = world[xOffSet][yOffSet];
+    private void headUpDisplay(double x, double y, TETile[][] world) {
+        try {
+            String text = "";
+            int xOffSet = (int) x;
+            int yOffSet = (int) y;
+            TETile teTile = world[xOffSet][yOffSet];
 
-                if (teTile == Tileset.WALL) {
-                    text = "Wall";
-                } else if (teTile == Tileset.FLOOR) {
-                    text = "Floor";
-                } else if (teTile == Tileset.PLAYER) {
-                    text = "Player";
-                }
-                Font smallFont = new Font("Times New Roman", Font.CENTER_BASELINE, 20);
-                StdDraw.setFont();
-                StdDraw.setPenColor(Color.WHITE);
-                StdDraw.textLeft(1, HEIGHT - 1, text);
-                StdDraw.show();
-            } catch (IndexOutOfBoundsException e) {
-
+            if (teTile == Tileset.WALL) {
+                text = "Wall";
+            } else if (teTile == Tileset.FLOOR) {
+                text = "Floor";
+            } else if (teTile == Tileset.PLAYER) {
+                text = "Player";
             }
+
+            StdDraw.setPenColor(Color.WHITE);
+            StdDraw.textLeft(1, HEIGHT - 1, text);
+            StdDraw.show();
+        } catch (IndexOutOfBoundsException e) {
+
         }
 
     }
