@@ -69,7 +69,7 @@ public class MemoryGame {
             StdDraw.textLeft(1, height - 1, "Round:" + round);
             if (!playerTurn) {
                 StdDraw.text(halfWidth, height - 1, "Watch!");
-            } else if (playerTurn) {
+            } else  {
                 StdDraw.text(halfWidth, height - 1, "Type!");
             }
             StdDraw.textRight(width - 1, height - 1, ENCOURAGEMENT[rand.nextInt(ENCOURAGEMENT.length)]);

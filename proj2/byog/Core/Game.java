@@ -2,6 +2,7 @@ package byog.Core;
 
 import byog.TileEngine.TERenderer;
 import byog.TileEngine.TETile;
+import byog.TileEngine.Tileset;
 import edu.princeton.cs.introcs.StdDraw;
 
 import java.awt.*;
@@ -82,7 +83,8 @@ public class Game {
         teRenderer.initialize(WIDTH, HEIGHT);
         teRenderer.renderFrame(world);
         while (isPlayerTurn) {
-            if (!StdDraw.hasNextKeyTyped()) {
+            HUD(world);
+            if (!StdDraw.hasNextKeyTyped() || ) {
                 continue;
             }
             char input = StdDraw.nextKeyTyped();
@@ -90,6 +92,34 @@ public class Game {
             mapGenerator.movePlayer(input, world);
             teRenderer.renderFrame(world);
         }
+
+    }
+
+    private void HUD(TETile[][] world) {
+        while (!StdDraw.hasNextKeyTyped()) {
+            try {
+                String text = "";
+                int xOffSet = (int) StdDraw.mouseX();
+                int yOffSet = (int) StdDraw.mouseY();
+                TETile teTile = world[xOffSet][yOffSet];
+
+                if (teTile == Tileset.WALL) {
+                    text = "Wall";
+                } else if (teTile == Tileset.FLOOR) {
+                    text = "Floor";
+                } else if (teTile == Tileset.PLAYER) {
+                    text = "Player";
+                }
+                Font smallFont = new Font("Times New Roman", Font.CENTER_BASELINE, 20);
+                StdDraw.setFont();
+                StdDraw.setPenColor(Color.WHITE);
+                StdDraw.textLeft(1, HEIGHT - 1, text);
+                StdDraw.show();
+            } catch (IndexOutOfBoundsException e) {
+
+            }
+        }
+
     }
 
     private char readInput() {
