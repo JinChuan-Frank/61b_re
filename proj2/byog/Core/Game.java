@@ -57,9 +57,14 @@ public class Game {
                 continue;
             }
             char key = StdDraw.nextKeyTyped();
-            if (Character.toLowerCase(key) == 'n' ) {
+            Character.toLowerCase(key);
+            if (key == 'n' ) {
                 isPlayerTurn = false;
                 newGame();
+            } else if (key == 'l') {
+                loadGame();
+            } else if (key == 'q') {
+                quitGame();
             }
         }
     }
@@ -78,6 +83,14 @@ public class Game {
         showMapAndTrackMovement(mapGenerator, world);
     }
 
+    private void loadGame() {
+
+    }
+
+    private void quitGame() {
+        System.exit(0);
+    }
+
     private void showMapAndTrackMovement(MapGenerator mapGenerator, TETile[][] world) {
         TERenderer teRenderer = new TERenderer();
         teRenderer.initialize(WIDTH, HEIGHT);
@@ -87,19 +100,25 @@ public class Game {
             double x = StdDraw.mouseX();
             double y = StdDraw.mouseY();
             headUpDisplay(x, y, world);
-            teRenderer.renderFrame(world);
+
             if (StdDraw.mouseX() != x || StdDraw.mouseY() != y) {
+                teRenderer.renderFrame(world);
                 continue;
             }
             if (!StdDraw.hasNextKeyTyped()) {
                 continue;
             }
             char input = StdDraw.nextKeyTyped();
+            String command = "";
             Character.toLowerCase(input);
             mapGenerator.movePlayer(input, world);
             teRenderer.renderFrame(world);
+            if (input == ':') {
+                if (Character.toLowerCase(StdDraw.nextKeyTyped()) == 'q') {
+                    quitGame();
+                }
+            }
         }
-
     }
 
     private void headUpDisplay(double x, double y, TETile[][] world) {
