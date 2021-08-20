@@ -3,11 +3,12 @@ package byog.Core;
 import byog.TileEngine.TETile;
 import byog.TileEngine.Tileset;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
-public class MapGenerator {
+public class MapGenerator implements Serializable {
 
     private static final int WIDTH = 80;
     private static final int HEIGHT = 36;
@@ -24,7 +25,7 @@ public class MapGenerator {
         ROOMS = new ArrayList<>();
     }
 
-    private static class Position {
+    private static class Position implements Serializable {
         int xPos;
         int yPos;
 
@@ -34,7 +35,7 @@ public class MapGenerator {
         }
     }
 
-    private static class Room {
+    private static class Room implements Serializable {
         private Position position;
         private int width;
         private int height;
