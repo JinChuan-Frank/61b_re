@@ -85,15 +85,40 @@ public class Game {
     }
 
     private void loadGame() {
+        StdDraw.setPenColor(Color.WHITE);
+        StdDraw.clear(Color.black);
+        drawFrame("Loading game ......");
+        StdDraw.pause(1000);
 
+        try(FileInputStream fi = new FileInputStream("world.bin")) {
+            ObjectInputStream os = new ObjectInputStream(fi);
+            MapGenerator mapGenerator = (MapGenerator)os.readObject();
+            TETile[][] world = (TETile[][])os.readObject();
+            os.close();
+
+            showMapAndTrackMovement(mapGenerator, world);
+
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
+        }
     }
 
     private void quitGame() {
+        StdDraw.clear(Color.black);
+        drawFrame("Quiting game....");
+        StdDraw.pause(1000);
         System.exit(0);
     }
 
     private void saveGame(MapGenerator mapGenerator, TETile[][] world)  {
-        world = getRealTimeWorld(mapGenerator, world);
+        StdDraw.setPenColor(Color.WHITE);
+        StdDraw.clear(Color.black);
+        drawFrame("Saving game ......");
+        StdDraw.pause(1000);
         try(FileOutputStream fs = new FileOutputStream("world.bin")) {
             ObjectOutputStream os = new ObjectOutputStream(fs);
             os.writeObject(mapGenerator);
@@ -102,11 +127,6 @@ public class Game {
         } catch (IOException e) {
             e.printStackTrace();
         }
-    }
-
-    private TETile[][] getRealTimeWorld(MapGenerator mapGenerator, TETile[][] world) {
-        TETile[][] finalWorldFrame = mapGenerator.generateFinalWorldFrame(world);
-        return finalWorldFrame;
     }
 
     private void showMapAndTrackMovement(MapGenerator mapGenerator, TETile[][] world) {
@@ -148,11 +168,11 @@ public class Game {
             int yOffSet = (int) y;
             TETile teTile = world[xOffSet][yOffSet];
 
-            if (teTile == Tileset.WALL) {
+            if (teTile.equals(Tileset.WALL)) {
                 text = "Wall";
-            } else if (teTile == Tileset.FLOOR) {
+            } else if (teTile.equals(Tileset.FLOOR)) {
                 text = "Floor";
-            } else if (teTile == Tileset.PLAYER) {
+            } else if (teTile.equals(Tileset.PLAYER)) {
                 text = "Player";
             }
 

@@ -69,12 +69,6 @@ public class MapGenerator implements Serializable {
         }
     }
 
-    public TETile[][] generateFinalWorldFrame(TETile[][] world) {
-        TETile[][] finalWorldFrame = world;
-        finalWorldFrame[playerPosition.xPos][playerPosition.yPos] = Tileset.PLAYER;
-        return finalWorldFrame;
-    }
-
     public void movePlayer(char c, TETile[][] world) {
         Position p1 = playerPosition;
         Position p2 = calPlayerPosition(c, world);
@@ -100,7 +94,7 @@ public class MapGenerator implements Serializable {
         } else {
             newPlayerPosition = playerPosition;
         }
-        if (world[newPlayerPosition.xPos][newPlayerPosition.yPos] == Tileset.WALL) {
+        if (world[newPlayerPosition.xPos][newPlayerPosition.yPos].equals(Tileset.WALL)) {
             return playerPosition;
         }
         return newPlayerPosition;
