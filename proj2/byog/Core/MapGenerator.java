@@ -68,6 +68,12 @@ public class MapGenerator {
         }
     }
 
+    public TETile[][] generateFinalWorldFrame(TETile[][] world) {
+        TETile[][] finalWorldFrame = world;
+        finalWorldFrame[playerPosition.xPos][playerPosition.yPos] = Tileset.PLAYER;
+        return finalWorldFrame;
+    }
+
     public void movePlayer(char c, TETile[][] world) {
         Position p1 = playerPosition;
         Position p2 = calPlayerPosition(c, world);
@@ -90,6 +96,8 @@ public class MapGenerator {
         } else if (c == 'd') {
             newPlayerPosition.xPos = playerPosition.xPos + 1;
             newPlayerPosition.yPos = playerPosition.yPos;
+        } else {
+            newPlayerPosition = playerPosition;
         }
         if (world[newPlayerPosition.xPos][newPlayerPosition.yPos] == Tileset.WALL) {
             return playerPosition;

@@ -6,6 +6,7 @@ import byog.TileEngine.Tileset;
 import edu.princeton.cs.introcs.StdDraw;
 
 import java.awt.*;
+import java.io.*;
 import java.net.PortUnreachableException;
 import java.util.Locale;
 
@@ -91,16 +92,33 @@ public class Game {
         System.exit(0);
     }
 
+    private void saveGame(MapGenerator mapGenerator, TETile[][] world)  {
+        world = getRealTimeWorld(mapGenerator, world);
+        try(FileOutputStream fs = new FileOutputStream("world.bin")) {
+            ObjectOutputStream os = new ObjectOutputStream(fs);
+            os.writeObject(mapGenerator);
+            os.writeObject(world);
+            os.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private TETile[][] getRealTimeWorld(MapGenerator mapGenerator, TETile[][] world) {
+        TETile[][] finalWorldFrame = mapGenerator.generateFinalWorldFrame(world);
+        return finalWorldFrame;
+    }
+
     private void showMapAndTrackMovement(MapGenerator mapGenerator, TETile[][] world) {
         TERenderer teRenderer = new TERenderer();
         teRenderer.initialize(WIDTH, HEIGHT);
         teRenderer.renderFrame(world);
+        boolean isUserCommand = false;
 
         while (isPlayerTurn) {
             double x = StdDraw.mouseX();
             double y = StdDraw.mouseY();
             headUpDisplay(x, y, world);
-
             if (StdDraw.mouseX() != x || StdDraw.mouseY() != y) {
                 teRenderer.renderFrame(world);
                 continue;
@@ -109,14 +127,16 @@ public class Game {
                 continue;
             }
             char input = StdDraw.nextKeyTyped();
-            String command = "";
+
             Character.toLowerCase(input);
             mapGenerator.movePlayer(input, world);
             teRenderer.renderFrame(world);
             if (input == ':') {
-                if (Character.toLowerCase(StdDraw.nextKeyTyped()) == 'q') {
-                    quitGame();
-                }
+               isUserCommand = true;
+            }
+            if (isUserCommand && input == 'q') {
+                saveGame(mapGenerator, world);
+                quitGame();
             }
         }
     }
@@ -210,6 +230,7 @@ public class Game {
         String substring = input.substring(input.indexOf('n') + 1, input.indexOf('s') - 1);
         MapGenerator mapGenerator = new MapGenerator(Long.parseLong(substring));
         TETile[][] finalWorldFrame = mapGenerator.generateWorld();
+
         return finalWorldFrame;
     }
 
