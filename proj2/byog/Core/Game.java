@@ -114,6 +114,7 @@ public class Game {
         System.exit(0);
     }
 
+
     private void saveGame(MapGenerator mapGenerator, TETile[][] world)  {
         StdDraw.setPenColor(Color.WHITE);
         StdDraw.clear(Color.black);
@@ -247,11 +248,32 @@ public class Game {
         // and return a 2D tile representation of the world that would have been
         // drawn if the same inputs had been given to playWithKeyboard().
         input = input.toLowerCase();
-        String substring = input.substring(input.indexOf('n') + 1, input.indexOf('s') - 1);
-        MapGenerator mapGenerator = new MapGenerator(Long.parseLong(substring));
-        TETile[][] finalWorldFrame = mapGenerator.generateWorld();
+        TETile[][] finalWorldFrame = null;
+        if (input.startsWith("n")) {
+            String substring = input.substring(input.indexOf('n') + 1, input.indexOf('s') - 1);
+            MapGenerator mapGenerator = new MapGenerator(Long.parseLong(substring));
+            TETile[][] initialWorldFrame = mapGenerator.generateWorld();
+            if (input.length() == substring.length()) {
+                finalWorldFrame = initialWorldFrame;
+            } else {
+                String command = input.substring(input.indexOf('s') + 1);
+                if (command.contains(":")) {
+                    command = command.substring();
+                    char arr[] = command.toCharArray();
+                    for (char c : arr) {
+
+                    }
+                }
+                finalWorldFrame = trackMovementWithInputString(initialWorldFrame, command);
+            }
+        }
+
 
         return finalWorldFrame;
+    }
+
+    private TETile[][] trackMovementWithInputString(TETile[][] initialWorldFrame, String command) {
+
     }
 
 }
