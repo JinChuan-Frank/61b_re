@@ -87,7 +87,7 @@ public class Game {
     private void loadGame() {
         displayLoadGame();
 
-        try(FileInputStream fi = new FileInputStream("world.bin")) {
+        try(FileInputStream fi = new FileInputStream("world.txt")) {
             ObjectInputStream os = new ObjectInputStream(fi);
             MapGenerator mapGenerator = (MapGenerator)os.readObject();
             TETile[][] world = (TETile[][])os.readObject();
@@ -121,7 +121,7 @@ public class Game {
 
     private void saveGame(MapGenerator mapGenerator, TETile[][] world)  {
         displaySaveGame();
-        try(FileOutputStream fs = new FileOutputStream("world.bin")) {
+        try(FileOutputStream fs = new FileOutputStream("world.txt")) {
             ObjectOutputStream os = new ObjectOutputStream(fs);
             os.writeObject(mapGenerator);
             os.writeObject(world);
@@ -277,15 +277,16 @@ public class Game {
             return worldFrame;
         }
 
-        String command = input.substring(input.indexOf('s') + 1);
-        if (command.contains(":")) {
-            command = command.substring(0, command.indexOf(':'));
+        String substring1 = input.substring(input.indexOf('s') + 1);
+        if (substring1.contains(":")) {
+            String command = substring1.substring(0, substring1.indexOf(':'));
+
         }
         char arr[] = command.toCharArray();
         for (char c : arr) {
             mapGenerator.movePlayer(c, worldFrame);
         }
-        if (command.contains(":q")) {
+        if (substring1.contains(":q")) {
             saveGame(mapGenerator, worldFrame);
         }
         return worldFrame;
@@ -294,7 +295,7 @@ public class Game {
     private TETile[][] playWithInputStringLoadGame(String input) {
 
         TETile[][] worldFrame = null;
-        try(FileInputStream fi = new FileInputStream("world.bin")) {
+        try(FileInputStream fi = new FileInputStream("world.txt")) {
             ObjectInputStream os = new ObjectInputStream(fi);
             MapGenerator mapGenerator = (MapGenerator)os.readObject();
             TETile[][] world = (TETile[][])os.readObject();

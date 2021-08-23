@@ -20,9 +20,9 @@ public class TestGame {
         Game game = new Game();
         //game.playWithKeyboard();
 
-        //TETile[][] tiles1 = game.playWithInputString("N999SDDDWWWDDD");
+        TETile[][] tiles0 = game.playWithInputString("N999SDDDWWWDDD");
 
-        TETile[][] tiles3 = game.playWithInputString("N999SDDD:Q");
+        TETile[][] tiles1 = game.playWithInputString("N999SDDD:Q");
         TETile[][] tiles2 = game.playWithInputString("L:Q");
         TERenderer teRenderer = new TERenderer();
         teRenderer.initialize(WIDTH, HEIGHT);

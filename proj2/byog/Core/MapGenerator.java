@@ -17,6 +17,7 @@ public class MapGenerator implements Serializable {
     private ArrayList<Position> EXITS;
     private ArrayList<Room> ROOMS;
     private Position playerPosition;
+    public TETile[][] WORLD;
 
     MapGenerator(long l) {
         SEED = l;
