@@ -20,7 +20,7 @@ public class TestGame {
         Game game = new Game();
         //game.playWithKeyboard();
 
-        TETile[][] tiles = game.playWithInputString("N3659452656456123S");
+        TETile[][] tiles = game.playWithInputString("N99S");
         TERenderer teRenderer = new TERenderer();
         teRenderer.initialize(WIDTH, HEIGHT);
         teRenderer.renderFrame(tiles);

@@ -251,7 +251,7 @@ public class Game {
         System.out.println(input);
         TETile[][] finalWorldFrame = null;
         if (input.startsWith("n")) {
-            String substring = input.substring(input.indexOf('n') + 1, input.indexOf('s') - 1);
+            String substring = input.substring(input.indexOf('n') + 1, input.indexOf('s'));
             MapGenerator mapGenerator = new MapGenerator(Long.parseLong(substring));
             TETile[][] initialWorldFrame = mapGenerator.generateWorld();
             if (input.length() == substring.length() + 2) {
