@@ -20,10 +20,13 @@ public class TestGame {
         Game game = new Game();
         //game.playWithKeyboard();
 
-        TETile[][] tiles = game.playWithInputString("N99S");
+        //TETile[][] tiles1 = game.playWithInputString("N999SDDDWWWDDD");
+
+        TETile[][] tiles3 = game.playWithInputString("N999SDDD:Q");
+        TETile[][] tiles2 = game.playWithInputString("L:Q");
         TERenderer teRenderer = new TERenderer();
         teRenderer.initialize(WIDTH, HEIGHT);
-        teRenderer.renderFrame(tiles);
+        teRenderer.renderFrame(tiles2);
     }
 
 

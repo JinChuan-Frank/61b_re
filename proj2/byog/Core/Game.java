@@ -85,10 +85,7 @@ public class Game {
     }
 
     private void loadGame() {
-        StdDraw.setPenColor(Color.WHITE);
-        StdDraw.clear(Color.black);
-        drawFrame("Loading game ......");
-        StdDraw.pause(1000);
+        displayLoadGame();
 
         try(FileInputStream fi = new FileInputStream("world.bin")) {
             ObjectInputStream os = new ObjectInputStream(fi);
@@ -107,6 +104,13 @@ public class Game {
         }
     }
 
+    private void displayLoadGame() {
+        StdDraw.setPenColor(Color.WHITE);
+        StdDraw.clear(Color.black);
+        drawFrame("Loading game ......");
+        StdDraw.pause(1000);
+    }
+
     private void quitGame() {
         StdDraw.clear(Color.black);
         drawFrame("Quiting game....");
@@ -116,10 +120,7 @@ public class Game {
 
 
     private void saveGame(MapGenerator mapGenerator, TETile[][] world)  {
-        StdDraw.setPenColor(Color.WHITE);
-        StdDraw.clear(Color.black);
-        drawFrame("Saving game ......");
-        StdDraw.pause(1000);
+        displaySaveGame();
         try(FileOutputStream fs = new FileOutputStream("world.bin")) {
             ObjectOutputStream os = new ObjectOutputStream(fs);
             os.writeObject(mapGenerator);
@@ -128,6 +129,13 @@ public class Game {
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+
+    private void displaySaveGame() {
+        StdDraw.setPenColor(Color.WHITE);
+        StdDraw.clear(Color.black);
+        drawFrame("Saving game ......");
+        StdDraw.pause(1000);
     }
 
     private void showMapAndTrackMovement(MapGenerator mapGenerator, TETile[][] world) {
@@ -251,25 +259,69 @@ public class Game {
         System.out.println(input);
         TETile[][] finalWorldFrame = null;
         if (input.startsWith("n")) {
-            String substring = input.substring(input.indexOf('n') + 1, input.indexOf('s'));
-            MapGenerator mapGenerator = new MapGenerator(Long.parseLong(substring));
-            TETile[][] initialWorldFrame = mapGenerator.generateWorld();
-            if (input.length() == substring.length() + 2) {
-                return initialWorldFrame;
-            }
+            finalWorldFrame = playWithInputStringNewGame(input);
+        }
 
-            String command = input.substring(input.indexOf('s') + 1);
-            if (command.contains(":")) {
-                command = command.substring(0, command.indexOf(':'));
-                char arr[] = command.toCharArray();
-                for (char c : arr) {
-                    mapGenerator.movePlayer(c, initialWorldFrame);
-                }
-            }
+        if (input.startsWith("l")) {
+            finalWorldFrame = playWithInputStringLoadGame(input);
         }
 
         return finalWorldFrame;
     }
 
+    private TETile[][] playWithInputStringNewGame(String input) {
+        String substring = input.substring(input.indexOf('n') + 1, input.indexOf('s'));
+        MapGenerator mapGenerator = new MapGenerator(Long.parseLong(substring));
+        TETile[][] worldFrame = mapGenerator.generateWorld();
+        if (input.length() == substring.length() + 2) {
+            return worldFrame;
+        }
+
+        String command = input.substring(input.indexOf('s') + 1);
+        if (command.contains(":")) {
+            command = command.substring(0, command.indexOf(':'));
+        }
+        char arr[] = command.toCharArray();
+        for (char c : arr) {
+            mapGenerator.movePlayer(c, worldFrame);
+        }
+        if (command.contains(":q")) {
+            saveGame(mapGenerator, worldFrame);
+        }
+        return worldFrame;
+    }
+
+    private TETile[][] playWithInputStringLoadGame(String input) {
+
+        TETile[][] worldFrame = null;
+        try(FileInputStream fi = new FileInputStream("world.bin")) {
+            ObjectInputStream os = new ObjectInputStream(fi);
+            MapGenerator mapGenerator = (MapGenerator)os.readObject();
+            TETile[][] world = (TETile[][])os.readObject();
+            os.close();
+            if (input == "l:q") {
+                return world;
+            }
+            worldFrame = world;
+            String command = input.substring(input.indexOf('l') + 1);
+            if (command.contains(":")) {
+                command = command.substring(0, command.indexOf(':'));
+            }
+            char arr[] = command.toCharArray();
+            for (char c : arr) {
+                mapGenerator.movePlayer(c, worldFrame);
+            }
+            if (command.contains(":Q") || command.contains(":q")) {
+                saveGame(mapGenerator, worldFrame);
+            }
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
+        }
+        return worldFrame;
+    }
 
 }
