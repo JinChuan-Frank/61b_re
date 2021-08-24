@@ -178,9 +178,11 @@ public class MapGenerator implements Serializable {
 
     private Room branchOffThisRoom(Room room, Position exit) {
         Room temp;
-        if (room.width > 3 && room.height > 3) {
+        if (exit.equals(null)) {
+            temp = sentinel;
+        } else if (room.width > 3 && room.height > 3) {
             temp = generateRandomHallWay(room, exit);
-        } else if ((room.width == 3 && exit.xPos == room.position.xPos + 1)
+        }  else if ((room.width == 3 && exit.xPos == room.position.xPos + 1)
                 || (room.height == 3 && exit.yPos == room.position.yPos + 1)) {
             temp = generateRandomNeighborRoom(room, exit);
         } else {
@@ -317,7 +319,7 @@ public class MapGenerator implements Serializable {
         }
         int xPos = position.xPos;
         int yPos = position.yPos;
-        if (xPos >= 4 &&  yPos >= 4 && xPos <= WIDTH - 4 && yPos<= HEIGHT - 4) {
+        if (xPos >= 3 &&  yPos >= 3 && xPos <= WIDTH - 3 && yPos<= HEIGHT - 3) {
             isValidExit = true;
         }
         return isValidExit;
