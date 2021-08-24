@@ -22,11 +22,11 @@ public class TestGame {
 
         TETile[][] tiles0 = game.playWithInputString("N999SDDDWWWDDD");
 
-        TETile[][] tiles1 = game.playWithInputString("N999SDDD:Q");
-        TETile[][] tiles2 = game.playWithInputString("L:Q");
+        game.playWithInputString("N999SDDD:Q");
+        TETile[][] tiles2 = game.playWithInputString("LWWWDDD");
         TERenderer teRenderer = new TERenderer();
         teRenderer.initialize(WIDTH, HEIGHT);
-        teRenderer.renderFrame(tiles2);
+        teRenderer.renderFrame(tiles0);
     }
 
 

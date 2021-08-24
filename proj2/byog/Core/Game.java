@@ -261,10 +261,13 @@ public class Game {
         TETile[][] finalWorldFrame = null;
         if (input.startsWith("n")) {
             finalWorldFrame = playWithInputStringNewGame(input);
-        }
-
-        if (input.startsWith("l")) {
+        } else if (input.startsWith("l")) {
             finalWorldFrame = playWithInputStringLoadGame(input);
+        } else if (input.startsWith("q")) {
+            System.exit(0);
+        } else {
+            System.out.println("Please enter valid input");
+            System.exit(0);
         }
 
         return finalWorldFrame;
@@ -275,7 +278,6 @@ public class Game {
         MapGenerator mapGenerator = new MapGenerator(Long.parseLong(substring));
         TETile[][] worldFrame = mapGenerator.generateWorld();
         if (input.length() == substring.length() + 2) {
-            System.exit(0);
             return worldFrame;
         }
 
@@ -290,6 +292,7 @@ public class Game {
         if (command.contains(":q")) {
             saveGame(mapGenerator, worldFrame);
         }
+
         return worldFrame;
     }
 
