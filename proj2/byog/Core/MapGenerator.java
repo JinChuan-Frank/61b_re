@@ -161,6 +161,7 @@ public class MapGenerator implements Serializable {
 
 
     private void generateNewRoom(int times) {
+        System.out.println(times);
         for (int i = 0; i < times; i ++) {
             int k = RANDOM.nextInt(ROOMS.size());
             Room room = ROOMS.get(k);
@@ -277,6 +278,7 @@ public class MapGenerator implements Serializable {
      *
      * @param current the given room.
      * @return exit generated at this room for creation of a new room.
+     * tryingTimes is used to avoid infinite loop.
      */
     private Position generateRandomExit(Room current) {
         int tryingTimes = 0;
@@ -297,11 +299,13 @@ public class MapGenerator implements Serializable {
             positions.add(left);
             positions.add(right);
         }
-        while (isValidExit == false && tryingTimes < positions.size()) {
+        while (isValidExit == false && tryingTimes <= 2 * positions.size()) {
             int i = RANDOM.nextInt(positions.size());
             exit = positions.get(i);
             isValidExit = checkValidExit(exit);
             tryingTimes += 1;
+        } if (tryingTimes == 2* positions.size()) {
+            return null;
         }
         return exit;
     }
@@ -313,13 +317,13 @@ public class MapGenerator implements Serializable {
     private boolean checkValidExit(Position position) {
         boolean isValidExit = false;
         for (Position exit : EXITS) {
-            if (exit.xPos == position.xPos && exit.yPos == position.yPos) {
+            if (exit.equals(position)) {
                 isValidExit = false;
             }
         }
         int xPos = position.xPos;
         int yPos = position.yPos;
-        if (xPos >= 3 &&  yPos >= 3 && xPos <= WIDTH - 3 && yPos<= HEIGHT - 3) {
+        if (xPos >= 2 &&  yPos >= 2 && xPos <= WIDTH - 2 && yPos <= HEIGHT - 2) {
             isValidExit = true;
         }
         return isValidExit;
