@@ -12,6 +12,7 @@ public class MapGenerator implements Serializable {
 
     private static final int WIDTH = 80;
     private static final int HEIGHT = 36;
+    private static Room sentinel = new Room(new Position(0,0), 0, 0,new Position(0,0));;
     private long SEED;
     private Random RANDOM;
     private ArrayList<Position> EXITS;
@@ -50,6 +51,9 @@ public class MapGenerator implements Serializable {
         }
 
         private boolean isEligibleRoom() {
+            if (this.equals(sentinel)) {
+                return false;
+            }
             Position end = calEndingPosition(position, width, height);
             return position.xPos >= 0 && position.xPos < WIDTH && position.yPos >= 0
                     && position.yPos < HEIGHT && end.xPos >= 0 && end.xPos < WIDTH - 1
@@ -161,6 +165,9 @@ public class MapGenerator implements Serializable {
             int k = RANDOM.nextInt(ROOMS.size());
             Room room = ROOMS.get(k);
             Position exit = generateRandomExit(room);
+            if (exit == null) {
+                return;
+            }
             Room newRoom = branchOffThisRoom(room, exit);
             if (newRoom.isEligibleRoom() && !checkOverlap(newRoom, room)){
                 ROOMS.add(newRoom);
@@ -177,7 +184,7 @@ public class MapGenerator implements Serializable {
                 || (room.height == 3 && exit.yPos == room.position.yPos + 1)) {
             temp = generateRandomNeighborRoom(room, exit);
         } else {
-            temp = generateRandomHallWay(room, exit);
+            temp = sentinel;
         }
         return temp;
     }
@@ -270,13 +277,11 @@ public class MapGenerator implements Serializable {
      * @return exit generated at this room for creation of a new room.
      */
     private Position generateRandomExit(Room current) {
-        int width = current.width;;
-        int height = current.height;
+        int tryingTimes = 0;
         boolean isValidExit = false;
-        Position exit = new Position(0,0);
+        Position exit = null;
         Position start = current.position;
         Position end = calEndingPosition(start, current.width, current.height);
-        int numberOfPositions = 2 * (width + height - 4);
         List<Position> positions= new ArrayList<>();
         for (int j = start.xPos + 1; j < end.xPos; j ++) {
             Position lower = new Position(j, start.yPos);
@@ -290,11 +295,11 @@ public class MapGenerator implements Serializable {
             positions.add(left);
             positions.add(right);
         }
-        Random random = new Random();
-        while (isValidExit == false) {
+        while (isValidExit == false && tryingTimes < positions.size()) {
             int i = RANDOM.nextInt(positions.size());
             exit = positions.get(i);
             isValidExit = checkValidExit(exit);
+            tryingTimes += 1;
         }
         return exit;
     }
@@ -312,7 +317,7 @@ public class MapGenerator implements Serializable {
         }
         int xPos = position.xPos;
         int yPos = position.yPos;
-        if ( xPos >= 4 &&  yPos >= 4 && xPos <= WIDTH - 4 && yPos<= HEIGHT - 4) {
+        if (xPos >= 4 &&  yPos >= 4 && xPos <= WIDTH - 4 && yPos<= HEIGHT - 4) {
             isValidExit = true;
         }
         return isValidExit;
