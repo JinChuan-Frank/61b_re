@@ -120,7 +120,7 @@ public class Game {
 
 
     private void saveGame(MapGenerator mapGenerator, TETile[][] world)  {
-        displaySaveGame();
+
         try(FileOutputStream fs = new FileOutputStream("world.txt")) {
             ObjectOutputStream os = new ObjectOutputStream(fs);
             os.writeObject(mapGenerator);
@@ -164,6 +164,7 @@ public class Game {
                isUserCommand = true;
             }
             if (isUserCommand && input == 'q') {
+                displaySaveGame();
                 saveGame(mapGenerator, world);
                 quitGame();
             }
@@ -274,19 +275,19 @@ public class Game {
         MapGenerator mapGenerator = new MapGenerator(Long.parseLong(substring));
         TETile[][] worldFrame = mapGenerator.generateWorld();
         if (input.length() == substring.length() + 2) {
+            System.exit(0);
             return worldFrame;
         }
 
-        String substring1 = input.substring(input.indexOf('s') + 1);
-        if (substring1.contains(":")) {
-            String command = substring1.substring(0, substring1.indexOf(':'));
-
-        }
-        char arr[] = command.toCharArray();
-        for (char c : arr) {
+        String command = input.substring(input.indexOf('s') + 1);
+        char commandArr[] = command.toCharArray();
+        for (char c : commandArr) {
+            if (c == ':') {
+                break;
+            }
             mapGenerator.movePlayer(c, worldFrame);
         }
-        if (substring1.contains(":q")) {
+        if (command.contains(":q")) {
             saveGame(mapGenerator, worldFrame);
         }
         return worldFrame;
