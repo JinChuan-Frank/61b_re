@@ -21,6 +21,7 @@ public class TestGame {
         //game.playWithKeyboard();
 
         TETile[][] tiles0 = game.playWithInputString("n8241282926721153129ssdwsdsaswssw");
+        TETile[][] tiles1 = game.playWithInputString("n5197880843569031643s");
 
         /**game.playWithInputString("N999SDDD:Q");
         game.playWithInputString("L:Q");
@@ -28,7 +29,7 @@ public class TestGame {
         TETile[][] tiles2 = game.playWithInputString("LWWWDDD");*/
         TERenderer teRenderer = new TERenderer();
         teRenderer.initialize(WIDTH, HEIGHT);
-        teRenderer.renderFrame(tiles0);
+        teRenderer.renderFrame(tiles1);
     }
 
 

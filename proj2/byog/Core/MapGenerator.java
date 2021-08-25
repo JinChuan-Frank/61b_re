@@ -304,7 +304,8 @@ public class MapGenerator implements Serializable {
             exit = positions.get(i);
             isValidExit = checkValidExit(exit);
             tryingTimes += 1;
-        } if (tryingTimes == 2* positions.size()) {
+        }
+        if (tryingTimes == 2* positions.size()) {
             return null;
         }
         return exit;
