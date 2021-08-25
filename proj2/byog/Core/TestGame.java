@@ -29,7 +29,7 @@ public class TestGame {
         TETile[][] tiles2 = game.playWithInputString("LWWWDDD");*/
         TERenderer teRenderer = new TERenderer();
         teRenderer.initialize(WIDTH, HEIGHT);
-        teRenderer.renderFrame(tiles1);
+        teRenderer.renderFrame(tiles0);
     }
 
 

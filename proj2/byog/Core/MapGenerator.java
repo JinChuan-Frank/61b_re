@@ -151,8 +151,8 @@ public class MapGenerator implements Serializable {
             int xPos = RandomUtils.uniform(RANDOM, WIDTH);
             int yPos = RandomUtils.uniform(RANDOM, HEIGHT);
             Position position = new Position(xPos, yPos);
-            int width = RandomUtils.uniform(RANDOM, 3,WIDTH / 10);
-            int height = RandomUtils.uniform(RANDOM, 3,HEIGHT / 7);
+            int width = RandomUtils.uniform(RANDOM, 4,WIDTH / 10);
+            int height = RandomUtils.uniform(RANDOM, 4,HEIGHT / 7);
             room = new Room(position, width, height, new Position(position.xPos + 1, position.yPos));
             isEligibleRoom = room.isEligibleRoom();
         }
@@ -167,7 +167,7 @@ public class MapGenerator implements Serializable {
             Room room = ROOMS.get(k);
             Position exit = generateRandomExit(room);
             if (exit == null) {
-                return;
+                continue;
             }
             Room newRoom = branchOffThisRoom(room, exit);
             if (newRoom.isEligibleRoom() && !checkOverlap(newRoom, room)){
@@ -324,7 +324,7 @@ public class MapGenerator implements Serializable {
         }
         int xPos = position.xPos;
         int yPos = position.yPos;
-        if (xPos >= 2 &&  yPos >= 2 && xPos <= WIDTH - 2 && yPos <= HEIGHT - 2) {
+        if (xPos >= 3 &&  yPos >= 3 && xPos <= WIDTH - 3 && yPos <= HEIGHT - 3) {
             isValidExit = true;
         }
         return isValidExit;
