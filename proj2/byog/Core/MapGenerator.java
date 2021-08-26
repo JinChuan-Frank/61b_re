@@ -201,19 +201,19 @@ public class MapGenerator implements Serializable {
         Position start = current.position;
         Position end = calEndingPosition(start, current.width, current.height);
         Room hallWay = new Room(new Position(0,0), 0, 0, new Position(0,0));
-        while ( (isEligible == false || isOverlap == true) && times <= 5 ) {
+        while ( (!isEligible|| isOverlap) && times <= 100 ) {
             if (exit.yPos == start.yPos) {
                 width = 3;
-                height = RandomUtils.uniform(RANDOM, 3, start.yPos);
+                height = RandomUtils.uniform(RANDOM, 3, start.yPos + 1);
             } else if (exit.yPos == end.yPos) {
                 width = 3;
-                height = RandomUtils.uniform(RANDOM, 3, HEIGHT - end.yPos);
+                height = RandomUtils.uniform(RANDOM, 3, HEIGHT - end.yPos + 1);
             } else if (exit.xPos == start.xPos) {
                 height = 3;
-                width = RandomUtils.uniform(RANDOM, 3, start.xPos);
+                width = RandomUtils.uniform(RANDOM, 3, start.xPos + 1);
             } else if (exit.xPos == end.xPos) {
                 height = 3;
-                width = RandomUtils.uniform(RANDOM, 3, WIDTH - end.xPos);
+                width = RandomUtils.uniform(RANDOM, 3, WIDTH - end.xPos +1);
             }
             Position neighboringRoomPos = calHallwayPosition(current, exit, width, height);
             hallWay = new Room(neighboringRoomPos, width, height, exit);
