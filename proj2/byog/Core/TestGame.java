@@ -20,8 +20,8 @@ public class TestGame {
         Game game = new Game();
         //game.playWithKeyboard();
 
-        TETile[][] tiles0 = game.playWithInputString("n8241282926721153129ssdwsdsaswssw");
-        TETile[][] tiles1 = game.playWithInputString("n5197880843569031643s");
+        TETile[][] tiles0 = game.playWithInputString("n7139552381966369122s");
+        //TETile[][] tiles1 = game.playWithInputString("n5197880843569031643s");
 
         /**game.playWithInputString("N999SDDD:Q");
         game.playWithInputString("L:Q");

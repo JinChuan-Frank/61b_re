@@ -324,7 +324,7 @@ public class MapGenerator implements Serializable {
         }
         int xPos = position.xPos;
         int yPos = position.yPos;
-        if (xPos >= 3 &&  yPos >= 3 && xPos <= WIDTH - 3 && yPos <= HEIGHT - 3) {
+        if (xPos >= 3 && yPos >= 3 && xPos <= WIDTH - 3 && yPos <= HEIGHT - 3) {
             isValidExit = true;
         }
         return isValidExit;
