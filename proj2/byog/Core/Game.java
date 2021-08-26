@@ -256,7 +256,7 @@ public class Game {
         // and return a 2D tile representation of the world that would have been
         // drawn if the same inputs had been given to playWithKeyboard().
         input = input.toLowerCase();
-        System.out.println(input);
+
         TETile[][] finalWorldFrame = null;
         if (input.startsWith("n")) {
             finalWorldFrame = playWithInputStringNewGame(input);
