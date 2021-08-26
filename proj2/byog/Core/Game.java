@@ -228,7 +228,6 @@ public class Game {
         }
 
         isPlayerTurn = false;
-        System.out.println(input);
         return input;
 
     }
