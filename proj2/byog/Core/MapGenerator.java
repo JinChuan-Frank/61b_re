@@ -161,7 +161,7 @@ public class MapGenerator implements Serializable {
 
 
     private void generateNewRoom(int times) {
-        System.out.println(times);
+
         for (int i = 0; i < times; i ++) {
             int k = RANDOM.nextInt(ROOMS.size());
             Room room = ROOMS.get(k);
