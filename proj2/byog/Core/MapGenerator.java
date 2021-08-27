@@ -12,13 +12,12 @@ public class MapGenerator implements Serializable {
 
     private static final int WIDTH = 80;
     private static final int HEIGHT = 36;
-    private static Room sentinel = new Room(new Position(0,0), 0, 0,new Position(0,0));;
+    private static Room sentinel = new Room(new Position(0, 0), 0, 0, new Position(0, 0));;
     private long SEED;
     private Random RANDOM;
     private ArrayList<Position> EXITS;
     private ArrayList<Room> ROOMS;
     private Position playerPosition;
-    public TETile[][] WORLD;
 
     MapGenerator(long l) {
         SEED = l;
@@ -66,11 +65,12 @@ public class MapGenerator implements Serializable {
             Position thisRoomEnd = calEndingPosition(position, this.width, this.height);
             Position oldRoomEnd = calEndingPosition(oldRoomPosition, oldRoom.width, oldRoom.height);
             if (thisRoomEnd.xPos < oldRoomPosition.xPos || thisRoomPosition.xPos > oldRoomEnd.xPos
-                    || thisRoomPosition.yPos > oldRoomEnd.yPos || thisRoomEnd.yPos < oldRoomPosition.yPos) {
+                    || thisRoomPosition.yPos > oldRoomEnd.yPos
+                    || thisRoomEnd.yPos < oldRoomPosition.yPos) {
                 return false;
-            } else {
-                return true;
             }
+            return true;
+
         }
     }
 
@@ -83,7 +83,7 @@ public class MapGenerator implements Serializable {
     }
 
     private Position calPlayerPosition(char c, TETile[][] world) {
-        Position newPlayerPosition = new Position(0,0);
+        Position newPlayerPosition = new Position(0, 0);
         if (c == 'w') {
             newPlayerPosition.yPos = playerPosition.yPos + 1;
             newPlayerPosition.xPos = playerPosition.xPos;
@@ -123,7 +123,8 @@ public class MapGenerator implements Serializable {
     }
 
     private void setPlayer(ArrayList<Room> rooms, TETile[][] world) {
-        playerPosition = new Position(rooms.get(0).position.xPos + 1, rooms.get(0).position.yPos + 1);
+        playerPosition = new Position(rooms.get(0).position.xPos + 1,
+                rooms.get(0).position.yPos + 1);
         world[playerPosition.xPos][playerPosition.yPos] = Tileset.PLAYER;
     }
 
@@ -141,19 +142,20 @@ public class MapGenerator implements Serializable {
 
     private void generateRooms() {
         generateStartRoom();
-        generateNewRoom(RandomUtils.uniform(RANDOM, 10, 100));
+        generateNewRoom(RandomUtils.uniform(RANDOM, 30, 1000));
     }
 
     public void generateStartRoom() {
         boolean isEligibleRoom = false;
-        Room room = new Room(new Position(0,0), 0, 0,new Position(0,0));
-        while (isEligibleRoom == false) {
+        Room room = new Room(new Position(0, 0), 0, 0, new Position(0, 0));
+        while (!isEligibleRoom) {
             int xPos = RandomUtils.uniform(RANDOM, WIDTH);
             int yPos = RandomUtils.uniform(RANDOM, HEIGHT);
             Position position = new Position(xPos, yPos);
-            int width = RandomUtils.uniform(RANDOM, 4,WIDTH / 10);
-            int height = RandomUtils.uniform(RANDOM, 4,HEIGHT / 7);
-            room = new Room(position, width, height, new Position(position.xPos + 1, position.yPos));
+            int width = RandomUtils.uniform(RANDOM, 4, WIDTH / 10);
+            int height = RandomUtils.uniform(RANDOM, 4, HEIGHT / 7);
+            room = new Room(position, width, height,
+                    new Position(position.xPos + 1, position.yPos));
             isEligibleRoom = room.isEligibleRoom();
         }
         ROOMS.add(0, room);
@@ -162,7 +164,7 @@ public class MapGenerator implements Serializable {
 
     private void generateNewRoom(int times) {
 
-        for (int i = 0; i < times; i ++) {
+        for (int i = 0; i < times; i++) {
             int k = RANDOM.nextInt(ROOMS.size());
             Room room = ROOMS.get(k);
             Position exit = generateRandomExit(room);
@@ -170,7 +172,7 @@ public class MapGenerator implements Serializable {
                 continue;
             }
             Room newRoom = branchOffThisRoom(room, exit);
-            if (newRoom.isEligibleRoom() && !checkOverlap(newRoom, room)){
+            if (newRoom.isEligibleRoom() && !checkOverlap(newRoom, room)) {
                 ROOMS.add(newRoom);
                 EXITS.add(exit);
             }
@@ -200,8 +202,8 @@ public class MapGenerator implements Serializable {
         int times = 0;
         Position start = current.position;
         Position end = calEndingPosition(start, current.width, current.height);
-        Room hallWay = new Room(new Position(0,0), 0, 0, new Position(0,0));
-        while ( (!isEligible|| isOverlap) && times <= 100 ) {
+        Room hallWay = new Room(new Position(0, 0), 0, 0, new Position(0, 0));
+        while ((!isEligible || isOverlap)) {
             if (exit.yPos == start.yPos) {
                 width = 3;
                 height = RandomUtils.uniform(RANDOM, 3, start.yPos + 1);
@@ -213,13 +215,17 @@ public class MapGenerator implements Serializable {
                 width = RandomUtils.uniform(RANDOM, 3, start.xPos + 1);
             } else if (exit.xPos == end.xPos) {
                 height = 3;
-                width = RandomUtils.uniform(RANDOM, 3, WIDTH - end.xPos +1);
+                width = RandomUtils.uniform(RANDOM, 3, WIDTH - end.xPos + 1);
             }
             Position neighboringRoomPos = calHallwayPosition(current, exit, width, height);
             hallWay = new Room(neighboringRoomPos, width, height, exit);
             isEligible = hallWay.isEligibleRoom();
             isOverlap = checkOverlap(hallWay, current);
-            times ++;
+            times++;
+            if (times == 100) {
+                hallWay = sentinel;
+                break;
+            }
         }
         return hallWay;
     }
@@ -228,22 +234,24 @@ public class MapGenerator implements Serializable {
         boolean isEligible = false;
         boolean isOverlap = true;
         int times = 0;
-        Room room = new Room(new Position(0,0), 0, 0, new Position(0,0));
-        while ( (isEligible == false || isOverlap == true) && times <= 10 ) {
+        Room room = new Room(new Position(0, 0), 0, 0, new Position(0, 0));
+        while ((!isEligible || isOverlap)) {
             int width = RandomUtils.uniform(RANDOM, 4, WIDTH / 10);
             int height = RandomUtils.uniform(RANDOM, 4, HEIGHT / 7);
             int xOff = RandomUtils.uniform(RANDOM, 1, width - 2);
             int yOff = RandomUtils.uniform(RANDOM, 1, height - 2);
             int xPos = 0;
             int yPos = 0;
-            Position currentEnd = calEndingPosition(current.position, current.width, current.height);
+            Position currentEnd = calEndingPosition(current.position,
+                    current.width, current.height);
             if (exit.xPos == current.position.xPos + 1 && exit.yPos == current.position.yPos) {
                 xPos = current.position.xPos - xOff;
                 yPos = current.position.yPos - height + 1;
             } else if (exit.xPos == current.position.xPos + 1 && exit.yPos == currentEnd.yPos) {
                 xPos = current.position.xPos - xOff;
                 yPos = currentEnd.yPos;
-            } else if (exit.yPos == current.position.yPos + 1 && exit.xPos == current.position.xPos) {
+            } else if (exit.yPos == current.position.yPos + 1
+                    && exit.xPos == current.position.xPos) {
                 xPos = current.position.xPos - (width - 1);
                 yPos = current.position.yPos - yOff;
             } else if (exit.yPos == current.position.yPos + 1 && exit.xPos == currentEnd.xPos) {
@@ -253,7 +261,11 @@ public class MapGenerator implements Serializable {
             room = new Room(new Position(xPos, yPos), width, height, exit);
             isEligible = room.isEligibleRoom();
             isOverlap = checkOverlap(room, current);
-            times ++;
+            times++;
+            if (times == 100) {
+                room = sentinel;
+                break;
+            }
         }
         return room;
     }
@@ -267,7 +279,7 @@ public class MapGenerator implements Serializable {
             if (room.equals(oldRoom)) {
                 continue;
             }
-            if ( newRoom.isOverlap(room)) {
+            if (newRoom.isOverlap(room)) {
                 isOverlap = true;
             }
         }
@@ -286,8 +298,8 @@ public class MapGenerator implements Serializable {
         Position exit = null;
         Position start = current.position;
         Position end = calEndingPosition(start, current.width, current.height);
-        List<Position> positions= new ArrayList<>();
-        for (int j = start.xPos + 1; j < end.xPos; j ++) {
+        List<Position> positions = new ArrayList<>();
+        for (int j = start.xPos + 1; j < end.xPos; j++) {
             Position lower = new Position(j, start.yPos);
             Position upper = new Position(j, end.yPos);
             positions.add(lower);
@@ -299,14 +311,15 @@ public class MapGenerator implements Serializable {
             positions.add(left);
             positions.add(right);
         }
-        while (isValidExit == false && tryingTimes <= 2 * positions.size()) {
+        while (!isValidExit) {
             int i = RANDOM.nextInt(positions.size());
             exit = positions.get(i);
             isValidExit = checkValidExit(exit);
             tryingTimes += 1;
-        }
-        if (tryingTimes == 2* positions.size()) {
-            return null;
+            if (tryingTimes == 2 * positions.size()) {
+                exit = null;
+                break;
+            }
         }
         return exit;
     }
@@ -355,7 +368,7 @@ public class MapGenerator implements Serializable {
             hallwayXPos = exit.xPos - 1;
             hallwayYPos = exit.yPos;
         }
-        return new Position(hallwayXPos,hallwayYPos);
+        return new Position(hallwayXPos, hallwayYPos);
     }
 
     private static void drawExit(Position exit, TETile[][] world) {
@@ -388,7 +401,8 @@ public class MapGenerator implements Serializable {
         }
     }
 
-    private static void drawRoomFloors(Position startingPoint, Position endPoint, TETile[][] world) {
+    private static void drawRoomFloors(Position startingPoint, Position endPoint,
+                                       TETile[][] world) {
         int floorStartX = startingPoint.xPos + 1;
         int floorStartY = startingPoint.yPos + 1;
         int floorEndX = endPoint.xPos - 1;

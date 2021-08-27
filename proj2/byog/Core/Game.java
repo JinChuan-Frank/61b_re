@@ -5,15 +5,16 @@ import byog.TileEngine.TETile;
 import byog.TileEngine.Tileset;
 import edu.princeton.cs.introcs.StdDraw;
 
-import java.awt.*;
-import java.io.*;
-import java.net.PortUnreachableException;
-import java.util.Locale;
-
+import java.awt.Color;
+import java.awt.Font;
+import java.io.FileInputStream;
+import java.io.ObjectInputStream;
+import java.io.FileOutputStream;
+import java.io.ObjectOutputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
 
 public class Game {
-    TERenderer ter = new TERenderer();
-    /* Feel free to change the width and height. */
     public static final int WIDTH = 80;
     public static final int HEIGHT = 36;
     int halfWidth = WIDTH / 2;
@@ -59,7 +60,7 @@ public class Game {
             }
             char key = StdDraw.nextKeyTyped();
             Character.toLowerCase(key);
-            if (key == 'n' ) {
+            if (key == 'n') {
                 isPlayerTurn = false;
                 newGame();
             } else if (key == 'l') {
@@ -87,10 +88,10 @@ public class Game {
     private void loadGame() {
         displayLoadGame();
 
-        try(FileInputStream fi = new FileInputStream("world.txt")) {
+        try (FileInputStream fi = new FileInputStream("world.txt")) {
             ObjectInputStream os = new ObjectInputStream(fi);
-            MapGenerator mapGenerator = (MapGenerator)os.readObject();
-            TETile[][] world = (TETile[][])os.readObject();
+            MapGenerator mapGenerator = (MapGenerator) os.readObject();
+            TETile[][] world = (TETile[][]) os.readObject();
             os.close();
 
             showMapAndTrackMovement(mapGenerator, world);
@@ -121,7 +122,7 @@ public class Game {
 
     private void saveGame(MapGenerator mapGenerator, TETile[][] world)  {
 
-        try(FileOutputStream fs = new FileOutputStream("world.txt")) {
+        try (FileOutputStream fs = new FileOutputStream("world.txt")) {
             ObjectOutputStream os = new ObjectOutputStream(fs);
             os.writeObject(mapGenerator);
             os.writeObject(world);
@@ -161,7 +162,7 @@ public class Game {
             mapGenerator.movePlayer(input, world);
             teRenderer.renderFrame(world);
             if (input == ':') {
-               isUserCommand = true;
+                isUserCommand = true;
             }
             if (isUserCommand && input == 'q') {
                 displaySaveGame();
@@ -191,9 +192,8 @@ public class Game {
             StdDraw.show();
 
         } catch (IndexOutOfBoundsException e) {
-
+            System.out.println("Invalid");
         }
-
     }
 
     private char readInput() {
@@ -252,11 +252,8 @@ public class Game {
      * @return the 2D TETile[][] representing the state of the world
      */
     public TETile[][] playWithInputString(String input) {
-        // TODO: Fill out this method to run the game using the input passed in,
-        // and return a 2D tile representation of the world that would have been
-        // drawn if the same inputs had been given to playWithKeyboard().
         input = input.toLowerCase();
-
+        //System.out.println(input);
         TETile[][] finalWorldFrame = null;
         if (input.startsWith("n")) {
             finalWorldFrame = playWithInputStringNewGame(input);
@@ -281,7 +278,7 @@ public class Game {
         }
 
         String command = input.substring(input.indexOf('s') + 1);
-        char commandArr[] = command.toCharArray();
+        char[] commandArr  = command.toCharArray();
         for (char c : commandArr) {
             if (c == ':') {
                 break;
@@ -298,12 +295,12 @@ public class Game {
     private TETile[][] playWithInputStringLoadGame(String input) {
 
         TETile[][] worldFrame = null;
-        try(FileInputStream fi = new FileInputStream("world.txt")) {
+        try (FileInputStream fi = new FileInputStream("world.txt")) {
             ObjectInputStream os = new ObjectInputStream(fi);
-            MapGenerator mapGenerator = (MapGenerator)os.readObject();
-            TETile[][] world = (TETile[][])os.readObject();
+            MapGenerator mapGenerator = (MapGenerator) os.readObject();
+            TETile[][] world = (TETile[][]) os.readObject();
             os.close();
-            if (input == "l:q") {
+            if (input.equals("l:q")) {
                 return world;
             }
             worldFrame = world;
@@ -311,7 +308,7 @@ public class Game {
             if (command.contains(":")) {
                 command = command.substring(0, command.indexOf(':'));
             }
-            char arr[] = command.toCharArray();
+            char[] arr = command.toCharArray();
             for (char c : arr) {
                 mapGenerator.movePlayer(c, worldFrame);
             }
