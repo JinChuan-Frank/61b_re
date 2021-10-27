@@ -34,7 +34,8 @@ public class MapVisualTest {
         initializeWorld(world);
         ArrayList<MapGenerator.Room> rooms = new ArrayList<>();
         MapGenerator.Position position = new MapGenerator.Position(2, 2);
-        MapGenerator.Room start = new MapGenerator.Room(position,6, 6, new MapGenerator.Position(3,2));
+        MapGenerator.Room start = new MapGenerator.Room(position,6, 6,
+               new MapGenerator.Position(3,2));
         rooms.add(start);
         MapGenerator.Position position1 = MapGenerator.generateRandomExit(start);
         MapGenerator.Room room1 = MapGenerator.branchOffThisRoom(start, position1);
@@ -81,7 +82,7 @@ public class MapVisualTest {
         teRenderer.renderFrame(world);
     }
 
-    public static void main(String[] args){
+    public static void main(String[] args) {
         testGenerateStartRoom();
     }
 
