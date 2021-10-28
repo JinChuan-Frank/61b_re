@@ -1,5 +1,6 @@
 package lab9;
 
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Set;
 
@@ -77,12 +78,11 @@ public class BSTMap<K extends Comparable<K>, V> implements Map61B<K, V> {
 
         int cmp = key.compareTo(p.key);
         if (cmp < 0) {
-            p.left = putHelper(key, value, p);
+            p.left = putHelper(key, value, p.left);
         } else if (cmp == 0) {
             p.value = value;
-            return p;
         } else {
-            return putHelper(key, value, p.right);
+            p.right = putHelper(key, value, p.right);
         }
         return p;
     }
@@ -92,13 +92,13 @@ public class BSTMap<K extends Comparable<K>, V> implements Map61B<K, V> {
      */
     @Override
     public void put(K key, V value) {
-        throw new UnsupportedOperationException();
+        root = putHelper(key, value, root);
     }
 
     /* Returns the number of key-value mappings in this map. */
     @Override
     public int size() {
-        throw new UnsupportedOperationException();
+        return size;
     }
 
     //////////////// EVERYTHING BELOW THIS LINE IS OPTIONAL ////////////////
@@ -106,7 +106,18 @@ public class BSTMap<K extends Comparable<K>, V> implements Map61B<K, V> {
     /* Returns a Set view of the keys contained in this map. */
     @Override
     public Set<K> keySet() {
-        throw new UnsupportedOperationException();
+        Set<K> set = new HashSet<>();
+        getKey(root, set);
+        return set;
+    }
+
+    private void getKey(Node p, Set set) {
+        if (p == null) {
+            return;
+        }
+        set.add(p.value);
+        getKey(p.left, set);
+        getKey(p.right, set);
     }
 
     /** Removes KEY from the tree if present
