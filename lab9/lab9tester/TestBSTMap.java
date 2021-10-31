@@ -95,6 +95,7 @@ public class TestBSTMap {
         b.put("a", 0);
         b.put("b", 1);
         b.put("c", 2);
+        b.put("d", 999);
         System.out.println(b.keySet());
     }
 

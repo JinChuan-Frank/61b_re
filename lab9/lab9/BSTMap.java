@@ -115,7 +115,7 @@ public class BSTMap<K extends Comparable<K>, V> implements Map61B<K, V> {
         if (p == null) {
             return;
         }
-        set.add(p.value);
+        set.add(p.key);
         getKey(p.left, set);
         getKey(p.right, set);
     }
@@ -128,6 +128,7 @@ public class BSTMap<K extends Comparable<K>, V> implements Map61B<K, V> {
     public V remove(K key) {
         throw new UnsupportedOperationException();
     }
+
 
     /** Removes the key-value entry for the specified key only if it is
      *  currently mapped to the specified value.  Returns the VALUE removed,
