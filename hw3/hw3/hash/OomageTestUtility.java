@@ -15,11 +15,22 @@ public class OomageTestUtility {
          * Oomages and no bucket has more than N / 2.5 Oomages.
          */
         ArrayList[] buckets = new ArrayList[M];
-
+        for (int i = 0; i < M; i++) {
+            buckets[i] = new ArrayList();
+        }
+        int oomageNum = oomages.size();
+        double max = oomageNum / 2.5;
+        double min = oomageNum / 50;
         for (Oomage o : oomages) {
             int bucketNum = (o.hashCode() & 0x7FFFFFFF) % M;
-
+            buckets[bucketNum].add(o);
         }
-        return false;
+
+        for (ArrayList bucket : buckets) {
+            if (bucket.size() > max || bucket.size() < min) {
+                return false;
+            }
+        }
+        return true;
     }
 }
