@@ -24,7 +24,7 @@ public class SimpleOomage implements Oomage {
             return false;
         }
         SimpleOomage other = (SimpleOomage) o;
-        return (this.red == other.red ) && (this.blue == other.blue) && (this.green == other.green);
+        return (this.red == other.red) && (this.blue == other.blue) && (this.green == other.green);
     }
 
 
@@ -35,13 +35,11 @@ public class SimpleOomage implements Oomage {
         } else {
             int hash = 0;
             int [] colors = new int[] {red, green, blue};
-            for (int i = 0; i < 3; i++){
+            for (int i = 0; i < 3; i++) {
                 hash *= 256;
                 hash += colors[i] / 5;
-
             }
-        return hash;
-
+            return hash;
         }
     }
 
