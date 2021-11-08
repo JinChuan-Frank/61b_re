@@ -36,9 +36,9 @@ public class SimpleOomage implements Oomage {
             int hash = 0;
             int [] colors = new int[] {red, green, blue};
             for (int i = 0; i < 3; i++){
-
-                hash += colors[i] / 5;
                 hash *= 256;
+                hash += colors[i] / 5;
+
             }
         return hash;
 
