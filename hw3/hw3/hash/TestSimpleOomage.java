@@ -43,7 +43,7 @@ public class TestSimpleOomage {
         arrayList.add(ooD);
         arrayList.add(ooE);
         arrayList.add(ooF);
-        for (int i = 0; i < arrayList.size(); i++){
+        for (int i = 0; i < arrayList.size(); i++) {
             for (int j = i + 1; j < arrayList.size(); j++) {
                 assertNotEquals(arrayList.get(i).hashCode(), arrayList.get(j).hashCode());
             }

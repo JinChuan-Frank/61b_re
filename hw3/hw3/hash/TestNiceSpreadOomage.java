@@ -21,6 +21,14 @@ public class TestNiceSpreadOomage {
             return val;
         }
 
+        @Override
+        public boolean equals(Object o) {
+            if (o.getClass() != this.getClass()) {
+                return false;
+            }
+            return this.hashCode() == o.hashCode();
+        }
+
         public static NiceSpreadOomage randomNiceSpreadOomage() {
             NiceSpreadOomage x = new NiceSpreadOomage();
             x.val = StdRandom.uniform(0, 1000000);
