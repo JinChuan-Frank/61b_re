@@ -21,6 +21,14 @@ public class TestJankyOomage {
             return val;
         }
 
+
+        public boolean equals(Object o) {
+            if (o.getClass() != JankyOomage.class) {
+                return false;
+            }
+            return this.hashCode() == o.hashCode();
+        }
+
         public static JankyOomage randomJankyOomage() {
             JankyOomage x = new JankyOomage();
             x.val = StdRandom.uniform(0, 2);
