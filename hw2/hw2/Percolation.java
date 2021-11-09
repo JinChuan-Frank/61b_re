@@ -11,8 +11,8 @@ public class Percolation {
         size = N;
     }
 
-    private int xyTo1D(int r, int c) {
-        int oneD = r * size + c;
+    public int xyTo1D(int row, int column) {
+        int oneD = row * size + column;
         return oneD;
     }
 
