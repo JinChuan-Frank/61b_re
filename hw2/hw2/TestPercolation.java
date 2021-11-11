@@ -17,5 +17,6 @@ public class TestPercolation {
         int actual2 = percolation.xyTo1D(x2, y2);
         assertEquals(expected2, actual2);
 
+
     }
 }
