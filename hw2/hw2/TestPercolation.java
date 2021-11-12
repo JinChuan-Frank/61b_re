@@ -2,6 +2,7 @@ package hw2;
 import org.junit.Test;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.assertEquals;
+
 public class TestPercolation {
     @Test
     public void testXYTo1D() {
@@ -16,6 +17,11 @@ public class TestPercolation {
         int expected2 = 14;
         int actual2 = percolation.xyTo1D(x2, y2);
         assertEquals(expected2, actual2);
+        int x3 = 2;
+        int y3 = 2;
+        int expected3 = 12;
+        int actual3 = percolation.xyTo1D(x3, y3);
+        assertEquals(expected3, actual3);
 
     }
 }

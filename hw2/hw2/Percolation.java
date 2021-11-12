@@ -4,11 +4,24 @@ import edu.princeton.cs.algs4.WeightedQuickUnionUF;
 
 public class Percolation {
 
+    private class site {
+        boolean isOpen;
+        private site() {
+            isOpen =false;
+        }
+    }
+
     private int size;
+    private site[][] grid;
 
     // create N-by-N grid, with all sites initially blocked
     public Percolation(int N) {
         size = N;
+        for (int i = 0; i < N; i++) {
+            for (int j = 0; j < N; j++) {
+                grid[i][j] = new site();
+            }
+        }
     }
 
     public int xyTo1D(int row, int column) {
