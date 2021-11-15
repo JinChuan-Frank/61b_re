@@ -31,9 +31,9 @@ public class Percolation {
         for (int i = 0; i <= N * N - 1; i++) {
             grid[i] = new Site();
         }
-        weightedQuickUnionUF = new WeightedQuickUnionUF(N * N - 1 + 2);
-        virtualBottomSite = N;
-        virtualTopSite = N + 1;
+        weightedQuickUnionUF = new WeightedQuickUnionUF(N * N + 2);
+        virtualBottomSite = N * N;
+        virtualTopSite = N * N + 1;
         connectToTopAndBottom();
     }
 
@@ -57,7 +57,9 @@ public class Percolation {
             throw new ArrayIndexOutOfBoundsException();
         }
         int pos = xyTo1D(row, col);
-        grid[pos].isOpen = true;
+        if (!grid[pos].isOpen) {
+            grid[pos].isOpen = true;
+        }
         connectOpenSites(row, col);
     }
 
@@ -65,7 +67,7 @@ public class Percolation {
         int pos = xyTo1D(row, col);
         List neighbors = findNeighbors(row, col);
         for (Object i : neighbors) {
-            if (grid[(int) i].isOpen) {
+            if (grid[(int) i].isOpen && !weightedQuickUnionUF.connected(pos, (int) i)) {
                 weightedQuickUnionUF.union(pos, (int) i);
             }
         }

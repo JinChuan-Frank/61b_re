@@ -22,7 +22,12 @@ public class TestPercolation {
         int expected3 = 12;
         int actual3 = percolation.xyTo1D(x3, y3);
         assertEquals(expected3, actual3);
+    }
 
-
+    @Test
+    public void testConstructor() {
+        Percolation percolation = new Percolation(5);
+        assertTrue(percolation.weightedQuickUnionUF.connected(4, 26));
+        assertTrue(percolation.weightedQuickUnionUF.connected(24, 25));
     }
 }
