@@ -23,8 +23,11 @@ public class Percolation {
 
     // create N-by-N grid, with all sites initially blocked
     public Percolation(int sideLength) {
+        if (sideLength < 0) {
+            throw new IllegalArgumentException();
+        }
         N = sideLength;
-        grid = new Site[N * N - 1 + 2];
+        grid = new Site[N * N];
         for (int i = 0; i <= N * N - 1; i++) {
             grid[i] = new Site();
         }
