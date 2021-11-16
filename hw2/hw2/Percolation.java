@@ -9,7 +9,7 @@ import java.util.List;
 public class Percolation {
 
     private int N;
-    private Site[] grid;
+    public Site[] grid;
     private int virtualTopSite;
     private int virtualBottomSite;
     WeightedQuickUnionUF weightedQuickUnionUF;
@@ -65,16 +65,16 @@ public class Percolation {
 
     private void connectOpenSites(int row, int col) {
         int pos = xyTo1D(row, col);
-        List neighbors = findNeighbors(row, col);
-        for (Object i : neighbors) {
-            if (grid[(int) i].isOpen && !weightedQuickUnionUF.connected(pos, (int) i)) {
-                weightedQuickUnionUF.union(pos, (int) i);
+        ArrayList<Integer> neighbors = findNeighbors(row, col);
+        for (int i : neighbors) {
+            if (grid[i].isOpen && !weightedQuickUnionUF.connected(pos, i)) {
+                weightedQuickUnionUF.union(pos, i);
             }
         }
     }
 
-    private List findNeighbors(int row, int col) {
-        List neighbors= new ArrayList();
+    private ArrayList<Integer> findNeighbors(int row, int col) {
+        ArrayList<Integer> neighbors= new ArrayList();
         int[] positions = new int[4];
 
         int up = xyTo1D(row - 1, col);
