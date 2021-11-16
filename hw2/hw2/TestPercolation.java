@@ -26,8 +26,10 @@ public class TestPercolation {
 
     @Test
     public void testConstructor() {
-        Percolation percolation = new Percolation(5);
-        assertTrue(percolation.weightedQuickUnionUF.connected(4, 26));
-        assertTrue(percolation.weightedQuickUnionUF.connected(24, 25));
+        Percolation percolation = new Percolation(2);
+        assertTrue(percolation.weightedQuickUnionUF.connected(0, 5));
+        assertTrue(percolation.weightedQuickUnionUF.connected(1, 5));
+        assertTrue(percolation.weightedQuickUnionUF.connected(2, 4));
+        assertTrue(percolation.weightedQuickUnionUF.connected(3, 4));
     }
 }
