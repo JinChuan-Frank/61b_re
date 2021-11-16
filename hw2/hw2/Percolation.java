@@ -102,7 +102,7 @@ public class Percolation {
     // is the site (row, col) full?
     public boolean isFull(int row, int col) {
         int pos = xyTo1D(row, col);
-        return weightedQuickUnionUF.connected(pos, virtualTopSite);
+        return isOpen(row, col) && weightedQuickUnionUF.connected(pos, virtualTopSite);
     }
 
     // number of open sites
