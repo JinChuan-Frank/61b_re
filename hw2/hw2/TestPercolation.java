@@ -49,9 +49,18 @@ public class TestPercolation {
     public void testIsFull() {
         percolation.open(0, 0);
         percolation.open(1, 1);
-
         percolation.open(0, 1);
-        assertTrue(percolation.weightedQuickUnionUF.connected(1,3));
+        //System.out.println(percolation.weightedQuickUnionUF.connected(1, 3));
+        assertTrue(percolation.isOpen(0, 0));
+        assertTrue(percolation.isOpen(1, 1));
+        assertTrue(percolation.isOpen(0, 1));
+        System.out.println("grid[0] is open: " + "" + percolation.grid[0].isOpen);
+        System.out.println("grid[1] is open: " + "" + percolation.grid[1].isOpen);
+        System.out.println("grid[3] is open: " + "" + percolation.grid[3].isOpen);
+        System.out.println("neighbors:" + percolation.findNeighbors(1, 1));
+
+
+        //assertTrue(percolation.weightedQuickUnionUF.connected(0,1));
         //assertTrue(percolation.isFull(1, 1));
     }
 }

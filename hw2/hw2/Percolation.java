@@ -14,8 +14,8 @@ public class Percolation {
     private int virtualBottomSite;
     WeightedQuickUnionUF weightedQuickUnionUF;
 
-    private class Site {
-        private boolean isOpen;
+    public class Site {
+        public boolean isOpen;
         public Site() {
             isOpen = false;
         }
@@ -67,13 +67,16 @@ public class Percolation {
         int pos = xyTo1D(row, col);
         ArrayList<Integer> neighbors = findNeighbors(row, col);
         for (int i : neighbors) {
+            System.out.println("checking..." + i);
+            System.out.println("isOpen" + grid[i].isOpen);
+            System.out.println("isConnected" + weightedQuickUnionUF.connected(pos, i));
             if (grid[i].isOpen && !weightedQuickUnionUF.connected(pos, i)) {
                 weightedQuickUnionUF.union(pos, i);
             }
         }
     }
 
-    private ArrayList<Integer> findNeighbors(int row, int col) {
+    public ArrayList<Integer> findNeighbors(int row, int col) {
         ArrayList<Integer> neighbors= new ArrayList();
         int[] positions = new int[4];
 
