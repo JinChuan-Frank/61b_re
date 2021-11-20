@@ -1,5 +1,6 @@
 package hw2;
 
+import edu.princeton.cs.algs4.In;
 import edu.princeton.cs.algs4.WeightedQuickUnionUF;
 
 import java.io.ObjectOutputStream;
@@ -67,9 +68,6 @@ public class Percolation {
         int pos = xyTo1D(row, col);
         ArrayList<Integer> neighbors = findNeighbors(row, col);
         for (int i : neighbors) {
-            System.out.println("checking..." + i);
-            System.out.println("isOpen" + grid[i].isOpen);
-            System.out.println("isConnected" + weightedQuickUnionUF.connected(pos, i));
             if (grid[i].isOpen && !weightedQuickUnionUF.connected(pos, i)) {
                 weightedQuickUnionUF.union(pos, i);
             }
@@ -77,23 +75,22 @@ public class Percolation {
     }
 
     public ArrayList<Integer> findNeighbors(int row, int col) {
-        ArrayList<Integer> neighbors= new ArrayList();
-        int[] positions = new int[4];
-
-        int up = xyTo1D(row - 1, col);
-        int down = xyTo1D(row + 1, col);
-        int left = xyTo1D(row, col - 1);
-        int right = xyTo1D(row, col + 1);
-        positions[0] = up;
-        positions[1] = down;
-        positions[2] = left;
-        positions[3] = right;
-        for (int i : positions) {
-            if (i >= 0 && i < N * N - 1) {
-                neighbors.add(i);
+        ArrayList<Integer> neighbors = new ArrayList();
+        int[][] potentialNeighbors = new int[4][2];
+        potentialNeighbors[0] = new int[]{row - 1, col};
+        potentialNeighbors[1] = new int[]{row + 1, col};
+        potentialNeighbors[2] = new int[]{row, col - 1};
+        potentialNeighbors[3] = new int[]{row, col + 1};
+        for (int[]i : potentialNeighbors) {
+            if (isValidSite(i[0], i[1])) {
+                neighbors.add(xyTo1D(i[0], i[1]));
             }
         }
         return neighbors;
+    }
+
+    private boolean isValidSite(int row, int col) {
+        return (row >= 0 && row < N && col >= 0 && col < N);
     }
 
     // is the site (row, col) open?
