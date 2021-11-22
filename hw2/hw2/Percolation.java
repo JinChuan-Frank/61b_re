@@ -35,16 +35,6 @@ public class Percolation {
         weightedQuickUnionUF = new WeightedQuickUnionUF(N * N + 2);
         virtualBottomSite = N * N;
         virtualTopSite = N * N + 1;
-        connectToTopAndBottom();
-    }
-
-    private void connectToTopAndBottom() {
-        for (int i = 0; i <= xyTo1D(0, N - 1); i++) {
-            weightedQuickUnionUF.union(i, virtualTopSite);
-        }
-        for (int j = xyTo1D(N - 1, 0) ; j <= xyTo1D(N - 1, N - 1); j++) {
-            weightedQuickUnionUF.union(j, virtualBottomSite);
-        }
     }
 
     public int xyTo1D(int row, int column) {
@@ -62,6 +52,12 @@ public class Percolation {
             grid[pos].isOpen = true;
         }
         connectOpenSites(row, col);
+        if (row == 0 && col >= 0 && col < N) {
+            weightedQuickUnionUF.union(xyTo1D(row, col), virtualTopSite);
+        }
+        if (row == N - 1 && col >= 0 && col < N) {
+            weightedQuickUnionUF.union(xyTo1D(row, col), virtualBottomSite);
+        }
     }
 
     private void connectOpenSites(int row, int col) {
