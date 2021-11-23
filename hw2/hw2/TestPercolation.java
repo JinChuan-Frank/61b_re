@@ -42,7 +42,7 @@ public class TestPercolation {
         assertTrue(percolation.isOpen(1, 1));
         assertTrue(percolation.isOpen(0, 1));
         assertTrue(percolation.isFull(1, 1));
-        assertTrue(percolation.weightedQuickUnionUF.connected(0,1));
+        assertTrue(percolation.weightedQuickUnionUF.connected(0, 1));
 
     }
 }

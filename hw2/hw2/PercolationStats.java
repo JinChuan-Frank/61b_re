@@ -3,7 +3,6 @@ package hw2;
 import edu.princeton.cs.algs4.StdRandom;
 import edu.princeton.cs.algs4.StdStats;
 
-import java.util.ArrayList;
 
 public class PercolationStats {
 
@@ -34,7 +33,7 @@ public class PercolationStats {
         while (times < testingTimes) {
             Percolation percolation = percolationFactory.make(sideLength);
             calThreshold(percolation, times);
-            times ++;
+            times++;
         }
     }
 

@@ -1,24 +1,22 @@
 package hw2;
 
-import edu.princeton.cs.algs4.In;
 import edu.princeton.cs.algs4.WeightedQuickUnionUF;
 
-import java.io.ObjectOutputStream;
 import java.util.ArrayList;
-import java.util.List;
+
 
 public class Percolation {
 
     private int N;
-    public Site[] grid;
+    private Site[] grid;
     private int virtualTopSite;
     private int virtualBottomSite;
     private int numberOfOpenSites;
     WeightedQuickUnionUF weightedQuickUnionUF;
 
     public class Site {
-        public boolean isOpen;
-        public Site() {
+        private boolean isOpen;
+        private Site() {
             isOpen = false;
         }
     }
