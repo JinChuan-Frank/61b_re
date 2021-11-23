@@ -13,6 +13,7 @@ public class Percolation {
     public Site[] grid;
     private int virtualTopSite;
     private int virtualBottomSite;
+    private int numberOfOpenSites;
     WeightedQuickUnionUF weightedQuickUnionUF;
 
     public class Site {
@@ -29,6 +30,7 @@ public class Percolation {
         }
         N = sideLength;
         grid = new Site[N * N];
+        numberOfOpenSites = 0;
         for (int i = 0; i <= N * N - 1; i++) {
             grid[i] = new Site();
         }
@@ -50,6 +52,7 @@ public class Percolation {
         int pos = xyTo1D(row, col);
         if (!grid[pos].isOpen) {
             grid[pos].isOpen = true;
+            numberOfOpenSites += 1;
         }
         connectOpenSites(row, col);
         if (row == 0 && col >= 0 && col < N) {
@@ -103,14 +106,9 @@ public class Percolation {
 
     // number of open sites
     public int numberOfOpenSites() {
-        int numberOfOpenSites = 0;
-        for (Site site : grid) {
-            if (site.isOpen) {
-                numberOfOpenSites += 1;
-            }
-        }
         return numberOfOpenSites;
     }
+
     // does the system percolate?
     public boolean percolates() {
         return weightedQuickUnionUF.connected(virtualBottomSite, virtualTopSite);

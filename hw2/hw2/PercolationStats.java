@@ -1,11 +1,15 @@
 package hw2;
 
 import edu.princeton.cs.algs4.StdRandom;
+import edu.princeton.cs.algs4.StdStats;
+
+import java.util.ArrayList;
 
 public class PercolationStats {
 
     private int testingTimes;
     private int sideLength;
+    private int[] numOfOpenSitesAtPercolation;
     PercolationFactory percolationFactory;
 
     // perform T independent experiments on an N-by-N grid
@@ -14,27 +18,26 @@ public class PercolationStats {
             throw new IllegalArgumentException();
         }
         testingTimes = T;
-        percolationFactory = pf;
         sideLength = N;
+        numOfOpenSitesAtPercolation = new int[testingTimes];
+        percolationFactory = pf;
     }
 
     // sample mean of percolation threshold
     public double mean() {
-        return getMean();
+        return StdStats.mean(numOfOpenSitesAtPercolation);
     }
 
-    private double getMean() {
+    private void setTestingTimes() {
         int times = 0;
-        double total = 0;
         while (times < testingTimes) {
             Percolation percolation = percolationFactory.make(sideLength);
-            total += calThreshold(percolation);
+            calThreshold(percolation, times);
             times ++;
         }
-        return total / times;
     }
 
-    private double calThreshold(Percolation percolation) {
+    private void calThreshold(Percolation percolation, int times) {
         while (!percolation.percolates()) {
             int row = StdRandom.uniform(0, sideLength);
             int col = StdRandom.uniform(0, sideLength);
@@ -44,12 +47,12 @@ public class PercolationStats {
             percolation.open(row, col);
         }
         int numberOfOpenSites = percolation.numberOfOpenSites();
-        return numberOfOpenSites / sideLength * sideLength;
+        numOfOpenSitesAtPercolation[times] = numberOfOpenSites;
     }
 
     // sample standard deviation of percolation threshold
     public double stddev() {
-        return 0;
+        return StdStats.stddev(numOfOpenSitesAtPercolation);
     }
 
     // low endpoint of 95% confidence interval
