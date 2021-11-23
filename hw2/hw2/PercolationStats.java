@@ -8,8 +8,8 @@ public class PercolationStats {
 
     private int testingTimes;
     private int sideLength;
-    private int[] numOfOpenSitesAtPercolation;
-    PercolationFactory percolationFactory;
+    public int[] numOfOpenSitesAtPercolation;
+    private PercolationFactory percolationFactory;
 
     // perform T independent experiments on an N-by-N grid
     public PercolationStats(int N, int T, PercolationFactory pf) {

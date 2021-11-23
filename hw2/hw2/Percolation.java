@@ -14,7 +14,7 @@ public class Percolation {
     private int numberOfOpenSites;
     WeightedQuickUnionUF weightedQuickUnionUF;
 
-    public class Site {
+    private class Site {
         private boolean isOpen;
         private Site() {
             isOpen = false;
@@ -37,7 +37,7 @@ public class Percolation {
         virtualTopSite = N * N + 1;
     }
 
-    public int xyTo1D(int row, int column) {
+    private int xyTo1D(int row, int column) {
         int oneD = row * N + column;
         return oneD;
     }
@@ -71,7 +71,7 @@ public class Percolation {
         }
     }
 
-    public ArrayList<Integer> findNeighbors(int row, int col) {
+    private ArrayList<Integer> findNeighbors(int row, int col) {
         ArrayList<Integer> neighbors = new ArrayList();
         int[][] potentialNeighbors = new int[4][2];
         potentialNeighbors[0] = new int[]{row - 1, col};

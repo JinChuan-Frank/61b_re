@@ -6,12 +6,6 @@ import static org.junit.Assert.*;
 public class TestPercolation {
     Percolation percolation = new Percolation(10);
 
-    @Test
-    public void testXYTo1D() {
-        int expected = 2;
-        int actual = percolation.xyTo1D(1, 0);
-        assertEquals(expected, actual);
-    }
 
     @Test
     public void testConstructor() {
