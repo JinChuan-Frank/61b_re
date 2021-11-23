@@ -21,6 +21,7 @@ public class PercolationStats {
         sideLength = N;
         numOfOpenSitesAtPercolation = new int[testingTimes];
         percolationFactory = pf;
+        testTTimes();
     }
 
     // sample mean of percolation threshold
@@ -28,7 +29,7 @@ public class PercolationStats {
         return StdStats.mean(numOfOpenSitesAtPercolation);
     }
 
-    private void setTestingTimes() {
+    private void testTTimes() {
         int times = 0;
         while (times < testingTimes) {
             Percolation percolation = percolationFactory.make(sideLength);
@@ -57,12 +58,16 @@ public class PercolationStats {
 
     // low endpoint of 95% confidence interval
     public double confidenceLow() {
-        return 0;
+        double averageThreshold = mean();
+        double lowEnd = averageThreshold - (stddev() / Math.sqrt(testingTimes));
+        return lowEnd;
     }
 
     // high endpoint of 95% confidence interval
     public double confidenceHigh() {
-        return 0;
+        double averageThreshold = mean();
+        double highEnd = averageThreshold + (stddev() / Math.sqrt(testingTimes));
+        return highEnd;
     }
 
 }
