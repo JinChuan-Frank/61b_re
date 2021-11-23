@@ -37,9 +37,14 @@ public class PercolationStats {
     private double calThreshold(Percolation percolation) {
         while (!percolation.percolates()) {
             int row = StdRandom.uniform(0, sideLength);
-
+            int col = StdRandom.uniform(0, sideLength);
+            if (percolation.isOpen(row, col)) {
+                continue;
+            }
+            percolation.open(row, col);
         }
-        return 0;
+        int numberOfOpenSites = percolation.numberOfOpenSites();
+        return numberOfOpenSites / sideLength * sideLength;
     }
 
     // sample standard deviation of percolation threshold
