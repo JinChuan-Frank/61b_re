@@ -12,7 +12,7 @@ public class Percolation {
     private int virtualTopSite;
     private int virtualBottomSite;
     private int numberOfOpenSites;
-    WeightedQuickUnionUF weightedQuickUnionUF;
+    private WeightedQuickUnionUF weightedQuickUnionUF;
 
     private class Site {
         private boolean isOpen;

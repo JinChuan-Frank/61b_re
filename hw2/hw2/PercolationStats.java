@@ -62,14 +62,14 @@ public class PercolationStats {
     // low endpoint of 95% confidence interval
     public double confidenceLow() {
         double averageThreshold = mean();
-        double lowEnd = averageThreshold - (stddev() / Math.sqrt(testingTimes));
+        double lowEnd = averageThreshold - (1.96 * stddev() / Math.sqrt(testingTimes));
         return lowEnd;
     }
 
     // high endpoint of 95% confidence interval
     public double confidenceHigh() {
         double averageThreshold = mean();
-        double highEnd = averageThreshold + (stddev() / Math.sqrt(testingTimes));
+        double highEnd = averageThreshold + (1.96 * stddev() / Math.sqrt(testingTimes));
         return highEnd;
     }
 

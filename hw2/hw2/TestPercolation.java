@@ -9,9 +9,6 @@ public class TestPercolation {
 
     @Test
     public void testConstructor() {
-
-        assertTrue(percolation.weightedQuickUnionUF.connected(4, 26));
-        assertTrue(percolation.weightedQuickUnionUF.connected(24, 25));
         assertFalse(percolation.isOpen(0, 0));
         assertFalse(percolation.isOpen(1, 1));
     }
@@ -36,7 +33,6 @@ public class TestPercolation {
         assertTrue(percolation.isOpen(1, 1));
         assertTrue(percolation.isOpen(0, 1));
         assertTrue(percolation.isFull(1, 1));
-        assertTrue(percolation.weightedQuickUnionUF.connected(0, 1));
 
     }
 }
