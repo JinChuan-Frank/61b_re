@@ -1,4 +1,3 @@
-import com.sun.source.doctree.SinceTree;
 import org.junit.Test;
 import static org.junit.Assert.*;
 
@@ -174,6 +173,7 @@ public class ArrayHeap<T> implements ExtrinsicPQ<T> {
         swap(1, size);
         contents[size] = null;
         size -= 1;
+        sink(1);
         return min;
     }
 
