@@ -102,7 +102,7 @@ public class ArrayHeap<T> implements ExtrinsicPQ<T> {
      * Bubbles up the node currently at the given index.
      */
     private void swim(int index) {
-        if (index < 2) {
+        if (size < 2) {
             return;
         }
         // Throws an exception if index is invalid. DON'T CHANGE THIS LINE.
@@ -117,7 +117,7 @@ public class ArrayHeap<T> implements ExtrinsicPQ<T> {
      * Bubbles down the node currently at the given index.
      */
     private void sink(int index) {
-        if (index < 2) {
+        if (size < 2) {
             return;
         }
         // Throws an exception if index is invalid. DON'T CHANGE THIS LINE.
