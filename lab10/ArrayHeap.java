@@ -1,3 +1,4 @@
+import com.sun.source.doctree.SinceTree;
 import org.junit.Test;
 import static org.junit.Assert.*;
 
@@ -101,6 +102,9 @@ public class ArrayHeap<T> implements ExtrinsicPQ<T> {
      * Bubbles up the node currently at the given index.
      */
     private void swim(int index) {
+        if (index < 2) {
+            return;
+        }
         // Throws an exception if index is invalid. DON'T CHANGE THIS LINE.
         validateSinkSwimArg(index);
         while (index > 1 && min(index, parentIndex(index)) == index) {
@@ -113,6 +117,9 @@ public class ArrayHeap<T> implements ExtrinsicPQ<T> {
      * Bubbles down the node currently at the given index.
      */
     private void sink(int index) {
+        if (index < 2) {
+            return;
+        }
         // Throws an exception if index is invalid. DON'T CHANGE THIS LINE.
         validateSinkSwimArg(index);
 
@@ -167,7 +174,6 @@ public class ArrayHeap<T> implements ExtrinsicPQ<T> {
         swap(1, size);
         contents[size] = null;
         size -= 1;
-        sink(1);
         return min;
     }
 
