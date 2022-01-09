@@ -8,7 +8,7 @@ public class PercolationStats {
 
     private int testingTimes;
     private int sideLength;
-    public int[] numOfOpenSitesAtPercolation;
+    private double[] thresholds;
     private PercolationFactory percolationFactory;
 
     // perform T independent experiments on an N-by-N grid
@@ -18,14 +18,14 @@ public class PercolationStats {
         }
         testingTimes = T;
         sideLength = N;
-        numOfOpenSitesAtPercolation = new int[testingTimes];
+        thresholds = new double[testingTimes];
         percolationFactory = pf;
         testTTimes();
     }
 
     // sample mean of percolation threshold
     public double mean() {
-        return StdStats.mean(numOfOpenSitesAtPercolation);
+        return StdStats.mean(thresholds);
     }
 
     private void testTTimes() {
@@ -46,26 +46,30 @@ public class PercolationStats {
             }
             percolation.open(row, col);
         }
-        int numberOfOpenSites = percolation.numberOfOpenSites();
-        numOfOpenSitesAtPercolation[times] = numberOfOpenSites;
+        double percolationThreshold = (double) percolation.numberOfOpenSites()
+                / ((double) (sideLength * sideLength));
+        thresholds[times] = percolationThreshold;
+        /**System.out.println("number of open sites is " + percolation.numberOfOpenSites());
+        System.out.println("number of total sites is " + sideLength * sideLength);
+        System.out.println("times at " + times + "threshold is" + " " + percolationThreshold);*/
     }
 
     // sample standard deviation of percolation threshold
     public double stddev() {
-        return StdStats.stddev(numOfOpenSitesAtPercolation);
+        return StdStats.stddev(thresholds);
     }
 
     // low endpoint of 95% confidence interval
     public double confidenceLow() {
         double averageThreshold = mean();
-        double lowEnd = averageThreshold - (stddev() / Math.sqrt(testingTimes));
+        double lowEnd = averageThreshold - (1.96 * stddev() / Math.sqrt(testingTimes));
         return lowEnd;
     }
 
     // high endpoint of 95% confidence interval
     public double confidenceHigh() {
         double averageThreshold = mean();
-        double highEnd = averageThreshold + (stddev() / Math.sqrt(testingTimes));
+        double highEnd = averageThreshold + (1.96 * stddev() / Math.sqrt(testingTimes));
         return highEnd;
     }
 
