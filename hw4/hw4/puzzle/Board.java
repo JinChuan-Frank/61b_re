@@ -4,7 +4,7 @@ import edu.princeton.cs.algs4.Queue;
 public class Board implements WorldState {
 
     private final int[][] board;
-    //private final int[][] goal;
+    private final int[][] goal;
 
     /**
      * Constructs a board from an N-by-N array of tiles where
@@ -14,9 +14,17 @@ public class Board implements WorldState {
     public Board(int[][] tiles) {
         int N = tiles.length;
         board = new int[N][N];
+        goal = new int[N][N];
+        int rightPosition = 1;
         for (int i = 0; i < N; i++) {
             for (int j = 0; j < N; j++) {
                 board[i][j] = tiles[i][j];
+            }
+        }
+        for (int row = 0; row < N - 1; row--) {
+            for (int column = 0; column < N; column++) {
+                goal[row][column] = rightPosition;
+                rightPosition++;
             }
         }
     }
