@@ -5,7 +5,16 @@ public class Board implements WorldState {
 
     private final int[][] board;
     public final int[][] goal;
+    private Number[] numbers;
 
+    private class Number {
+        private int[] initialPos;
+        private int[] rightPos;
+        private int orderAtBoard;
+        public Number(int order) {
+            orderAtBoard = order;
+        }
+    }
     /**
      * Constructs a board from an N-by-N array of tiles where
      * tiles[i][j] = tile at row i, column j
@@ -62,11 +71,26 @@ public class Board implements WorldState {
      * @return
      */
     public int hamming() {
+        int N = size();
+
+        return 0;
+    }
+
+    public int[] calRightPosition(int number) {
+        return null;
+    }
+
+    public int[] findInitialPosition(int number) {
         int size = size();
         for (int i = 0; i < size; i++) {
+            for (int j = 0; j < size; j++) {
+                if (this.tileAt(i, j) == number) {
+                    return new int[]{i, j};
+                }
 
+            }
         }
-        return 0;
+        return new int[]{-1, -1};
     }
 
     /**
