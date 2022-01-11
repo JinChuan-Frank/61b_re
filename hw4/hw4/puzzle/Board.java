@@ -26,7 +26,6 @@ public class Board implements WorldState {
     }
 
     public void setGoal(int[][] goal, int N) {
-        goal[N - 1][N - 1] = 0;
         int numberAtPosition = 1;
         for (int row = 0; row < N; row++) {
             for (int column = 0; column < N; column++) {
@@ -34,6 +33,7 @@ public class Board implements WorldState {
                 numberAtPosition ++;
             }
         }
+        goal[N - 1][N - 1] = 0;
     }
 
     /**
