@@ -48,4 +48,18 @@ public class TestBoard {
         assertEquals(8, board1.goal[2][1]);
         assertEquals(0, board1.goal[2][2]);
     }
+
+    @Test
+    public void testHamming() {
+        int[][] tiles1 = new int[3][3];
+        int cnt = 0;
+        for (int i = 0; i < 3; i += 1) {
+            for (int j = 0; j < 3; j += 1) {
+                tiles1[i][j] = cnt;
+                cnt += 1;
+            }
+        }
+        Board board1 = new Board(tiles1);
+        assertEquals(8, board1.hamming());
+    }
 }

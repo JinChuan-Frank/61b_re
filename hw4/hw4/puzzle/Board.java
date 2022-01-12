@@ -5,7 +5,7 @@ public class Board implements WorldState {
 
     private final int[][] board;
     public final int[][] goal;
-    private Tile[] tiles;
+    private final Tile[] T;
 
     private class Tile {
         private int[] initialPos;
@@ -15,6 +15,10 @@ public class Board implements WorldState {
             initialPos = initial;
             rightPos = goal;
             orderAtBoard = value;
+        }
+
+        private boolean inRightPosition() {
+            return initialPos.equals(rightPos);
         }
     }
     /**
@@ -26,15 +30,22 @@ public class Board implements WorldState {
         int N = tiles.length;
         board = new int[N][N];
         goal = new int[N][N];
+        T = new Tile[N * N];
+        int order = 1;
+        setGoal(goal, N);
 
         for (int i = 0; i < N; i++) {
             for (int j = 0; j < N; j++) {
                 board[i][j] = tiles[i][j];
                 int value = tiles[i][j];
-
+                int[] initial = {i, j};
+                int[] goal = {this.goal[i][j]};
+                Tile tile = new Tile(initial, goal, value);
+                T[order] = tile;
+                order++;
             }
         }
-        setGoal(goal, N);
+
 
     }
 
@@ -75,14 +86,15 @@ public class Board implements WorldState {
      * @return
      */
     public int hamming() {
-        int N = size();
-
-        return 0;
+        int wrong = 0;
+        for (int i = 1; i < T.length; i++) {
+            if (!T[i].inRightPosition()) {
+                wrong++;
+            }
+        }
+        return wrong;
     }
 
-    public int[] calRightPosition(int number) {
-        return null;
-    }
 
     public int[] findInitialPosition(int number) {
         int size = size();
