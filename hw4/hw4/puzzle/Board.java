@@ -5,14 +5,16 @@ public class Board implements WorldState {
 
     private final int[][] board;
     public final int[][] goal;
-    private Number[] numbers;
+    private Tile[] tiles;
 
-    private class Number {
+    private class Tile {
         private int[] initialPos;
         private int[] rightPos;
         private int orderAtBoard;
-        public Number(int order) {
-            orderAtBoard = order;
+        public Tile(int[] initial, int[] goal, int value) {
+            initialPos = initial;
+            rightPos = goal;
+            orderAtBoard = value;
         }
     }
     /**
@@ -28,6 +30,8 @@ public class Board implements WorldState {
         for (int i = 0; i < N; i++) {
             for (int j = 0; j < N; j++) {
                 board[i][j] = tiles[i][j];
+                int value = tiles[i][j];
+
             }
         }
         setGoal(goal, N);
