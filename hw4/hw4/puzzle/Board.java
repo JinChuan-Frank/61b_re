@@ -12,30 +12,23 @@ public class Board implements WorldState {
     private class Tile {
         private int[] initialPos;
         private int[] rightPos;
-        private int orderAtBoard;
-        public Tile(int[] initial, int[] goal, int value) {
+        private int disToRightPos;
+
+        public Tile(int[] initial, int[] goal) {
             initialPos = initial;
             rightPos = goal;
-            orderAtBoard = value;
+
         }
 
         private boolean inRightPosition() {
             return initialPos.equals(rightPos);
         }
 
-        private int[] calRightPos(int N, int[][] goal) {
-            int[] rightPos = new int[2];
-            if (this.orderAtBoard == 0) {
-
-            }
-
-            return rightPos;
-        }
 
         private int disToRightPos() {
-            System.out.println("cal dist on " + orderAtBoard);
-            System.out.println("init "+ Arrays.toString(initialPos));
-            System.out.println("goal" + Arrays.toString(rightPos));
+            //System.out.println("cal dist on " + orderAtBoard);
+            //System.out.println("init "+ Arrays.toString(initialPos));
+            //System.out.println("goal" + Arrays.toString(rightPos));
             int distance = 0;
             distance += Math.abs(initialPos[0] - rightPos[0]);
             distance += Math.abs(initialPos[1] - rightPos[1]);
@@ -60,8 +53,9 @@ public class Board implements WorldState {
                 board[i][j] = tiles[i][j];
                 int value = tiles[i][j];
                 int[] initial = {i, j};
-                int[] goal = {this.goal[i][j]};
-                Tile tile = new Tile(initial, goal, value);
+                int[] goalPos = calRightPos(N, value, goal);
+                Tile tile = new Tile(initial, goalPos);
+                tile.disToRightPos = tile.disToRightPos();
                 T[value] = tile;
             }
         }
@@ -80,6 +74,25 @@ public class Board implements WorldState {
         }
         goal[N - 1][N - 1] = 0;
 
+    }
+
+    private int[] calRightPos(int N, int value, int[][] goal) {
+        int[] rightPos = new int[2];
+        if (value == 0) {
+            rightPos[0] = N - 1;
+            rightPos[1] = N - 1;
+        } else {
+            for (int i = 0; i < N; i++) {
+                for (int j = 0; j< N; j++) {
+                    if (goal[i][j] == value) {
+                        rightPos[0] = i;
+                        rightPos[1] = j;
+                    }
+                }
+            }
+        }
+
+        return rightPos;
     }
 
     /**
@@ -140,9 +153,9 @@ public class Board implements WorldState {
 
         int sum = 0;
         for (int i = 1; i < T.length; i++) {
-            if (!T[i].inRightPosition()) {
-                sum += T[i].disToRightPos();
-            }
+
+                sum += T[i].disToRightPos;
+
         }
         return sum;
     }
