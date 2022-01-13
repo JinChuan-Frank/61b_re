@@ -1,6 +1,8 @@
 package hw4.puzzle;
 import edu.princeton.cs.algs4.Queue;
 
+import java.util.Arrays;
+
 public class Board implements WorldState {
 
     private final int[][] board;
@@ -20,7 +22,24 @@ public class Board implements WorldState {
         private boolean inRightPosition() {
             return initialPos.equals(rightPos);
         }
+
+        private int[] calRightPos(int N) {
+            int[] rightPos = new int[2];
+
+            return rightPos;
+        }
+
+        private int disToRightPos() {
+            System.out.println("cal dist on " + orderAtBoard);
+            System.out.println("init "+ Arrays.toString(initialPos));
+            System.out.println("goal" + Arrays.toString(rightPos));
+            int distance = 0;
+            distance += Math.abs(initialPos[0] - rightPos[0]);
+            distance += Math.abs(initialPos[1] - rightPos[1]);
+            return distance;
+        }
     }
+
     /**
      * Constructs a board from an N-by-N array of tiles where
      * tiles[i][j] = tile at row i, column j
@@ -31,7 +50,6 @@ public class Board implements WorldState {
         board = new int[N][N];
         goal = new int[N][N];
         T = new Tile[N * N];
-        int order = 1;
         setGoal(goal, N);
 
         for (int i = 0; i < N; i++) {
@@ -41,8 +59,7 @@ public class Board implements WorldState {
                 int[] initial = {i, j};
                 int[] goal = {this.goal[i][j]};
                 Tile tile = new Tile(initial, goal, value);
-                T[order] = tile;
-                order++;
+                T[value] = tile;
             }
         }
 
@@ -50,6 +67,7 @@ public class Board implements WorldState {
     }
 
     public void setGoal(int[][] goal, int N) {
+
         int numberAtPosition = 1;
         for (int row = 0; row < N; row++) {
             for (int column = 0; column < N; column++) {
@@ -58,6 +76,7 @@ public class Board implements WorldState {
             }
         }
         goal[N - 1][N - 1] = 0;
+
     }
 
     /**
@@ -115,16 +134,44 @@ public class Board implements WorldState {
      * @return
      */
     public int manhattan() {
-        return 0;
+
+        int sum = 0;
+        for (int i = 1; i < T.length; i++) {
+            if (!T[i].inRightPosition()) {
+                sum += T[i].disToRightPos();
+            }
+        }
+        return sum;
     }
 
+    /**
+     * Returns true if this board's tile values are the same
+     * position as y's
+     * @param y
+     * @return
+     */
     public boolean equals(Object y) {
-        return false;
+
+        Board board1 = (Board) y;
+        for (int i = 0; i < size(); i++) {
+            for (int j = 0; j < size(); j++) {
+                if (board[i][j] != board1.board[i][j]) {
+                    return false;
+                }
+            }
+        }
+        return true;
     }
 
+    /**
+     * Estimated distance to goal. This method should
+     * simply return the results of manhattan() when submitted to
+     * Gradescope.
+     * @return
+     */
     @Override
     public int estimatedDistanceToGoal() {
-        return 0;
+        return manhattan();
     }
 
     /**
