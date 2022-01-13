@@ -23,8 +23,11 @@ public class Board implements WorldState {
             return initialPos.equals(rightPos);
         }
 
-        private int[] calRightPos(int N) {
+        private int[] calRightPos(int N, int[][] goal) {
             int[] rightPos = new int[2];
+            if (this.orderAtBoard == 0) {
+
+            }
 
             return rightPos;
         }
