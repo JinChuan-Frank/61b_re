@@ -8,6 +8,8 @@ public class Board implements WorldState {
     private final int[][] board;
     public final int[][] goal;
     private final Tile[] T;
+    public Iterable<WorldState> neighbors;
+    private int distance;
 
     private class Tile {
         private int[] initialPos;
@@ -46,21 +48,38 @@ public class Board implements WorldState {
         board = new int[N][N];
         goal = new int[N][N];
         T = new Tile[N * N];
+
         setGoal(goal, N);
 
         for (int i = 0; i < N; i++) {
             for (int j = 0; j < N; j++) {
                 board[i][j] = tiles[i][j];
                 int value = tiles[i][j];
-                int[] initial = {i, j};
-                int[] goalPos = calRightPos(N, value, goal);
-                Tile tile = new Tile(initial, goalPos);
-                tile.disToRightPos = tile.disToRightPos();
-                T[value] = tile;
+                if (value != 0) {
+                    int[] initial = {i, j};
+                    int[] goalPos = calRightPos(N, value, goal);
+                    Tile tile = new Tile(initial, goalPos);
+                    tile.disToRightPos = tile.disToRightPos();
+                    T[value] = tile;
+                }
+
+
             }
         }
+        distance = sumUpDistanceOfTiles();
 
+    }
 
+    private int sumUpDistanceOfTiles() {
+        int sum = 0;
+        for (int i = 1; i < T.length; i++) {
+            sum += T[i].disToRightPos;
+        }
+        return sum;
+    }
+
+    public void setNeighbors() {
+        neighbors = this.neighbors();
     }
 
     public void setGoal(int[][] goal, int N) {
@@ -150,14 +169,36 @@ public class Board implements WorldState {
      * @return
      */
     public int manhattan() {
+        return distance;
+    }
 
+    private int sumUpDistanceBlock() {
+        int N = size();
         int sum = 0;
-        for (int i = 1; i < T.length; i++) {
-
-                sum += T[i].disToRightPos;
-
+        for (int i = 0; i < N; i++) {
+            for (int j = 0; j < N; j++) {
+                if (board[i][j] != 0) {
+                    int goalPos[] = getGoalPos(i, j);
+                    int[] cur = new int[]{i,j};
+                    sum += calDistance(cur, goalPos);
+                }
+            }
         }
         return sum;
+    }
+
+    private int[] getGoalPos(int i, int j) {
+        int N = size();
+        int row = i / N;
+        int col = j % N - 1;
+        if (col == -1) {
+            col += N;
+        }
+        return new int[]{row, col};
+    }
+
+    private int calDistance(int[]cur, int[]goal) {
+        return Math.abs(goal[0] - cur[0]) + Math.abs(goal[1] - cur[1]);
     }
 
     /**
@@ -168,21 +209,31 @@ public class Board implements WorldState {
      */
     public boolean equals(Object y) {
 
-        Board board1 = (Board) y;
-        for (int i = 0; i < size(); i++) {
-            for (int j = 0; j < size(); j++) {
-                if (board[i][j] != board1.board[i][j]) {
-                    return false;
+        if (y == null) {
+            return false;
+        }
+        if (y == this) {
+            return true;
+        }
+        if (y.getClass().isInstance(this)) {
+            Board boardY = (Board) y;
+            for (int i = 0; i < size(); i++) {
+                for (int j = 0; j < size(); j++) {
+                    if (board[i][j] != boardY.board[i][j]) {
+                        return false;
+                    }
                 }
             }
+        } else {
+            return false;
         }
+
         return true;
     }
 
     /**
      * Estimated distance to goal. This method should
-     * simply return the results of manhattan() when submitted to
-     * Gradescope.
+     * simply return the results of manhattan() when submitted to Gradescope.
      * @return
      */
     @Override
@@ -225,6 +276,8 @@ public class Board implements WorldState {
                 }
             }
         }
+
+
         return neighbors;
     }
 

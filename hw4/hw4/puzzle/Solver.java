@@ -2,10 +2,13 @@ package hw4.puzzle;
 import edu.princeton.cs.algs4.MinPQ;
 import edu.princeton.cs.algs4.Stack;
 
+import java.util.Comparator;
+
 public class Solver {
 
-    MinPQ<SearchNode> moveSequences;
-    Stack<WorldState> path;
+    MinPQ<SearchNode> moveSequences = new MinPQ<>();;
+    Stack<WorldState> path = new Stack<>();
+    SearchNode finish;
 
     public class SearchNode implements Comparable<SearchNode> {
         private WorldState worldState;
@@ -19,12 +22,13 @@ public class Solver {
         }
 
         @Override
-        public int compareTo(SearchNode searchNode) {
-            return (this.movesSoFar + this.worldState.estimatedDistanceToGoal())
-                    - (searchNode.movesSoFar + searchNode.worldState.estimatedDistanceToGoal());
+        public int compareTo(SearchNode o) {
+            return (this.movesSoFar + this.worldState.estimatedDistanceToGoal()) - (o.movesSoFar + o.worldState.estimatedDistanceToGoal());
         }
 
     }
+
+
 
     /**
      * Constructor which solves the puzzle, computing
@@ -34,36 +38,21 @@ public class Solver {
      * @param initial
      */
     public Solver(WorldState initial) {
-        moveSequences = new MinPQ<>();
-        path = new Stack<>();
         SearchNode initialNode = new SearchNode(initial, 0, null);
         moveSequences.insert(initialNode);
-        bestFirstSearch(moveSequences, initial);
-    }
-
-    public void bestFirstSearch(MinPQ<SearchNode> moves, WorldState initial) {
-        SearchNode X = moves.delMin();
-        if (X.worldState.isGoal()) {
-            path.push(X.worldState);
-            while (!X.worldState.equals(initial)) {
-                X = X.prevNode;
-                path.push(X.worldState);
+        while (!moveSequences.isEmpty()) {
+            SearchNode current = moveSequences.delMin();
+            if (current.worldState.estimatedDistanceToGoal() == 0) {
+                finish = current;
+                return;
             }
-            return;
-        }
-
-        for (WorldState neighbor : X.worldState.neighbors()) {
-            if (X.prevNode != null && neighbor.equals(X.prevNode.worldState)) {
-                continue;
+            for (WorldState neighborState : current.worldState.neighbors()) {
+                if (current.prevNode == null || !neighborState.equals(current.prevNode.worldState)) {
+                    moveSequences.insert(new SearchNode(neighborState, current.movesSoFar + 1, current));
+                }
             }
-            SearchNode neighborNode = new SearchNode(neighbor,
-                    X.movesSoFar + 1, X);
-            moves.insert(neighborNode);
-
         }
-        bestFirstSearch(moves, initial);
     }
-
 
     /**
      * Returns the minimum number of moves to solve the puzzle starting
@@ -71,7 +60,7 @@ public class Solver {
      * @return
      */
     public int moves() {
-        return path.size() - 1;
+        return finish.movesSoFar;
     }
 
     /**
@@ -80,6 +69,11 @@ public class Solver {
      * @return
      */
     public Iterable<WorldState> solution() {
+        SearchNode temp = finish;
+        while (temp != null) {
+            path.push(temp.worldState);
+            temp = temp.prevNode;
+        }
         return path;
     }
 }

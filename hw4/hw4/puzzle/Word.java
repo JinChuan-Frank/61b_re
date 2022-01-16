@@ -10,6 +10,7 @@ public class Word implements WorldState {
     private static final String WORDFILE = "input/words10000.txt";
     private final String word;
     private final String goal;
+    public Iterable<WorldState> neighbors;
 
     /**
      * Reads the wordfile specified by the wordfile variable.
