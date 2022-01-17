@@ -2,7 +2,7 @@ package hw4.puzzle;
 import edu.princeton.cs.algs4.MinPQ;
 import edu.princeton.cs.algs4.Stack;
 
-import java.util.Comparator;
+
 
 public class Solver {
 
@@ -23,7 +23,8 @@ public class Solver {
 
         @Override
         public int compareTo(SearchNode o) {
-            return (this.movesSoFar + this.worldState.estimatedDistanceToGoal()) - (o.movesSoFar + o.worldState.estimatedDistanceToGoal());
+            return (this.movesSoFar + this.worldState.estimatedDistanceToGoal())
+                    - (o.movesSoFar + o.worldState.estimatedDistanceToGoal());
         }
 
     }
@@ -47,8 +48,10 @@ public class Solver {
                 return;
             }
             for (WorldState neighborState : current.worldState.neighbors()) {
-                if (current.prevNode == null || !neighborState.equals(current.prevNode.worldState)) {
-                    moveSequences.insert(new SearchNode(neighborState, current.movesSoFar + 1, current));
+                if (current.prevNode == null
+                        || !neighborState.equals(current.prevNode.worldState)) {
+                    moveSequences.insert(new SearchNode(neighborState,
+                            current.movesSoFar + 1, current));
                 }
             }
         }

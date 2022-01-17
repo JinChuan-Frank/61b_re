@@ -1,14 +1,13 @@
 package hw4.puzzle;
 import edu.princeton.cs.algs4.Queue;
 
-import java.util.Arrays;
+
 
 public class Board implements WorldState {
 
     private final int[][] board;
-    public final int[][] goal;
+    private final int[][] goal;
     private final Tile[] T;
-    public Iterable<WorldState> neighbors;
     private int distance;
 
     private class Tile {
@@ -16,7 +15,7 @@ public class Board implements WorldState {
         private int[] rightPos;
         private int disToRightPos;
 
-        public Tile(int[] initial, int[] goal) {
+        Tile(int[] initial, int[] goal) {
             initialPos = initial;
             rightPos = goal;
 
@@ -28,13 +27,11 @@ public class Board implements WorldState {
 
 
         private int disToRightPos() {
-            //System.out.println("cal dist on " + orderAtBoard);
-            //System.out.println("init "+ Arrays.toString(initialPos));
-            //System.out.println("goal" + Arrays.toString(rightPos));
-            int distance = 0;
-            distance += Math.abs(initialPos[0] - rightPos[0]);
-            distance += Math.abs(initialPos[1] - rightPos[1]);
-            return distance;
+
+            int d = 0;
+            d += Math.abs(initialPos[0] - rightPos[0]);
+            d += Math.abs(initialPos[1] - rightPos[1]);
+            return d;
         }
     }
 
@@ -78,32 +75,28 @@ public class Board implements WorldState {
         return sum;
     }
 
-    public void setNeighbors() {
-        neighbors = this.neighbors();
-    }
-
-    public void setGoal(int[][] goal, int N) {
+    public void setGoal(int[][] g, int N) {
 
         int numberAtPosition = 1;
         for (int row = 0; row < N; row++) {
             for (int column = 0; column < N; column++) {
                 goal[row][column] = numberAtPosition;
-                numberAtPosition ++;
+                numberAtPosition++;
             }
         }
         goal[N - 1][N - 1] = 0;
 
     }
 
-    private int[] calRightPos(int N, int value, int[][] goal) {
+    private int[] calRightPos(int N, int value, int[][] g) {
         int[] rightPos = new int[2];
         if (value == 0) {
             rightPos[0] = N - 1;
             rightPos[1] = N - 1;
         } else {
             for (int i = 0; i < N; i++) {
-                for (int j = 0; j< N; j++) {
-                    if (goal[i][j] == value) {
+                for (int j = 0; j < N; j++) {
+                    if (g[i][j] == value) {
                         rightPos[0] = i;
                         rightPos[1] = j;
                     }
@@ -150,19 +143,6 @@ public class Board implements WorldState {
     }
 
 
-    public int[] findInitialPosition(int number) {
-        int size = size();
-        for (int i = 0; i < size; i++) {
-            for (int j = 0; j < size; j++) {
-                if (this.tileAt(i, j) == number) {
-                    return new int[]{i, j};
-                }
-
-            }
-        }
-        return new int[]{-1, -1};
-    }
-
     /**
      * The sum of the Manhattan distances (sum of the vertical and horizontal distance)
      * from the tiles to their goal positions
@@ -170,35 +150,6 @@ public class Board implements WorldState {
      */
     public int manhattan() {
         return distance;
-    }
-
-    private int sumUpDistanceBlock() {
-        int N = size();
-        int sum = 0;
-        for (int i = 0; i < N; i++) {
-            for (int j = 0; j < N; j++) {
-                if (board[i][j] != 0) {
-                    int goalPos[] = getGoalPos(i, j);
-                    int[] cur = new int[]{i,j};
-                    sum += calDistance(cur, goalPos);
-                }
-            }
-        }
-        return sum;
-    }
-
-    private int[] getGoalPos(int i, int j) {
-        int N = size();
-        int row = i / N;
-        int col = j % N - 1;
-        if (col == -1) {
-            col += N;
-        }
-        return new int[]{row, col};
-    }
-
-    private int calDistance(int[]cur, int[]goal) {
-        return Math.abs(goal[0] - cur[0]) + Math.abs(goal[1] - cur[1]);
     }
 
     /**
@@ -229,6 +180,17 @@ public class Board implements WorldState {
         }
 
         return true;
+    }
+
+    public int hashCode() {
+        int N = size();
+        int sum = 0;
+        for (int i = 0; i < N; i++) {
+            for (int j = 0; j < N; j++) {
+                sum = (sum + board[i][j]) * 31;
+            }
+        }
+        return sum;
     }
 
     /**
@@ -289,7 +251,7 @@ public class Board implements WorldState {
         s.append(N + "\n");
         for (int i = 0; i < N; i++) {
             for (int j = 0; j < N; j++) {
-                s.append(String.format("%2d ", tileAt(i,j)));
+                s.append(String.format("%2d ", tileAt(i, j)));
             }
             s.append("\n");
         }
