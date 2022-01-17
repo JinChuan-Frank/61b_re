@@ -11,8 +11,8 @@ public class Board implements WorldState {
     private int distance;
 
     private class Tile {
-        private int[] initialPos;
-        private int[] rightPos;
+        public int[] initialPos;
+        public int[] rightPos;
         private int disToRightPos;
 
         Tile(int[] initial, int[] goal) {
@@ -21,9 +21,7 @@ public class Board implements WorldState {
 
         }
 
-        private boolean inRightPosition() {
-            return initialPos.equals(rightPos);
-        }
+        private boolean inRightPosition() {return initialPos.equals(rightPos);}
 
 
         private int disToRightPos() {
@@ -75,16 +73,16 @@ public class Board implements WorldState {
         return sum;
     }
 
-    public void setGoal(int[][] g, int N) {
+    private void setGoal(int[][] g, int N) {
 
         int numberAtPosition = 1;
         for (int row = 0; row < N; row++) {
             for (int column = 0; column < N; column++) {
-                goal[row][column] = numberAtPosition;
+                g[row][column] = numberAtPosition;
                 numberAtPosition++;
             }
         }
-        goal[N - 1][N - 1] = 0;
+        g[N - 1][N - 1] = 0;
 
     }
 
@@ -136,6 +134,8 @@ public class Board implements WorldState {
         int wrong = 0;
         for (int i = 1; i < T.length; i++) {
             if (!T[i].inRightPosition()) {
+
+                System.out.println(T[i] +"not in right pos, right pos is" + T[i].rightPos + "actual is" + T[i].initialPos);
                 wrong++;
             }
         }

@@ -36,15 +36,13 @@ public class TestBoard {
 
     @Test
     public void testHamming() {
-        int[][] tiles1 = new int[3][3];
-        int cnt = 0;
-        for (int i = 0; i < 3; i += 1) {
-            for (int j = 0; j < 3; j += 1) {
-                tiles1[i][j] = cnt;
-                cnt += 1;
-            }
-        }
-        Board board1 = new Board(tiles1);
-        assertEquals(8, board1.hamming());
+        int[][] x = new int[2][2];
+        x[0][0] = 1;
+        x[0][1] = 0;
+        x[1][0] = 3;
+        x[1][1] = 2;
+        Board board = new Board(x);
+        int hamming = board.hamming();
+        assertEquals(1, hamming);
     }
 }

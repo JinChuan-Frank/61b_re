@@ -6,11 +6,11 @@ import edu.princeton.cs.algs4.Stack;
 
 public class Solver {
 
-    MinPQ<SearchNode> moveSequences = new MinPQ<>();;
-    Stack<WorldState> path = new Stack<>();
-    SearchNode finish;
+    private MinPQ<SearchNode> moveSequences = new MinPQ<>();;
+    private Stack<WorldState> path = new Stack<>();
+    private SearchNode finish;
 
-    public class SearchNode implements Comparable<SearchNode> {
+    private class SearchNode implements Comparable<SearchNode> {
         private WorldState worldState;
         int movesSoFar;
         SearchNode prevNode;
