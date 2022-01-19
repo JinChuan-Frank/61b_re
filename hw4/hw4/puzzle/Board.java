@@ -1,6 +1,7 @@
 package hw4.puzzle;
 import edu.princeton.cs.algs4.Queue;
 
+import java.util.Arrays;
 
 
 public class Board implements WorldState {
@@ -11,8 +12,8 @@ public class Board implements WorldState {
     private int distance;
 
     private class Tile {
-        public int[] initialPos;
-        public int[] rightPos;
+        private int[] initialPos;
+        private int[] rightPos;
         private int disToRightPos;
 
         Tile(int[] initial, int[] goal) {
@@ -21,7 +22,9 @@ public class Board implements WorldState {
 
         }
 
-        private boolean inRightPosition() {return initialPos.equals(rightPos);}
+        private boolean inRightPosition() {
+            return Arrays.equals(initialPos, rightPos);
+        }
 
 
         private int disToRightPos() {
@@ -134,8 +137,6 @@ public class Board implements WorldState {
         int wrong = 0;
         for (int i = 1; i < T.length; i++) {
             if (!T[i].inRightPosition()) {
-
-                System.out.println(T[i] +"not in right pos, right pos is" + T[i].rightPos + "actual is" + T[i].initialPos);
                 wrong++;
             }
         }
@@ -166,8 +167,11 @@ public class Board implements WorldState {
         if (y == this) {
             return true;
         }
-        if (y.getClass().isInstance(this)) {
+        if (getClass().equals(y.getClass())) {
             Board boardY = (Board) y;
+            if (size() != boardY.size()) {
+                return false;
+            }
             for (int i = 0; i < size(); i++) {
                 for (int j = 0; j < size(); j++) {
                     if (board[i][j] != boardY.board[i][j]) {

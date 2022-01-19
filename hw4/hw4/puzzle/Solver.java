@@ -15,7 +15,7 @@ public class Solver {
         int movesSoFar;
         SearchNode prevNode;
 
-        public SearchNode(WorldState state, int moves, SearchNode prev) {
+        SearchNode(WorldState state, int moves, SearchNode prev) {
             worldState = state;
             movesSoFar = moves;
             prevNode = prev;
