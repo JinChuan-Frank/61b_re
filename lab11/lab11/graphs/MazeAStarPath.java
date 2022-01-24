@@ -29,8 +29,8 @@ public class MazeAStarPath extends MazeExplorer {
         /* You do not have to use this method. */
     }
 
-    /** Performs an A star search from vertex s. */
-    private void astar(int s) {
+    /** Performs an A star search from vertex k. */
+    private void astar(int k) {
         // TODO
     }
 
