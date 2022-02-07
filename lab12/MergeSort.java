@@ -74,7 +74,6 @@ public class MergeSort {
             return items;
         }
         int mid = size / 2;
-        System.out.println("size is: " + size + " " + "mid is: " + mid);
 
         //Queue<Queue<Item>> singleItemQueues = makeSingleItemQueues(items);
         Queue<Item> q1 = new Queue<>();
