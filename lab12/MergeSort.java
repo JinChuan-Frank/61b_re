@@ -35,10 +35,8 @@ public class MergeSort {
     private static <Item extends Comparable> Queue<Queue<Item>>
             makeSingleItemQueues(Queue<Item> items) {
         Queue<Queue<Item>> singleItemQueues = new Queue<>();
-        while (!items.isEmpty()) {
-            Queue<Item> singleItemQueue = new Queue<>();
-            singleItemQueue.enqueue(items.dequeue());
-            singleItemQueues.enqueue(singleItemQueue);
+        for (Item item : items) {
+            singleItemQueues.enqueue(items);
         }
         return singleItemQueues;
     }
@@ -70,26 +68,31 @@ public class MergeSort {
     public static <Item extends Comparable> Queue<Item> mergeSort(
             Queue<Item> items) {
         int size = items.size();
+        if (size == 0) {
+            return items;
+        }
         if (size == 1) {
             return items;
         }
         int mid = size / 2;
-        System.out.println("size is: " + size + " " + "mid is: " + mid);
+        Queue<Item> items1 = new Queue<>();
+        for (Item item : items) {
+            items1.enqueue(item);
+        }
 
-        //Queue<Queue<Item>> singleItemQueues = makeSingleItemQueues(items);
         Queue<Item> q1 = new Queue<>();
         Queue<Item> q2 = new Queue<>();
         for (int i = 1; i <= mid; i++) {
-            q1.enqueue(items.dequeue());
+            q1.enqueue(items1.dequeue());
         }
         for (int j = mid + 1; j <= size; j++) {
-            q2.enqueue(items.dequeue());
+            q2.enqueue(items1.dequeue());
         }
         q1 = mergeSort(q1);
         q2 = mergeSort(q2);
-        items = mergeSortedQueues(q1, q2);
+        Queue<Item> sortedItems = mergeSortedQueues(q1, q2);
 
-        return items;
+        return sortedItems;
     }
 
     public static void main(String[] args) {
