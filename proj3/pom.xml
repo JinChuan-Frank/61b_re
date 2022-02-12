@@ -6,6 +6,7 @@
 
     <groupId>cs61b.proj3</groupId>
     <artifactId>proj3</artifactId>
+    <packaging>pom</packaging>
     <version>1.0</version>
     <build>
         <plugins>
@@ -20,6 +21,9 @@
             </plugin>
         </plugins>
     </build>
+    <modules>
+        <module>proj</module>
+    </modules>
 
     <dependencies>
         <dependency>
