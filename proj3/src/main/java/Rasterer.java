@@ -44,6 +44,8 @@ public class Rasterer {
     public Map<String, Object> getMapRaster(Map<String, Double> params) {
         System.out.println(params);
         Map<String, Object> results = new HashMap<>();
+        Object[][] render_grid = new Object() [[d7_x84_y28.png, d7_x85_y28.png, d7_x86_y28.png]];
+        results.put("render_grid", );
         System.out.println("Since you haven't implemented getMapRaster, nothing is displayed in "
                            + "your browser.");
         return results;
