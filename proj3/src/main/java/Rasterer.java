@@ -44,8 +44,20 @@ public class Rasterer {
     public Map<String, Object> getMapRaster(Map<String, Double> params) {
         System.out.println(params);
         Map<String, Object> results = new HashMap<>();
-        Object[][] render_grid = new Object() [[d7_x84_y28.png, d7_x85_y28.png, d7_x86_y28.png]];
-        results.put("render_grid", );
+        String[][] render_grid = {{"d7_x84_y28.png", "d7_x85_y28.png", "d7_x86_y28.png"}, {"d7_x84_y29", "d7_x85_y29", "d7_x86_y29"}, {"d7_x84_y30", "d7_x85_y30", "d7_x86_y30"}};
+        Double raster_ul_lon =  -122.24212;
+        Double raster_ul_lat = 37.87702;
+        Double raster_lr_lon = -122.24006;
+        Double raster_lr_lat = 37.87539;
+        int depth = 7;
+
+        results.put("render_grid", render_grid);
+        results.put("raster_ul_lon", raster_ul_lon);
+        results.put("raster_ul_lat", raster_ul_lat);
+        results.put("raster_lr_lon", raster_lr_lon);
+        results.put("raster_lr_lat", raster_lr_lat);
+        results.put("depth", depth);
+        results.put("query_success", true);
         System.out.println("Since you haven't implemented getMapRaster, nothing is displayed in "
                            + "your browser.");
         return results;
