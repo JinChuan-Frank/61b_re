@@ -14,15 +14,18 @@ public class Rasterer {
     private double lrLon;
     private double width;
     private double height;
-    private Map<String, Object> results;
+    private double initialLonDPP = (MapServer.ROOT_LRLON - MapServer.ROOT_ULLON) / MapServer.TILE_SIZE;
+    //private Map<String, Object> results;
 
     public Rasterer() {
         // YOUR CODE HERE
     }
 
-    private int calDepth() {
-        int depth = 0;
-
+    public int calDepth() {
+        int depth;
+        double queryBoxLonDPP = (lrLon - ulLon) / width;
+        double depthNeeded = Math.log(queryBoxLonDPP) / Math.log(2);
+        depth = (int)Math.ceil(depthNeeded);
         return depth;
     }
 

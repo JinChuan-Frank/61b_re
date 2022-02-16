@@ -32,6 +32,12 @@ public class TestRasterer {
     }
 
     @Test
+
+    public void testCalDepth() {
+
+    }
+
+    @Test
     public void testGetMapRaster() throws Exception {
         List<Map<String, Double>> testParams = paramsFromFile();
         List<Map<String, Object>> expectedResults = resultsFromFile();
