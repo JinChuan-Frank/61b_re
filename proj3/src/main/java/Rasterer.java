@@ -8,24 +8,27 @@ import java.util.Map;
  * not draw the output correctly.
  */
 public class Rasterer {
-    private double ulLat;
-    private double ulLon;
-    private double lrLat;
-    private double lrLon;
-    private double width;
-    private double height;
-    private double initialLonDPP = (MapServer.ROOT_LRLON - MapServer.ROOT_ULLON) / MapServer.TILE_SIZE;
+    public double ulLat;
+    public double ulLon;
+    public double lrLat;
+    public double lrLon;
+    public double width;
+    public double height;
+    public double initialLonDPP = (MapServer.ROOT_LRLON - MapServer.ROOT_ULLON) / MapServer.TILE_SIZE;
     //private Map<String, Object> results;
 
     public Rasterer() {
         // YOUR CODE HERE
     }
 
-    public int calDepth() {
-        int depth;
+    public double calDepth() {
+        double depth;
         double queryBoxLonDPP = (lrLon - ulLon) / width;
         double depthNeeded = Math.log(queryBoxLonDPP) / Math.log(2);
-        depth = (int)Math.ceil(depthNeeded);
+        depth = Math.round(depthNeeded);
+        if (depth >= 7) {
+            depth = 7;
+        }
         return depth;
     }
 
