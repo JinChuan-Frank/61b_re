@@ -21,15 +21,37 @@ public class Rasterer {
         // YOUR CODE HERE
     }
 
+    public class Tile {
+        public int depth;
+        public int x;
+        public int y;
+        public double ulLat;
+        public double ulLon;
+        public double lrLat;
+        public double lrLon;
+
+    }
+
     public double calDepth() {
         double depth;
         double queryBoxLonDPP = (lrLon - ulLon) / width;
-        double depthNeeded = Math.log(queryBoxLonDPP) / Math.log(2);
-        depth = Math.round(depthNeeded);
+        System.out.println("queryBoxLonDPP is: " + queryBoxLonDPP);
+        double depthNeeded = Math.log(initialLonDPP /queryBoxLonDPP) / Math.log(2);
+        depth = Math.ceil(depthNeeded);
+        System.out.println("desired depth is: " + depth);
         if (depth >= 7) {
             depth = 7;
         }
+        if (depth <= 0) {
+            depth = 0;
+        }
         return depth;
+    }
+
+    public Map<String, Double> calBoundingBox (int depth, int x, int y) {
+        Map<String, Double> boundingBox = new HashMap<>();
+
+        return boundingBox;
     }
 
     /**
