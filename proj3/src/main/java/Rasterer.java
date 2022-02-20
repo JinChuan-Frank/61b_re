@@ -29,6 +29,18 @@ public class Rasterer {
         public double ulLon;
         public double lrLat;
         public double lrLon;
+        Tile parent;
+
+        public Tile (int d, int xCoordinate, int yCoordinate) {
+            depth = d;
+            x = xCoordinate;
+            y = yCoordinate;
+        }
+
+        public void calBoundingBox (Tile tile) {
+
+        }
+
 
     }
 
@@ -48,11 +60,7 @@ public class Rasterer {
         return depth;
     }
 
-    public Map<String, Double> calBoundingBox (int depth, int x, int y) {
-        Map<String, Double> boundingBox = new HashMap<>();
 
-        return boundingBox;
-    }
 
     /**
      * Takes a user query and finds the grid of images that best matches the query. These
