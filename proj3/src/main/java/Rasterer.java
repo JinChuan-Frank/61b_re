@@ -8,9 +8,50 @@ import java.util.Map;
  * not draw the output correctly.
  */
 public class Rasterer {
+    public double ulLat;
+    public double ulLon;
+    public double lrLat;
+    public double lrLon;
+    public double width;
+    public double height;
+    public double initialLonDPP = (MapServer.ROOT_LRLON - MapServer.ROOT_ULLON) / MapServer.TILE_SIZE;
+    //private Map<String, Object> results;
 
     public Rasterer() {
         // YOUR CODE HERE
+    }
+
+    public class Tile {
+        public int depth;
+        public int x;
+        public int y;
+        public double ulLat;
+        public double ulLon;
+        public double lrLat;
+        public double lrLon;
+
+    }
+
+    public double calDepth() {
+        double depth;
+        double queryBoxLonDPP = (lrLon - ulLon) / width;
+        System.out.println("queryBoxLonDPP is: " + queryBoxLonDPP);
+        double depthNeeded = Math.log(initialLonDPP /queryBoxLonDPP) / Math.log(2);
+        depth = Math.ceil(depthNeeded);
+        System.out.println("desired depth is: " + depth);
+        if (depth >= 7) {
+            depth = 7;
+        }
+        if (depth <= 0) {
+            depth = 0;
+        }
+        return depth;
+    }
+
+    public Map<String, Double> calBoundingBox (int depth, int x, int y) {
+        Map<String, Double> boundingBox = new HashMap<>();
+
+        return boundingBox;
     }
 
     /**
@@ -44,7 +85,14 @@ public class Rasterer {
     public Map<String, Object> getMapRaster(Map<String, Double> params) {
         System.out.println(params);
         Map<String, Object> results = new HashMap<>();
-        String[][] render_grid = {{"d7_x84_y28.png", "d7_x85_y28.png", "d7_x86_y28.png"}, {"d7_x84_y29", "d7_x85_y29", "d7_x86_y29"}, {"d7_x84_y30", "d7_x85_y30", "d7_x86_y30"}};
+        ulLat = params.get("ullat");
+        ulLon = params.get("ullon");
+        lrLat = params.get("lrlat");
+        lrLon = params.get("lrlon");
+        width = params.get("w");
+        height = params.get("h");
+
+        /**String[][] render_grid = {{"d7_x84_y28.png", "d7_x85_y28.png", "d7_x86_y28.png"}, {"d7_x84_y29", "d7_x85_y29", "d7_x86_y29"}, {"d7_x84_y30", "d7_x85_y30", "d7_x86_y30"}};
         Double raster_ul_lon =  -122.24212;
         Double raster_ul_lat = 37.87702;
         Double raster_lr_lon = -122.24006;
@@ -57,7 +105,7 @@ public class Rasterer {
         results.put("raster_lr_lon", raster_lr_lon);
         results.put("raster_lr_lat", raster_lr_lat);
         results.put("depth", depth);
-        results.put("query_success", true);
+        results.put("query_success", true);*/
         System.out.println("Since you haven't implemented getMapRaster, nothing is displayed in "
                            + "your browser.");
         return results;
