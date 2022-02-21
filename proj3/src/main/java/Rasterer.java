@@ -22,6 +22,7 @@ public class Rasterer {
     }
 
     public class Tile {
+        public String tileName;
         public int depth;
         public int x;
         public int y;
@@ -32,13 +33,16 @@ public class Rasterer {
         Tile parent;
 
         public Tile (int d, int xCoordinate, int yCoordinate) {
+            tileName = "d" + d +"_x" + xCoordinate + "_y" + yCoordinate;
             depth = d;
             x = xCoordinate;
             y = yCoordinate;
         }
 
         public void calBoundingBox (Tile tile) {
+            if (depth == 0) {
 
+            }
         }
 
 
