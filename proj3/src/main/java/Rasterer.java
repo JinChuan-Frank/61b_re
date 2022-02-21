@@ -1,3 +1,4 @@
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -15,10 +16,11 @@ public class Rasterer {
     public double width;
     public double height;
     public double initialLonDPP = (MapServer.ROOT_LRLON - MapServer.ROOT_ULLON) / MapServer.TILE_SIZE;
+    public Map<String, Tile> tiles;
     //private Map<String, Object> results;
 
     public Rasterer() {
-        // YOUR CODE HERE
+        tiles = new HashMap<>();
     }
 
     public class Tile {
@@ -32,19 +34,37 @@ public class Rasterer {
         public double lrLon;
         Tile parent;
 
-        public Tile (int d, int xCoordinate, int yCoordinate) {
+        public Tile(int d, int xCoordinate, int yCoordinate) {
             tileName = "d" + d +"_x" + xCoordinate + "_y" + yCoordinate;
             depth = d;
             x = xCoordinate;
             y = yCoordinate;
         }
 
-        public void calBoundingBox (Tile tile) {
-            if (depth == 0) {
+    }
 
-            }
+    public void createOriginalTile() {
+        Tile originalTile = new Tile(0, 0, 0);
+        originalTile.ulLat = MapServer.ROOT_ULLAT;
+        originalTile.ulLon = MapServer.ROOT_ULLON;
+        originalTile.lrLat = MapServer.ROOT_LRLAT;
+        originalTile.lrLon = MapServer.ROOT_LRLON;
+        tiles.put(originalTile.tileName, originalTile);
+    }
+
+    public void createTilesAndChildren(Tile tile) {
+        int d = tile.depth;
+        if (d == 7) {
+            return;
         }
+        Tile uLChild = new Tile(d + 1, 2 * tile.x, tile.y);
 
+        Tile uRChild = new Tile(d + 1, 2 * tile.x + 1, tile.y);
+        Tile lLChild = new Tile(d + 1, 2 * tile.x, 2 * tile.y);
+        Tile lRChild = new Tile(d + 1, 2 * tile.x + 1, 2 * tile.y + 1);
+    }
+
+    public void createUpperLeftChild(Tile tile) {
 
     }
 
