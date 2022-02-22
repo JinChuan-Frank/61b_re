@@ -32,7 +32,6 @@ public class TestRasterer {
     }
 
     @Test
-
     public void testCalDepth() {
         rasterer = new Rasterer();
         /**rasterer.ulLon = -122.241632;
@@ -42,6 +41,13 @@ public class TestRasterer {
         rasterer.width = 892.0;
         rasterer.height = 875.0;
         System.out.println(rasterer.calDepth());*/
+    }
+
+    @Test
+    public void testCreateTiles() {
+        rasterer = new Rasterer();
+        Rasterer.Tile tile = rasterer.tiles.get("d1_x0_y0");
+        System.out.println("Tile[d1_x0_y0] ullat is: " +tile.getTileULLat());
     }
 
     @Test
