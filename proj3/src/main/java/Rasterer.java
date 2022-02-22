@@ -9,10 +9,10 @@ import java.util.Map;
  * not draw the output correctly.
  */
 public class Rasterer {
-    public double ulLat;
-    public double ulLon;
-    public double lrLat;
-    public double lrLon;
+    public double queryULLat;
+    public double queryULLon;
+    public double queryLRLat;
+    public double queryLRLon;
     public double width;
     public double height;
     public double initialLonDPP = (MapServer.ROOT_LRLON - MapServer.ROOT_ULLON) / MapServer.TILE_SIZE;
@@ -28,10 +28,10 @@ public class Rasterer {
         public int depth;
         public int x;
         public int y;
-        public double ulLat;
-        public double ulLon;
-        public double lrLat;
-        public double lrLon;
+        public double tileULLat;
+        public double tileULLon;
+        public double tileLRLat;
+        public double tileLRLon;
         Tile parent;
 
         public Tile(int d, int xCoordinate, int yCoordinate) {
@@ -41,36 +41,90 @@ public class Rasterer {
             y = yCoordinate;
         }
 
+        public void setPosition(double uLLatPos, double uLLonPos, double lRLatPos, double lRLonPos) {
+            tileULLat =  uLLatPos;
+            tileULLon = uLLonPos;
+            tileLRLat = lRLatPos;
+            tileLRLon = lRLonPos;
+        }
+
+        public int getDepth() {
+            return depth;
+        }
+
+        public double getTileULLat() {
+            return tileULLat;
+        }
+
+        public double getTileULLon() {
+            return tileULLon;
+        }
+
+        public double getTileLRLat() {
+            return tileLRLat;
+        }
+
+        public double getTileLRLon() {
+            return tileLRLon;
+        }
+
+        public String getTileName() {
+            return tileName;
+        }
     }
 
     public void createOriginalTile() {
         Tile originalTile = new Tile(0, 0, 0);
-        originalTile.ulLat = MapServer.ROOT_ULLAT;
-        originalTile.ulLon = MapServer.ROOT_ULLON;
-        originalTile.lrLat = MapServer.ROOT_LRLAT;
-        originalTile.lrLon = MapServer.ROOT_LRLON;
-        tiles.put(originalTile.tileName, originalTile);
+        originalTile.setPosition(MapServer.ROOT_ULLAT, MapServer.ROOT_ULLON,
+                MapServer.ROOT_LRLAT, MapServer.ROOT_LRLON);
+        tiles.put(originalTile.getTileName(), originalTile);
     }
 
     public void createTilesAndChildren(Tile tile) {
-        int d = tile.depth;
+        int d = tile.getDepth();
         if (d == 7) {
             return;
         }
-        Tile uLChild = new Tile(d + 1, 2 * tile.x, tile.y);
-
-        Tile uRChild = new Tile(d + 1, 2 * tile.x + 1, tile.y);
-        Tile lLChild = new Tile(d + 1, 2 * tile.x, 2 * tile.y);
-        Tile lRChild = new Tile(d + 1, 2 * tile.x + 1, 2 * tile.y + 1);
+        Map<String, Tile> children = createChildren(tile);
+        Tile upperLeftChild = children.get("upperLeftChild");
+        tiles.put(upperLeftChild.getTileName(), upperLeftChild);
+        Tile upperRightChild = new Tile(d + 1, 2 * tile.x + 1, 2 * tile.y);
+        Tile lowerLeftChild = new Tile(d + 1, 2 * tile.x, 2 * tile.y + 1);
+        Tile lowerRightChild = new Tile(d + 1, 2 * tile.x + 1, 2 * tile.y + 1);
     }
 
-    public void createUpperLeftChild(Tile tile) {
+    public Map<String, Tile> createChildren(Tile tile) {
+        Map<String, Tile> children = new HashMap<>();
+        int d = tile.getDepth();
+        double parentULLat = tile.getTileULLat();
+        double parentULLon = tile.getTileULLon();
+        double parentLRLat = tile.getTileLRLat();
+        double parentLRLon = tile.getTileLRLon();
+        double centralLat = (parentULLat + parentLRLat) / 2;
+        double centralLon = (parentULLon + parentLRLon) / 2;
 
+        Tile upperLeftChild = new Tile(d + 1, 2 * tile.x, 2 * tile.y);
+        upperLeftChild.setPosition(parentULLat, parentULLon, centralLat, centralLon);
+        children.put("upperLeftChild", upperLeftChild);
+
+        Tile upperRightChild = new Tile(d + 1, 2 * tile.x + 1, 2 * tile.y);
+        upperRightChild.setPosition(parentULLat, centralLon, parentLRLat, parentLRLon);
+        children.put("upperRightChild", upperRightChild);
+
+        Tile lowerLeftChild = new Tile(d + 1, 2 * tile.x, 2 * tile.y + 1);
+        lowerLeftChild.setPosition(centralLat, parentULLon, parentLRLat, centralLon);
+        children.put("lowerLeftChild", lowerLeftChild);
+
+        Tile lowerRightChild = new Tile(d + 1, 2 * tile.x + 1, 2 * tile.y + 1);
+        lowerRightChild.setPosition(centralLat, centralLon, parentLRLat, parentLRLon);
+        children.put("lowerRightChild", lowerRightChild);
+
+        return children;
     }
 
     public double calDepth() {
         double depth;
-        double queryBoxLonDPP = (lrLon - ulLon) / width;
+        double queryBoxLonDPP = (queryLRLon - queryULLon) / width;
         System.out.println("queryBoxLonDPP is: " + queryBoxLonDPP);
         double depthNeeded = Math.log(initialLonDPP /queryBoxLonDPP) / Math.log(2);
         depth = Math.ceil(depthNeeded);
@@ -117,10 +171,10 @@ public class Rasterer {
     public Map<String, Object> getMapRaster(Map<String, Double> params) {
         System.out.println(params);
         Map<String, Object> results = new HashMap<>();
-        ulLat = params.get("ullat");
-        ulLon = params.get("ullon");
-        lrLat = params.get("lrlat");
-        lrLon = params.get("lrlon");
+        queryULLon = params.get("ullat");
+        queryULLon = params.get("ullon");
+        queryLRLat = params.get("lrlat");
+        queryLRLon = params.get("lrlon");
         width = params.get("w");
         height = params.get("h");
 

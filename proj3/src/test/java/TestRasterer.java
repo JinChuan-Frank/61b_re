@@ -35,13 +35,13 @@ public class TestRasterer {
 
     public void testCalDepth() {
         rasterer = new Rasterer();
-        rasterer.ulLon = -122.241632;
+        /**rasterer.ulLon = -122.241632;
         rasterer.lrLon = -122.24053;
         rasterer.lrLat = 37.87548;
         rasterer.ulLat = 37.87655;
         rasterer.width = 892.0;
         rasterer.height = 875.0;
-        System.out.println(rasterer.calDepth());
+        System.out.println(rasterer.calDepth());*/
     }
 
     @Test
