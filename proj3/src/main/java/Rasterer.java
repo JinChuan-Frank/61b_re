@@ -1,4 +1,3 @@
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -9,15 +8,9 @@ import java.util.Map;
  * not draw the output correctly.
  */
 public class Rasterer {
-    public double queryULLat;
-    public double queryULLon;
-    public double queryLRLat;
-    public double queryLRLon;
-    public double width;
-    public double height;
-    public double initialLonDPP = (MapServer.ROOT_LRLON - MapServer.ROOT_ULLON) / MapServer.TILE_SIZE;
+
+    private final double  initialLonDPP = (MapServer.ROOT_LRLON - MapServer.ROOT_ULLON) / MapServer.TILE_SIZE;
     public Map<String, Tile>[] tiles;
-    //private Map<String, Object> results;
 
     public Rasterer() {
         tiles = new Map[8];
@@ -28,25 +21,78 @@ public class Rasterer {
         createTilesAndChildren(originalTile);
     }
 
-    public Map<String, Tile> findBoundTile(double queryULLat, double queryULLon,
-                                           double queryLRLat, double queryLRLon) {
-        int d = (int) calDepth();
-        for (Tile tile : tiles[d].values()) {
+    public Map<String, Object> findBounds(double queryULLat, double queryULLon,
+                                           double queryLRLat, double queryLRLon, double width) {
 
+        Map<String, Object> bounds = new HashMap<>();
+        int d = calDepth(queryULLon, queryLRLon, width);
+        double layerTileLength = calLayerTileLength(d);
+        double layerTileHeight = calLayerTileHeight(d);
+
+        double leftMostLon = MapServer.ROOT_ULLON;
+        double upperMostLat = MapServer.ROOT_ULLAT;
+
+
+        if (queryULLon < leftMostLon) {
+            int upperLeftTileX = 0;
+            bounds.put("upperLeftLon", leftMostLon);
+        } else {
+            for (int i = 0; i <= Math.pow(2, d); i++) {
+                if ((upperMostLat - i * layerTileLength <= queryULLon) &&
+                        leftMostLon + (i + 1) * layerTileLength > queryULLon) {
+                    double leftBoundLon = leftMostLon + i * layerTileLength;
+                    bounds.put("leftBoundLon", leftBoundLon);
+                    int upperLeftTileX = i;
+                    System.out.println("leftBound is: " + leftBoundLon);
+                    System.out.println("upperLeftTileY: " + upperLeftTileX);
+                }
+            }
         }
-        return null;
+
+        if (queryULLat > upperMostLat) {
+            int upperLeftTileY = 0;
+            bounds.put("upperLeftLat", upperMostLat);
+        } else {
+            for (int i = 0; i <= Math.pow(2, d); i++) {
+                if ((upperMostLat - i * layerTileHeight >= queryULLat) &&
+                        leftMostLon - (i + 1) * layerTileLength < queryULLon) {
+                    double upperBondLat = upperMostLat - i * layerTileHeight;
+                    bounds.put("upperBondLat", upperBondLat);
+                    int upperLeftTileY = i;
+                    System.out.println("upperLeftTileY is: " + upperLeftTileY);
+                }
+            }
+        }
+
+        return bounds;
+    }
+
+    private double calLayerTileLength(int layer) {
+        Tile upperLeftMostTile = tiles[layer].get(translateIntoTileName(layer, 0, 0));
+        double layerTileLength = upperLeftMostTile.getTileLRLon() - upperLeftMostTile.getTileULLon();
+        return layerTileLength;
+    }
+
+    private double calLayerTileHeight(int layer) {
+        Tile upperLeftMostTile = tiles[layer].get(translateIntoTileName(layer, 0, 0));
+        double layerTileHeight = upperLeftMostTile.getTileULLat() - upperLeftMostTile.getTileLRLat();
+        return layerTileHeight;
+    }
+
+    private String translateIntoTileName(int d, int xCoordinate, int yCoordinate) {
+        String tileName = "d" + d +"_x" + xCoordinate + "_y" + yCoordinate;
+        return tileName;
     }
 
     public class Tile {
-        public String tileName;
-        public int depth;
-        public int x;
-        public int y;
-        public double tileULLat;
-        public double tileULLon;
-        public double tileLRLat;
-        public double tileLRLon;
-        Tile parent;
+        private String tileName;
+        private int depth;
+        private int x;
+        private int y;
+        private double tileULLat;
+        private double tileULLon;
+        private double tileLRLat;
+        private double tileLRLon;
 
         public Tile(int d, int xCoordinate, int yCoordinate) {
             tileName = "d" + d +"_x" + xCoordinate + "_y" + yCoordinate;
@@ -100,6 +146,7 @@ public class Rasterer {
         if (d == 7) {
             return;
         }
+
         Map<String, Tile> children = createChildren(tile);
         Tile upperLeftChild = children.get("upperLeftChild");
         tiles[d + 1].put(upperLeftChild.getTileName(), upperLeftChild);
@@ -143,20 +190,20 @@ public class Rasterer {
         return children;
     }
 
-    public double calDepth() {
+    public int calDepth(double queryULLon, double queryLRLon, double width) {
         double depth;
         double queryBoxLonDPP = (queryLRLon - queryULLon) / width;
-        System.out.println("queryBoxLonDPP is: " + queryBoxLonDPP);
+        //System.out.println("queryBoxLonDPP is: " + queryBoxLonDPP);
         double depthNeeded = Math.log(initialLonDPP /queryBoxLonDPP) / Math.log(2);
         depth = Math.ceil(depthNeeded);
-        System.out.println("desired depth is: " + depth);
+        //System.out.println("desired depth is: " + depth);
         if (depth >= 7) {
             depth = 7;
         }
         if (depth <= 0) {
             depth = 0;
         }
-        return depth;
+        return (int) depth;
     }
 
 
@@ -192,12 +239,12 @@ public class Rasterer {
     public Map<String, Object> getMapRaster(Map<String, Double> params) {
         System.out.println(params);
         Map<String, Object> results = new HashMap<>();
-        queryULLon = params.get("ullat");
-        queryULLon = params.get("ullon");
-        queryLRLat = params.get("lrlat");
-        queryLRLon = params.get("lrlon");
-        width = params.get("w");
-        height = params.get("h");
+        double queryULLat = params.get("ullat");
+        double queryULLon = params.get("ullon");
+        double queryLRLat = params.get("lrlat");
+        double queryLRLon = params.get("lrlon");
+        double width = params.get("w");
+        double height = params.get("h");
 
         /**String[][] render_grid = {{"d7_x84_y28.png", "d7_x85_y28.png", "d7_x86_y28.png"}, {"d7_x84_y29", "d7_x85_y29", "d7_x86_y29"}, {"d7_x84_y30", "d7_x85_y30", "d7_x86_y30"}};
         Double raster_ul_lon =  -122.24212;

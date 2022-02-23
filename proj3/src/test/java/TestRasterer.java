@@ -53,6 +53,14 @@ public class TestRasterer {
     }
 
     @Test
+    public void testCalBounds() {
+        rasterer = new Rasterer();
+        rasterer.findBounds(37.87655, -122.241632,
+                37.87548, -122.24053, 892.0);
+
+    }
+
+    @Test
     public void testGetMapRaster() throws Exception {
         List<Map<String, Double>> testParams = paramsFromFile();
         List<Map<String, Object>> expectedResults = resultsFromFile();
