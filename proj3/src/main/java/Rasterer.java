@@ -16,13 +16,25 @@ public class Rasterer {
     public double width;
     public double height;
     public double initialLonDPP = (MapServer.ROOT_LRLON - MapServer.ROOT_ULLON) / MapServer.TILE_SIZE;
-    public Map<String, Tile> tiles;
+    public Map<String, Tile>[] tiles;
     //private Map<String, Object> results;
 
     public Rasterer() {
-        tiles = new HashMap<>();
+        tiles = new Map[8];
+        for (int i = 0; i <= 7; i++) {
+            tiles[i] = new HashMap<>();
+        }
         Tile originalTile = createOriginalTile();
         createTilesAndChildren(originalTile);
+    }
+
+    public Map<String, Tile> findBoundTile(double queryULLat, double queryULLon,
+                                           double queryLRLat, double queryLRLon) {
+        int d = (int) calDepth();
+        for (Tile tile : tiles[d].values()) {
+
+        }
+        return null;
     }
 
     public class Tile {
@@ -79,24 +91,24 @@ public class Rasterer {
         Tile originalTile = new Tile(0, 0, 0);
         originalTile.setPosition(MapServer.ROOT_ULLAT, MapServer.ROOT_ULLON,
                 MapServer.ROOT_LRLAT, MapServer.ROOT_LRLON);
-        tiles.put(originalTile.getTileName(), originalTile);
+        tiles[0].put(originalTile.getTileName(), originalTile);
         return originalTile;
     }
 
     public void createTilesAndChildren(Tile tile) {
         int d = tile.getDepth();
-        if (d == 2) {
+        if (d == 7) {
             return;
         }
         Map<String, Tile> children = createChildren(tile);
         Tile upperLeftChild = children.get("upperLeftChild");
-        tiles.put(upperLeftChild.getTileName(), upperLeftChild);
+        tiles[d + 1].put(upperLeftChild.getTileName(), upperLeftChild);
         Tile upperRightChild = children.get("upperRightChild");
-        tiles.put(upperRightChild.getTileName(), upperRightChild);
+        tiles[d + 1].put(upperRightChild.getTileName(), upperRightChild);
         Tile lowerLeftChild = children.get("lowerLeftChild");
-        tiles.put(lowerLeftChild.getTileName(), lowerLeftChild);
+        tiles[d + 1].put(lowerLeftChild.getTileName(), lowerLeftChild);
         Tile lowerRightChild = children.get("lowerRightChild");
-        tiles.put(lowerRightChild.getTileName(), lowerRightChild);
+        tiles[d + 1].put(lowerRightChild.getTileName(), lowerRightChild);
         for (Tile child : children.values()) {
             createTilesAndChildren(child);
         }
@@ -117,7 +129,7 @@ public class Rasterer {
         children.put("upperLeftChild", upperLeftChild);
 
         Tile upperRightChild = new Tile(d + 1, 2 * tile.x + 1, 2 * tile.y);
-        upperRightChild.setPosition(parentULLat, centralLon, parentLRLat, parentLRLon);
+        upperRightChild.setPosition(parentULLat, centralLon, centralLat, parentLRLon);
         children.put("upperRightChild", upperRightChild);
 
         Tile lowerLeftChild = new Tile(d + 1, 2 * tile.x, 2 * tile.y + 1);

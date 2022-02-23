@@ -46,8 +46,10 @@ public class TestRasterer {
     @Test
     public void testCreateTiles() {
         rasterer = new Rasterer();
-        Rasterer.Tile tile = rasterer.tiles.get("d1_x0_y0");
-        System.out.println("Tile[d1_x0_y0] ullat is: " +tile.getTileULLat());
+        Rasterer.Tile tile = rasterer.tiles[7].get("d7_x125_y98");
+        System.out.println("Tile[d7_x125_y98] ullat is: " + tile.getTileULLat() + " " + "ullon is: " + tile.getTileULLon() + " " +
+                "lrlat is: " + tile.getTileLRLat() + " " + "lrlon is " + tile.getTileLRLon());
+
     }
 
     @Test
