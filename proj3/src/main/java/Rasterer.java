@@ -1,3 +1,4 @@
+import javax.swing.*;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -29,43 +30,58 @@ public class Rasterer {
         double layerTileLength = calLayerTileLength(d);
         double layerTileHeight = calLayerTileHeight(d);
 
+        Map<String, Integer> upperLeftTileXAndY = calUpperLeftTileXAndY(layerTileLength, layerTileHeight,
+                queryULLat, queryULLon, d);
+
+        return bounds;
+    }
+
+    private Map<String, Integer> calUpperLeftTileXAndY(double layerTileLength, double layerTileHeight,
+                                                      double queryULLat, double queryULLon, int d) {
+
+        Map <String, Integer> upperLeftTileXAndY = new HashMap<>();
         double leftMostLon = MapServer.ROOT_ULLON;
         double upperMostLat = MapServer.ROOT_ULLAT;
 
-
         if (queryULLon < leftMostLon) {
             int upperLeftTileX = 0;
-            bounds.put("upperLeftLon", leftMostLon);
+            upperLeftTileXAndY.put("upperLeftTileX", upperLeftTileX);
         } else {
             for (int i = 0; i <= Math.pow(2, d); i++) {
-                if ((upperMostLat - i * layerTileLength <= queryULLon) &&
+                if ((leftMostLon + i * layerTileLength <= queryULLon) &&
                         leftMostLon + (i + 1) * layerTileLength > queryULLon) {
-                    double leftBoundLon = leftMostLon + i * layerTileLength;
-                    bounds.put("leftBoundLon", leftBoundLon);
                     int upperLeftTileX = i;
-                    System.out.println("leftBound is: " + leftBoundLon);
-                    System.out.println("upperLeftTileY: " + upperLeftTileX);
+                    System.out.println("upperLeftTileX is: " + upperLeftTileX);
+                    upperLeftTileXAndY.put("upperLeftTileX", upperLeftTileX);
+                    break;
                 }
             }
         }
 
         if (queryULLat > upperMostLat) {
             int upperLeftTileY = 0;
-            bounds.put("upperLeftLat", upperMostLat);
+            upperLeftTileXAndY.put("upperLeftTileY", upperLeftTileY);
         } else {
             for (int i = 0; i <= Math.pow(2, d); i++) {
                 if ((upperMostLat - i * layerTileHeight >= queryULLat) &&
-                        leftMostLon - (i + 1) * layerTileLength < queryULLon) {
-                    double upperBondLat = upperMostLat - i * layerTileHeight;
-                    bounds.put("upperBondLat", upperBondLat);
+                        (upperMostLat - (i + 1) * layerTileHeight < queryULLat)) {
                     int upperLeftTileY = i;
                     System.out.println("upperLeftTileY is: " + upperLeftTileY);
+                    upperLeftTileXAndY.put("upperLeftTileY", upperLeftTileY);
+                    break;
                 }
             }
         }
-
-        return bounds;
+        return upperLeftTileXAndY;
     }
+
+    private Map<String, Integer> calLowerRightTileXAndY(double layerTileLength, double layerTileHeight,
+                                                        double queryLRLat, double queryLRLon, int d) {
+        Map <String, Integer> lowerRightTileXAndY = new HashMap<>();
+        return lowerRightTileXAndY;
+    }
+
+
 
     private double calLayerTileLength(int layer) {
         Tile upperLeftMostTile = tiles[layer].get(translateIntoTileName(layer, 0, 0));
