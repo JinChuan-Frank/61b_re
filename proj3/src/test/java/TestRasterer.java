@@ -23,7 +23,7 @@ public class TestRasterer {
     private static final String PARAMS_FILE = "raster_params.txt";
     private static final String RESULTS_FILE = "raster_results.txt";
     private static final int NUM_TESTS = 8;
-    private static Rasterer rasterer;
+    private static Rasterer rasterer = new Rasterer();
 
 
     @Before
@@ -45,18 +45,18 @@ public class TestRasterer {
 
     @Test
     public void testCreateTiles() {
-        rasterer = new Rasterer();
+        /**rasterer = new Rasterer();
         Rasterer.Tile tile = rasterer.tiles[7].get("d7_x125_y98");
         System.out.println("Tile[d7_x125_y98] ullat is: " + tile.getTileULLat() + " " + "ullon is: " + tile.getTileULLon() + " " +
-                "lrlat is: " + tile.getTileLRLat() + " " + "lrlon is " + tile.getTileLRLon());
+                "lrlat is: " + tile.getTileLRLat() + " " + "lrlon is " + tile.getTileLRLon()); */
 
     }
 
     @Test
     public void testCalBounds() {
-        rasterer = new Rasterer();
-        rasterer.findBounds(37.87655, -122.241632,
-                37.87548, -122.24053, 892.0);
+        /**rasterer = new Rasterer();
+        rasterer.getRasterParams(37.87655, -122.241632,
+                37.87548, -122.24053, 892.0); */
 
     }
 
