@@ -115,8 +115,9 @@ public class Rasterer {
 
         Map<String, Integer> upperLeftTileXAndY = calUpperLeftTileXAndY
                 (layerTileLength, layerTileHeight, queryULLat, queryULLon, d);
-        Map<String, Integer> lowerRightTileXAndY = calLowerRightTileXAndY
+        Map<String, Integer> lowerRightTileXAndY = calLowerAndRightBound
                 (layerTileLength, layerTileHeight, queryLRLat, queryLRLon, d);
+
         int upperLeftTileX = upperLeftTileXAndY.get("upperLeftTileX");
         int upperLeftTileY = upperLeftTileXAndY.get("upperLeftTileY");
         int lowerRightTileX = lowerRightTileXAndY.get("lowerRightTileX");
@@ -125,21 +126,21 @@ public class Rasterer {
         Tile upperLeftTile = tiles[d].get(translateIntoTileName(d, upperLeftTileX, upperLeftTileY));
         Tile lowerRightTile = tiles[d].get(translateIntoTileName
                 (d, lowerRightTileX, lowerRightTileY));
-        double raster_Ul_Lon = upperLeftTile.getTileULLon();
-        double raster_ul_lat = upperLeftTile.getTileULLat();
-        double raster_lr_lon = lowerRightTile.getTileLRLon();
-        double raster_lr_lat = lowerRightTile.getTileLRLat();
+        double rasterUlLon = upperLeftTile.getTileULLon();
+        double rasterUlLat = upperLeftTile.getTileULLat();
+        double rasterLrLon = lowerRightTile.getTileLRLon();
+        double rasterLrLat = lowerRightTile.getTileLRLat();
 
-        rasterParams.put("raster_ul_lon", raster_Ul_Lon);
-        rasterParams.put("raster_ul_lat", raster_ul_lat);
-        rasterParams.put("raster_lr_lon", raster_lr_lon);
-        rasterParams.put("raster_lr_lat", raster_lr_lat);
+        rasterParams.put("raster_ul_lon", rasterUlLon);
+        rasterParams.put("raster_ul_lat", rasterUlLat);
+        rasterParams.put("raster_lr_lon", rasterLrLon);
+        rasterParams.put("raster_lr_lat", rasterLrLat);
 
 
 
-        String[][] render_grid = renderGrid
+        String[][] renderGrid = renderGrid
                 (upperLeftTileX, upperLeftTileY, lowerRightTileX, lowerRightTileY, d);
-        rasterParams.put("render_grid", render_grid);
+        rasterParams.put("render_grid", renderGrid);
 
 
         return rasterParams;
@@ -149,6 +150,7 @@ public class Rasterer {
         String fileName = tileName + ".png";
         return fileName;
     }
+
     private boolean checkValidQuery(double queryULLat, double queryULLon,
                                     double queryLRLat, double queryLRLon) {
         boolean isValidQuery = true;
@@ -159,7 +161,9 @@ public class Rasterer {
         return isValidQuery;
     }
 
-    private String[][] renderGrid(int upperLeftTileX, int upperLeftTileY, int lowerRightTileX, int lowerRightTileY, int d) {
+    private String[][] renderGrid(int upperLeftTileX, int upperLeftTileY,
+                                  int lowerRightTileX, int lowerRightTileY, int d) {
+
         int numOfColumns = lowerRightTileX - upperLeftTileX + 1;
         int numOfRows = lowerRightTileY - upperLeftTileY + 1;
         int x = upperLeftTileX;
@@ -178,10 +182,11 @@ public class Rasterer {
         return renderGrid;
     }
 
-    private Map<String, Integer> calUpperLeftTileXAndY(double layerTileLength, double layerTileHeight,
-                                                      double queryULLat, double queryULLon, int d) {
+    private Map<String, Integer> calUpperLeftTileXAndY(double layerTileLength,
+                                                       double layerTileHeight, double queryULLat,
+                                                       double queryULLon, int d) {
 
-        Map <String, Integer> upperLeftTileXAndY = new HashMap<>();
+        Map<String, Integer> upperLeftTileXAndY = new HashMap<>();
 
 
         if (queryULLon < leftMostLon) {
@@ -189,8 +194,8 @@ public class Rasterer {
             upperLeftTileXAndY.put("upperLeftTileX", upperLeftTileX);
         } else {
             for (int i = 0; i < Math.pow(2, d); i++) {
-                if ((leftMostLon + i * layerTileLength <= queryULLon) &&
-                        leftMostLon + (i + 1) * layerTileLength > queryULLon) {
+                if ((leftMostLon + i * layerTileLength <= queryULLon)
+                        && leftMostLon + (i + 1) * layerTileLength > queryULLon) {
                     int upperLeftTileX = i;
                     //System.out.println("upperLeftTileX is: " + upperLeftTileX);
                     upperLeftTileXAndY.put("upperLeftTileX", upperLeftTileX);
@@ -204,8 +209,8 @@ public class Rasterer {
             upperLeftTileXAndY.put("upperLeftTileY", upperLeftTileY);
         } else {
             for (int i = 0; i < Math.pow(2, d); i++) {
-                if ((upperMostLat - i * layerTileHeight >= queryULLat) &&
-                        (upperMostLat - (i + 1) * layerTileHeight < queryULLat)) {
+                if ((upperMostLat - i * layerTileHeight >= queryULLat)
+                        && (upperMostLat - (i + 1) * layerTileHeight < queryULLat)) {
                     int upperLeftTileY = i;
                     //System.out.println("upperLeftTileY is: " + upperLeftTileY);
                     upperLeftTileXAndY.put("upperLeftTileY", upperLeftTileY);
@@ -216,10 +221,17 @@ public class Rasterer {
         return upperLeftTileXAndY;
     }
 
-    private Map<String, Integer> calLowerRightTileXAndY(double layerTileLength, double layerTileHeight,
-                                                        double queryLRLat, double queryLRLon, int d) {
-        Map <String, Integer> lowerRightTileXAndY = new HashMap<>();
+    private Map<String, Double> calUlTileLatAndLon(int upperLeftTileX, int upperLeftTileY, double , ) {
+        Map<String, Double> bounds = new HashMap<>();
+        double upperBound = upperMostLat -
+        return bounds;
+    }
 
+    private Map<String, Integer> calLowerAndRightBound(double layerTileLength,
+                                                        double layerTileHeight, double queryLRLat,
+                                                        double queryLRLon, int d) {
+
+        Map<String, Integer> lowerRightTileXAndY = new HashMap<>();
 
         if (queryLRLon > rightMostLon) {
             int lowerRightTileX = (int) (Math.pow(2, d) - 1);
@@ -241,8 +253,8 @@ public class Rasterer {
             lowerRightTileXAndY.put("lowerRightTileY", lowerRightTileY);
         } else {
             for (int i = 0; i < Math.pow(2, d); i++) {
-                if ((upperMostLat - i * layerTileHeight > queryLRLat) &&
-                        (upperMostLat - (i + 1) * layerTileHeight <= queryLRLat)) {
+                if ((upperMostLat - i * layerTileHeight > queryLRLat)
+                        && (upperMostLat - (i + 1) * layerTileHeight <= queryLRLat)) {
                     int lowerRightTileY = i;
                     lowerRightTileXAndY.put("lowerRightTileY", lowerRightTileY);
                     //System.out.println("lowerRightTileY is: " + lowerRightTileY);
@@ -258,13 +270,15 @@ public class Rasterer {
 
     private double calLayerTileLength(int layer) {
         Tile upperLeftMostTile = tiles[layer].get(translateIntoTileName(layer, 0, 0));
-        double layerTileLength = upperLeftMostTile.getTileLRLon() - upperLeftMostTile.getTileULLon();
+        double layerTileLength = upperLeftMostTile.getTileLRLon()
+                - upperLeftMostTile.getTileULLon();
         return layerTileLength;
     }
 
     private double calLayerTileHeight(int layer) {
         Tile upperLeftMostTile = tiles[layer].get(translateIntoTileName(layer, 0, 0));
-        double layerTileHeight = upperLeftMostTile.getTileULLat() - upperLeftMostTile.getTileLRLat();
+        double layerTileHeight = upperLeftMostTile.getTileULLat()
+                - upperLeftMostTile.getTileLRLat();
         return layerTileHeight;
     }
 
@@ -336,7 +350,7 @@ public class Rasterer {
         double depth;
         double queryBoxLonDPP = (queryLRLon - queryULLon) / width;
         //System.out.println("queryBoxLonDPP is: " + queryBoxLonDPP);
-        double depthNeeded = Math.log(initialLonDPP /queryBoxLonDPP) / Math.log(2);
+        double depthNeeded = Math.log(initialLonDPP / queryBoxLonDPP) / Math.log(2);
         depth = Math.ceil(depthNeeded);
         //System.out.println("desired depth is: " + depth);
         if (depth >= 7) {
@@ -387,7 +401,8 @@ public class Rasterer {
         double queryLRLon = params.get("lrlon");
         double width = params.get("w");
 
-        Map<String, Object> results = getRasterParams(queryULLat, queryULLon, queryLRLat, queryLRLon, width);
+        Map<String, Object> results = getRasterParams(queryULLat, queryULLon,
+                queryLRLat, queryLRLon, width);
         /**System.out.println("Since you haven't implemented getMapRaster, nothing is displayed in "
                            + "your browser."); */
         return results;
