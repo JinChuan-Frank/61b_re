@@ -56,7 +56,7 @@ public class TestRasterer {
     public void testCalBounds() {
         /**rasterer = new Rasterer();
         rasterer.getRasterParams(37.87655, -122.241632,
-                37.87548, -122.24053, 892.0); */
+                37.87548, -122.24053, 892.0);*/
 
     }
 
