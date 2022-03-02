@@ -9,6 +9,7 @@ import javax.xml.parsers.SAXParserFactory;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 /**
  * Graph for storing all of the intersection (vertex) and road (edge) information.
@@ -23,6 +24,10 @@ public class GraphDB {
     /** Your instance variables for storing the graph. You should consider
      * creating helper classes, e.g. Node, Edge, etc. */
     Map<Long, Node> graph;
+
+    public Map<Long, Node> getGraph() {
+        return graph;
+    }
 
     public class Node {
         long id;
@@ -47,6 +52,14 @@ public class GraphDB {
         public double getLon() {
             return lon;
         }
+
+        public ArrayList<Node> getAdjacentVertices() {
+            return adjacentVertices;
+        }
+
+        public void addAdjacentVertex(Node node) {
+            adjacentVertices.add(node);
+        }
     }
 
     public class Edge {
@@ -58,9 +71,43 @@ public class GraphDB {
         }
     }
 
+    private class Way {
+        boolean isValidWay;
+        ArrayList<Node> nodes;
+
+        public Way(ArrayList<Node> nodes) {
+            this.nodes = nodes;
+        }
+
+        public void setValidWay(boolean isValidWay) {
+            this.isValidWay = isValidWay;
+        }
+
+        public ArrayList<Node> getNodes() {
+            return nodes;
+        }
+
+        public boolean checkValidWay() {
+            return isValidWay;
+        }
+    }
+
     public void addEdge(Node A, Node B) {
-        A.adjacentVertices.add(B);
-        B.adjacentVertices.add(A);
+        A.addAdjacentVertex(B);
+        B.addAdjacentVertex(B);
+    }
+
+    public void addNode(Node node) {
+        long id = node.getId();
+        graph.put(id, node);
+    }
+
+    public void addWay(Way way) {
+        List<Node> nodes = way.getNodes();
+        int numOfEdges = nodes.size() - 1;
+        for (int i = 0; i < numOfEdges; i++) {
+            addEdge(nodes.get(i), nodes.get(i + 1));
+        }
     }
 
 
@@ -102,7 +149,13 @@ public class GraphDB {
      *  we can reasonably assume this since typically roads are connected.
      */
     private void clean() {
-        // TODO: Your code here.
+        Set<Long> IDs = graph.keySet();
+        for (long i : IDs) {
+            Node node = graph.get(i);
+            if (node.getAdjacentVertices() == null) {
+                graph.remove(i);
+            }
+        }
     }
 
     /**
@@ -119,12 +172,14 @@ public class GraphDB {
      * @return An iterable of the ids of the neighbors of v.
      */
     Iterable<Long> adjacent(long v) {
-        ArrayList<Long> adjacentIDs= new ArrayList<>();
+        List<Long> adjacentVerticesIDs = new ArrayList<>();
         Node node = graph.get(v);
-        for (Node node1 : node.adjacentVertices) {
-            adjacentIDs.add(node1.getId());
+        List<Node> adjacentVertices = node.getAdjacentVertices();
+        for (Node node1 : adjacentVertices) {
+            adjacentVerticesIDs.add(node1.getId());
         }
-        return adjacentIDs;
+        return adjacentVerticesIDs;
+
     }
 
     /**

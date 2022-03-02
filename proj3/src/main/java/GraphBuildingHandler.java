@@ -6,6 +6,7 @@ import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Set;
 
+
 /**
  *  Parses OSM XML files using an XML SAX parser. Used to construct the graph of roads for
  *  pathfinding, under some constraints.
@@ -71,10 +72,14 @@ public class GraphBuildingHandler extends DefaultHandler {
             activeState = "node";
             System.out.println("Node id: " + attributes.getValue("id"));
             System.out.println("Node lon: " + attributes.getValue("lon"));
-            System.out.println("Node lat: " + attributes.getValue("lat"));
+            System.out.println("Node lat: " + attributes.getValue("id"));
 
             /* TODO Use the above information to save a "node" to somewhere. */
             /* Hint: A graph-like structure would be nice. */
+            long id = Long.parseLong(attributes.getValue("id"));
+            double lat = Double.parseDouble(attributes.getValue("lat"));
+            double lon = Double.parseDouble(attributes.getValue("lon"));
+
 
         } else if (qName.equals("way")) {
             /* We encountered a new <way...> tag. */
