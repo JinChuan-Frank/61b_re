@@ -3,6 +3,7 @@ import org.xml.sax.SAXException;
 import org.xml.sax.helpers.DefaultHandler;
 
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Set;
@@ -41,7 +42,8 @@ public class GraphBuildingHandler extends DefaultHandler {
                     "secondary_link", "tertiary_link"));
     private String activeState = "";
     private final GraphDB g;
-
+    private GraphDB.Way activeWay;
+    private GraphDB.Node activeNode;
 
     /**
      * Create a new GraphBuildingHandler.
@@ -81,23 +83,32 @@ public class GraphBuildingHandler extends DefaultHandler {
             long id = Long.parseLong(attributes.getValue("id"));
             double lat = Double.parseDouble(attributes.getValue("lat"));
             double lon = Double.parseDouble(attributes.getValue("lon"));
-            GraphDB.Node node = new GraphDB.Node(id, lat, lon);
+            GraphDB.Node node = g.new Node(id, lat, lon);
             g.addNode(node);
+            activeNode = node;
+            //System.out.println("graph size is: " + g.graph.size());
 
         } else if (qName.equals("way")) {
             /* We encountered a new <way...> tag. */
             activeState = "way";
-//            System.out.println("Beginning a way...");
+            System.out.println("Beginning a way...");
+            GraphDB.Way way = g.new Way();
+            activeWay = way;
         } else if (activeState.equals("way") && qName.equals("nd")) {
             /* While looking at a way, we found a <nd...> tag. */
-            //System.out.println("Id of a node in this way: " + attributes.getValue("ref"));
-
+            System.out.println("Id of a node in this way: " + attributes.getValue("ref"));
             /* TODO Use the above id to make "possible" connections between the nodes in this way */
             /* Hint1: It would be useful to remember what was the last node in this way. */
             /* Hint2: Not all ways are valid. So, directly connecting the nodes here would be
             cumbersome since you might have to remove the connections if you later see a tag that
             makes this way invalid. Instead, think of keeping a list of possible connections and
             remember whether this way is valid or not. */
+            //ArrayList<GraphDB.Node> nodesOnThisWay = new ArrayList<>();
+
+            long nodeID = Long.parseLong(attributes.getValue("ref"));
+            GraphDB.Node node = g.graph.get(nodeID);
+            activeWay.addNode(node);
+
 
         } else if (activeState.equals("way") && qName.equals("tag")) {
             /* While looking at a way, we found a <tag...> tag. */
@@ -106,12 +117,15 @@ public class GraphBuildingHandler extends DefaultHandler {
             if (k.equals("maxspeed")) {
                 //System.out.println("Max Speed: " + v);
                 /* TODO set the max speed of the "current way" here. */
-            } else if (k.equals("highway")) {
+                activeWay.setMaxSpeed(Integer.parseInt(v));
+            } else if (k.equals("highway") && ALLOWED_HIGHWAY_TYPES.contains(v)) {
                 //System.out.println("Highway type: " + v);
                 /* TODO Figure out whether this way and its connections are valid. */
                 /* Hint: Setting a "flag" is good enough! */
+                activeWay.isValidWay = true;
             } else if (k.equals("name")) {
                 //System.out.println("Way Name: " + v);
+                activeWay.setWayName(v);
             }
 //            System.out.println("Tag with k=" + k + ", v=" + v + ".");
         } else if (activeState.equals("node") && qName.equals("tag") && attributes.getValue("k")
@@ -121,7 +135,8 @@ public class GraphBuildingHandler extends DefaultHandler {
             /* Hint: Since we found this <tag...> INSIDE a node, we should probably remember which
             node this tag belongs to. Remember XML is parsed top-to-bottom, so probably it's the
             last node that you looked at (check the first if-case). */
-//            System.out.println("Node's name: " + attributes.getValue("v"));
+            System.out.println("Node's name: " + attributes.getValue("v"));
+            activeNode.setLocationName(attributes.getValue("v"));
         }
     }
 
@@ -143,6 +158,11 @@ public class GraphBuildingHandler extends DefaultHandler {
             /* Hint1: If you have stored the possible connections for this way, here's your
             chance to actually connect the nodes together if the way is valid. */
 //            System.out.println("Finishing a way...");
+            if (activeWay.isValidWay()) {
+                activeWay.connectNodesOnTheWay();
+
+            }
+
         }
     }
 

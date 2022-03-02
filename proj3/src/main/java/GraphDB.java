@@ -6,10 +6,7 @@ import java.io.IOException;
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.parsers.SAXParser;
 import javax.xml.parsers.SAXParserFactory;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
 /**
  * Graph for storing all of the intersection (vertex) and road (edge) information.
@@ -23,22 +20,28 @@ import java.util.Set;
 public class GraphDB {
     /** Your instance variables for storing the graph. You should consider
      * creating helper classes, e.g. Node, Edge, etc. */
-    Map<Long, Node> graph;
+    Map<Long, Node> graph = new HashMap<>();
+    Map<Long, Way> ways = new HashMap<>();
 
     public Map<Long, Node> getGraph() {
         return graph;
     }
 
-    public static class Node {
+    public class Node {
         long id;
         double lat;
         double lon;
         ArrayList<Node> adjacentVertices;
+        String locationName;
 
         Node(long id, double lat, double lon) {
             this.id = id;
             this.lat = lat;
             this.lon = lon;
+        }
+
+        public void setLocationName(String locationName) {
+            this.locationName = locationName;
         }
 
         public long getId() {
@@ -71,25 +74,52 @@ public class GraphDB {
         }
     }
 
-    private class Way {
+    public class Way {
+        long ID;
         boolean isValidWay;
         ArrayList<Node> nodes;
+        int maxSpeed;
+        String wayName;
 
-        public Way(ArrayList<Node> nodes) {
-            this.nodes = nodes;
+        public Way() {
+            isValidWay = false;
         }
 
         public void setValidWay(boolean isValidWay) {
             this.isValidWay = isValidWay;
         }
 
+        public void setWayName(String wayName) {
+            this.wayName = wayName;
+        }
+
+        public long getID() {
+            return ID;
+        }
+
+        void addNode(Node node) {
+            nodes.add(node);
+        }
+
+        void setMaxSpeed(int maxSpeed) {
+            this.maxSpeed = maxSpeed;
+        }
+
         public ArrayList<Node> getNodes() {
             return nodes;
         }
 
-        public boolean checkValidWay() {
+        public boolean isValidWay() {
             return isValidWay;
         }
+
+        public void connectNodesOnTheWay() {
+            int numOfEdges = nodes.size() - 1;
+            for (int i = 0; i < numOfEdges; i++) {
+                addEdge(nodes.get(i), nodes.get(i + 1));
+            }
+        }
+
     }
 
     public void addEdge(Node A, Node B) {
@@ -102,13 +132,12 @@ public class GraphDB {
         graph.put(id, node);
     }
 
-    public void addWay(Way way) {
-        List<Node> nodes = way.getNodes();
-        int numOfEdges = nodes.size() - 1;
-        for (int i = 0; i < numOfEdges; i++) {
-            addEdge(nodes.get(i), nodes.get(i + 1));
-        }
+    public void addNewWay(Way way) {
+        long ID = way.getID();
+        ways.put(ID, way);
     }
+
+
 
 
 
