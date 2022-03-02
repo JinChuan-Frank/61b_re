@@ -29,7 +29,7 @@ public class GraphDB {
         return graph;
     }
 
-    public class Node {
+    public static class Node {
         long id;
         double lat;
         double lon;
