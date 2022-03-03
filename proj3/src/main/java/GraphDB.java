@@ -78,6 +78,7 @@ public class GraphDB {
     public class Way {
         long ID;
         boolean isValidWay;
+        Set<Long> nodesIDs;
         ArrayList<Node> nodes;
         int maxSpeed;
         String wayName;
@@ -85,6 +86,7 @@ public class GraphDB {
         public Way() {
             isValidWay = false;
             nodes = new ArrayList<>();
+            nodesIDs = new HashSet<>();
         }
 
         public void setID(long ID) {
@@ -104,7 +106,11 @@ public class GraphDB {
         }
 
         void addNode(Node node) {
-            nodes.add(node);
+            long ID = node.getId();
+            if (!nodesIDs.contains(ID)) {
+                nodes.add(node);
+                nodesIDs.add(ID);
+            }
         }
 
         void setMaxSpeed(int maxSpeed) {
@@ -144,10 +150,6 @@ public class GraphDB {
     }
 
 
-
-
-
-
     /**
      * Example constructor shows how to create and start an XML parser.
      * You do not need to modify this constructor, but you're welcome to do so.
@@ -185,11 +187,16 @@ public class GraphDB {
      */
     private void clean() {
         Set<Long> IDs = graph.keySet();
+        Set<Long> NodesToBeRemoved = new HashSet<>();
         for (long i : IDs) {
             Node node = graph.get(i);
-            if (node.getAdjacentVertices() == null) {
-                graph.remove(i);
+            if (node.getAdjacentVertices().size() == 0) {
+                NodesToBeRemoved.add(i);
             }
+        }
+
+        for (long i : NodesToBeRemoved) {
+            graph.remove(i);
         }
     }
 
