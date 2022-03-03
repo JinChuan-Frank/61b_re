@@ -115,16 +115,22 @@ public class GraphBuildingHandler extends DefaultHandler {
             String k = attributes.getValue("k");
             String v = attributes.getValue("v");
             if (k.equals("maxspeed")) {
-                //System.out.println("Max Speed: " + v);
+
                 /* TODO set the max speed of the "current way" here. */
+                v = v.replaceAll("[^\\d.]", "");
+
                 activeWay.setMaxSpeed(Integer.parseInt(v));
+                System.out.println("Max Speed: " + v);
+
             } else if (k.equals("highway") && ALLOWED_HIGHWAY_TYPES.contains(v)) {
                 //System.out.println("Highway type: " + v);
                 /* TODO Figure out whether this way and its connections are valid. */
                 /* Hint: Setting a "flag" is good enough! */
-                activeWay.isValidWay = true;
+
+                activeWay.setValidWay(true);
             } else if (k.equals("name")) {
                 //System.out.println("Way Name: " + v);
+
                 activeWay.setWayName(v);
             }
 //            System.out.println("Tag with k=" + k + ", v=" + v + ".");
@@ -157,12 +163,12 @@ public class GraphBuildingHandler extends DefaultHandler {
             /* We are done looking at a way. (We finished looking at the nodes, speeds, etc...)*/
             /* Hint1: If you have stored the possible connections for this way, here's your
             chance to actually connect the nodes together if the way is valid. */
-//            System.out.println("Finishing a way...");
+            System.out.println("Finishing a way..." + activeWay.getID());
             if (activeWay.isValidWay()) {
                 activeWay.connectNodesOnTheWay();
-
             }
-
+            g.ways.put(activeNode.getId(), activeWay);
+            activeWay = null;
         }
     }
 

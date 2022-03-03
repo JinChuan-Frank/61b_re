@@ -38,6 +38,7 @@ public class GraphDB {
             this.id = id;
             this.lat = lat;
             this.lon = lon;
+            adjacentVertices = new ArrayList<>();
         }
 
         public void setLocationName(String locationName) {
@@ -83,6 +84,11 @@ public class GraphDB {
 
         public Way() {
             isValidWay = false;
+            nodes = new ArrayList<>();
+        }
+
+        public void setID(long ID) {
+            this.ID = ID;
         }
 
         public void setValidWay(boolean isValidWay) {
