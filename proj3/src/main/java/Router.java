@@ -25,6 +25,8 @@ public class Router {
      */
     public static List<Long> shortestPath(GraphDB g, double stlon, double stlat,
                                           double destlon, double destlat) {
+        long startNodeID = g.closest(stlon, stlat);
+        long destNodeID = g.closest(destlon, destlat);
         return null; // FIXME
     }
 

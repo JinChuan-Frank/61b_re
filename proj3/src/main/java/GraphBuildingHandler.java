@@ -171,6 +171,11 @@ public class GraphBuildingHandler extends DefaultHandler {
             //System.out.println("Finishing way ID: " + activeWay.getID());
             if (activeWay.isValidWay()) {
                 activeWay.connectNodesOnTheWay();
+                //System.out.println("way" + activeWay.getID() + "is Valid");
+                /**for (GraphDB.Node node : activeWay.nodes) {
+                    System.out.println("Nodes ids: " + node.getId());
+                }*/
+
             }
             g.addNewWay(activeWay);
             activeWay = null;

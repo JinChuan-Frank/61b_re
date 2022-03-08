@@ -136,7 +136,7 @@ public class GraphDB {
 
     public void addEdge(Node A, Node B) {
         A.addAdjacentVertex(B);
-        B.addAdjacentVertex(B);
+        B.addAdjacentVertex(A);
     }
 
     public void addNode(Node node) {
@@ -284,13 +284,14 @@ public class GraphDB {
     long closest(double lon, double lat) {
         double lonV = lon;
         double latV = lat;
-        double minDistance = 0;
+        double minDistance = Double.MAX_VALUE;
         long minDisID = 0;
         for (Node W : graph.values()) {
             long id = W.getId();
             double lonW = W.getLon();
             double latW = W.getLat();
             double distance = distance(lonV, latV, lonW, latW);
+
             if (distance < minDistance) {
                 minDistance = distance;
                 minDisID = id;
