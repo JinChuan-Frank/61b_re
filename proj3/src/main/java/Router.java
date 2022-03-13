@@ -1,5 +1,4 @@
-import java.util.List;
-import java.util.Objects;
+import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -27,8 +26,19 @@ public class Router {
                                           double destlon, double destlat) {
         long startNodeID = g.closest(stlon, stlat);
         long destNodeID = g.closest(destlon, destlat);
+        g.setStartNodeID(startNodeID);
+        PriorityQueue<GraphDB.Node> fringe = new PriorityQueue<>();
+        Iterable<Long> allNodes = g.vertices();
+        Map<Long, GraphDB.Node> graph = g.getGraph();
+        for (long ID : allNodes) {
+            GraphDB.Node node = graph.get(ID);
+            fringe.add(node);
+        }
+        List<Long> path = new ArrayList<>();
         return null; // FIXME
     }
+
+
 
     /**
      * Create the list of directions corresponding to a route on the graph.
