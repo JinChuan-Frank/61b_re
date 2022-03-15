@@ -3,7 +3,7 @@ import org.xml.sax.SAXException;
 import org.xml.sax.helpers.DefaultHandler;
 
 
-import java.util.ArrayList;
+
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Set;
@@ -92,12 +92,11 @@ public class GraphBuildingHandler extends DefaultHandler {
         } else if (qName.equals("way")) {
             /* We encountered a new <way...> tag. */
             activeState = "way";
-            //System.out.println("Beginning a way...");
             GraphDB.Way way = g.new Way();
             activeWay = way;
-            Long ID = Long.parseLong(attributes.getValue("id"));
-            way.setID(ID);
-            //System.out.println(ID);
+            Long id = Long.parseLong(attributes.getValue("id"));
+            way.setID(id);
+
         } else if (activeState.equals("way") && qName.equals("nd")) {
             /* While looking at a way, we found a <nd...> tag. */
             //System.out.println("Id of a node in this way: " + attributes.getValue("ref"));

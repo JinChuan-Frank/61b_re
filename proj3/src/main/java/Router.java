@@ -41,19 +41,23 @@ public class Router {
         g.setDestNodeID(destNodeID);
 
         GraphDB.Node start = graph.get(startNodeID);
-        //start.setDistanceFromStart(0);
+        GraphDB.Node end = graph.get(destNodeID);
+        start.setDistanceFromStart(0);
+
         PriorityQueue<GraphDB.Node> fringe = new PriorityQueue<>();
         for (long ID : allNodes) {
             GraphDB.Node node = graph.get(ID);
+            node.setDistanceToEnd();
             fringe.add(node);
         }
 
         fringe.remove(start);
+        start.relaxEdge(fringe, edgeTo);
         while (!fringe.isEmpty()) {
             GraphDB.Node node = fringe.remove();
-            /**if(node.equals(start)) {
+            if(node.equals(end)) {
                 break;
-            } */
+            }
             node.relaxEdge(fringe, edgeTo);
         }
 

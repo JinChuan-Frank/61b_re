@@ -43,6 +43,7 @@ public class GraphDB {
         double lat;
         double lon;
         double distanceFromStart = Double.MAX_VALUE;
+        double distanceToEnd;
         ArrayList<Node> adjacentVertices;
         String locationName;
 
@@ -55,6 +56,10 @@ public class GraphDB {
 
         public void setLocationName(String locationName) {
             this.locationName = locationName;
+        }
+
+        public void setDistanceToEnd() {
+            this.distanceToEnd = distance(id, destNodeID);
         }
 
         public ArrayList<Node> getAdjacentVertices() {
