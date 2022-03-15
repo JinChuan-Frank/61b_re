@@ -26,18 +26,47 @@ public class Router {
                                           double destlon, double destlat) {
         long startNodeID = g.closest(stlon, stlat);
         long destNodeID = g.closest(destlon, destlat);
-        g.setStartNodeID(startNodeID);
-        PriorityQueue<GraphDB.Node> fringe = new PriorityQueue<>();
-        Iterable<Long> allNodes = g.vertices();
+        List<Long> path = findShortestPath(g, startNodeID, destNodeID);
+
+        return path;
+    }
+
+    private static List<Long> findShortestPath(GraphDB g, long startNodeID, long destNodeID) {
+        List<Long> path = new ArrayList<>();
+        Map<Long, Long> edgeTo = new HashMap<>();
+
         Map<Long, GraphDB.Node> graph = g.getGraph();
+        Iterable<Long> allNodes = g.vertices();
+        g.setStartNodeID(startNodeID);
+        g.setDestNodeID(destNodeID);
+
+        GraphDB.Node start = graph.get(startNodeID);
+        //start.setDistanceFromStart(0);
+        PriorityQueue<GraphDB.Node> fringe = new PriorityQueue<>();
         for (long ID : allNodes) {
             GraphDB.Node node = graph.get(ID);
             fringe.add(node);
         }
-        List<Long> path = new ArrayList<>();
-        return null; // FIXME
-    }
 
+        fringe.remove(start);
+        while (!fringe.isEmpty()) {
+            GraphDB.Node node = fringe.remove();
+            /**if(node.equals(start)) {
+                break;
+            } */
+            node.relaxEdge(fringe, edgeTo);
+        }
+
+        path.add(destNodeID);
+        long goal = destNodeID;
+        while (goal != startNodeID) {
+            long parent = edgeTo.get(goal);
+            path.add(0, parent);
+            goal = parent;
+        }
+
+        return path;
+    }
 
 
     /**

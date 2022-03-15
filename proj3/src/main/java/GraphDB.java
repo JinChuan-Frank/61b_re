@@ -24,7 +24,6 @@ public class GraphDB {
     Map<Long, Way> ways = new HashMap<>();
     long startNodeID;
     long destNodeID;
-    double NodeDistanceFromStartInitial = Double.MAX_VALUE;
 
     public Map<Long, Node> getGraph() {
         return graph;
@@ -34,12 +33,16 @@ public class GraphDB {
         startNodeID = ID;
     }
 
+    public void setDestNodeID(long ID) {
+        destNodeID = ID;
+    }
+
 
     public class Node implements Comparable<Node> {
         long id;
         double lat;
         double lon;
-        double distanceFromStart = NodeDistanceFromStartInitial;
+        double distanceFromStart = Double.MAX_VALUE;
         ArrayList<Node> adjacentVertices;
         String locationName;
 
@@ -78,16 +81,23 @@ public class GraphDB {
             return distanceFromStart;
         }
 
-        public void relaxEdge() {
+        public void relaxEdge(PriorityQueue<Node> pq, Map<Long, Long> edgeTo) {
             List<Node> nodes = this.getAdjacentVertices();
             for (Node node : nodes) {
                 double distanceFromStarToThis = getDistanceFromStart();
                 double distanceBetweenTwoNodes = distance(this.getId(), node.getId());
                 double distanceFromStartToAdjacent = node.getDistanceFromStart();
                 double distanceToAdjNodeViaThis = distanceFromStarToThis + distanceBetweenTwoNodes;
+
                 if (distanceToAdjNodeViaThis < distanceFromStartToAdjacent) {
                     node.setDistanceFromStart(distanceToAdjNodeViaThis);
+                    edgeTo.put(node.getId(), this.getId());
+                    if (pq.contains(node)) {
+                        pq.remove(node);
+                    }
+                    pq.add(node);
                 }
+
             }
         }
 
@@ -97,9 +107,11 @@ public class GraphDB {
 
         @Override
         public int compareTo(Node o) {
-            double distanceFromStart1 = distance(startNodeID, this.getId());
-            double distanceFromStart2 = distance(startNodeID, o.getId());
-            return Double.compare(distanceFromStart1, distanceFromStart2);
+            double distanceToEnd1 = distance(this.getId(), destNodeID);
+            double distanceToEnd2 = distance(o.getId(), destNodeID);
+            double distanceFromStart1 = this.getDistanceFromStart();
+            double distanceFromStart2 = o.getDistanceFromStart();
+            return Double.compare(distanceFromStart1 + distanceToEnd1, distanceFromStart2 + distanceToEnd2);
         }
     }
 
