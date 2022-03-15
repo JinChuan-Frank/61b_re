@@ -1,4 +1,9 @@
-import java.util.*;
+import java.util.List;
+import java.util.ArrayList;
+import java.util.Map;
+import java.util.HashMap;
+import java.util.PriorityQueue;
+import java.util.Objects;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -45,8 +50,8 @@ public class Router {
         start.setDistanceFromStart(0);
 
         PriorityQueue<GraphDB.Node> fringe = new PriorityQueue<>();
-        for (long ID : allNodes) {
-            GraphDB.Node node = graph.get(ID);
+        for (long id : allNodes) {
+            GraphDB.Node node = graph.get(id);
             node.setDistanceToEnd();
             fringe.add(node);
         }
@@ -55,7 +60,7 @@ public class Router {
         start.relaxEdge(fringe, edgeTo);
         while (!fringe.isEmpty()) {
             GraphDB.Node node = fringe.remove();
-            if(node.equals(end)) {
+            if (node.equals(end)) {
                 break;
             }
             node.relaxEdge(fringe, edgeTo);

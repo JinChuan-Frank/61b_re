@@ -68,7 +68,8 @@ public class Rasterer {
         int lowerRightTileX = lowerRightTileXAndY.get("lowerRightTileX");
         int lowerRightTileY = lowerRightTileXAndY.get("lowerRightTileY");
 
-        Map<String, Double> bounds = calBounds(upperLeftTileX, upperLeftTileY, lowerRightTileX, lowerRightTileY, layerTileLength, layerTileHeight);
+        Map<String, Double> bounds = calBounds(upperLeftTileX, upperLeftTileY,
+                lowerRightTileX, lowerRightTileY, layerTileLength, layerTileHeight);
         double rasterUlLon = bounds.get("leftBound");
         double rasterUlLat = bounds.get("upperBound");
         double rasterLrLon = bounds.get("rightBound");

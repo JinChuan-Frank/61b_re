@@ -3,10 +3,18 @@ import org.xml.sax.SAXException;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.PriorityQueue;
+import java.util.Set;
+import java.util.HashSet;
+
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.parsers.SAXParser;
 import javax.xml.parsers.SAXParserFactory;
-import java.util.*;
+
 
 /**
  * Graph for storing all of the intersection (vertex) and road (edge) information.
@@ -29,12 +37,12 @@ public class GraphDB {
         return graph;
     }
 
-    public void setStartNodeID(long ID) {
-        startNodeID = ID;
+    public void setStartNodeID(long id) {
+        startNodeID = id;
     }
 
-    public void setDestNodeID(long ID) {
-        destNodeID = ID;
+    public void setDestNodeID(long id) {
+        destNodeID = id;
     }
 
 
@@ -116,16 +124,8 @@ public class GraphDB {
             double distanceToEnd2 = distance(o.getId(), destNodeID);
             double distanceFromStart1 = this.getDistanceFromStart();
             double distanceFromStart2 = o.getDistanceFromStart();
-            return Double.compare(distanceFromStart1 + distanceToEnd1, distanceFromStart2 + distanceToEnd2);
-        }
-    }
-
-    public class Edge {
-        Node nodeA;
-        Node NodeB;
-
-        Edge(Node A, Node B) {
-
+            return Double.compare(distanceFromStart1 + distanceToEnd1,
+                    distanceFromStart2 + distanceToEnd2);
         }
     }
 
@@ -143,12 +143,12 @@ public class GraphDB {
             nodesIDs = new HashSet<>();
         }
 
-        public void setID(long ID) {
-            this.ID = ID;
+        public void setID(long id) {
+            this.ID = id;
         }
 
-        public void setValidWay(boolean isValidWay) {
-            this.isValidWay = isValidWay;
+        public void setValidWay(boolean validWay) {
+            this.isValidWay = validWay;
         }
 
         public void setWayName(String wayName) {
@@ -160,7 +160,7 @@ public class GraphDB {
         }
 
         void addNode(Node node) {
-            long ID = node.getId();
+            long id = node.getId();
             if (!nodesIDs.contains(ID)) {
                 nodes.add(node);
                 nodesIDs.add(ID);
@@ -199,8 +199,8 @@ public class GraphDB {
     }
 
     public void addNewWay(Way way) {
-        long ID = way.getID();
-        ways.put(ID, way);
+        long id = way.getID();
+        ways.put(id, way);
     }
 
 
@@ -240,16 +240,16 @@ public class GraphDB {
      *  we can reasonably assume this since typically roads are connected.
      */
     private void clean() {
-        Set<Long> IDs = graph.keySet();
-        Set<Long> NodesToBeRemoved = new HashSet<>();
-        for (long i : IDs) {
+        Set<Long> ids = graph.keySet();
+        Set<Long> nodesToBeRemoved = new HashSet<>();
+        for (long i : ids) {
             Node node = graph.get(i);
             if (node.getAdjacentVertices().size() == 0) {
-                NodesToBeRemoved.add(i);
+                nodesToBeRemoved.add(i);
             }
         }
 
-        for (long i : NodesToBeRemoved) {
+        for (long i : nodesToBeRemoved) {
             graph.remove(i);
         }
     }
