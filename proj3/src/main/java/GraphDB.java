@@ -30,28 +30,16 @@ public class GraphDB {
      * creating helper classes, e.g. Node, Edge, etc. */
     Map<Long, Node> graph = new HashMap<>();
     Map<Long, Way> ways = new HashMap<>();
-    long startNodeID;
-    long destNodeID;
 
     public Map<Long, Node> getGraph() {
         return graph;
     }
 
-    public void setStartNodeID(long id) {
-        startNodeID = id;
-    }
 
-    public void setDestNodeID(long id) {
-        destNodeID = id;
-    }
-
-
-    public class Node implements Comparable<Node> {
+    public class Node {
         long id;
         double lat;
         double lon;
-        double distanceFromStart = Double.MAX_VALUE;
-        double distanceToEnd;
         ArrayList<Node> adjacentVertices;
         String locationName;
 
@@ -66,17 +54,11 @@ public class GraphDB {
             this.locationName = locationName;
         }
 
-        public void setDistanceToEnd() {
-            this.distanceToEnd = distance(id, destNodeID);
-        }
 
         public ArrayList<Node> getAdjacentVertices() {
             return adjacentVertices;
         }
 
-        public void setDistanceFromStart(double distanceFromStart) {
-            this.distanceFromStart = distanceFromStart;
-        }
 
         public long getId() {
             return id;
@@ -90,43 +72,11 @@ public class GraphDB {
             return lon;
         }
 
-        public double getDistanceFromStart() {
-            return distanceFromStart;
-        }
-
-        public void relaxEdge(PriorityQueue<Node> pq, Map<Long, Long> edgeTo) {
-            List<Node> nodes = this.getAdjacentVertices();
-            for (Node node : nodes) {
-                double distanceFromStarToThis = getDistanceFromStart();
-                double distanceBetweenTwoNodes = distance(this.getId(), node.getId());
-                double distanceFromStartToAdjacent = node.getDistanceFromStart();
-                double distanceToAdjNodeViaThis = distanceFromStarToThis + distanceBetweenTwoNodes;
-
-                if (distanceToAdjNodeViaThis < distanceFromStartToAdjacent) {
-                    node.setDistanceFromStart(distanceToAdjNodeViaThis);
-                    edgeTo.put(node.getId(), this.getId());
-                    if (pq.contains(node)) {
-                        pq.remove(node);
-                    }
-                    pq.add(node);
-                }
-
-            }
-        }
 
         public void addAdjacentVertex(Node node) {
             adjacentVertices.add(node);
         }
 
-        @Override
-        public int compareTo(Node o) {
-            double distanceToEnd1 = distance(this.getId(), destNodeID);
-            double distanceToEnd2 = distance(o.getId(), destNodeID);
-            double distanceFromStart1 = this.getDistanceFromStart();
-            double distanceFromStart2 = o.getDistanceFromStart();
-            return Double.compare(distanceFromStart1 + distanceToEnd1,
-                    distanceFromStart2 + distanceToEnd2);
-        }
     }
 
     public class Way {
@@ -161,7 +111,7 @@ public class GraphDB {
 
         void addNode(Node node) {
             long id = node.getId();
-            if (!nodesIDs.contains(ID)) {
+            if (!nodesIDs.contains(id)) {
                 nodes.add(node);
                 nodesIDs.add(ID);
             }

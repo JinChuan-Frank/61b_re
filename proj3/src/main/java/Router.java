@@ -29,52 +29,22 @@ public class Router {
      */
     public static List<Long> shortestPath(GraphDB g, double stlon, double stlat,
                                           double destlon, double destlat) {
-        long startNodeID = g.closest(stlon, stlat);
-        long destNodeID = g.closest(destlon, destlat);
-        List<Long> path = findShortestPath(g, startNodeID, destNodeID);
 
-        return path;
+
+        return null;
     }
 
     private static List<Long> findShortestPath(GraphDB g, long startNodeID, long destNodeID) {
         List<Long> path = new ArrayList<>();
         Map<Long, Long> edgeTo = new HashMap<>();
+        Map<Long, Double> bestDistance = new HashMap<>();
 
-        Map<Long, GraphDB.Node> graph = g.getGraph();
-        Iterable<Long> allNodes = g.vertices();
-        g.setStartNodeID(startNodeID);
-        g.setDestNodeID(destNodeID);
+        return null;
+    }
 
-        GraphDB.Node start = graph.get(startNodeID);
-        GraphDB.Node end = graph.get(destNodeID);
-        start.setDistanceFromStart(0);
+    class Vertex{
+        long id;
 
-        PriorityQueue<GraphDB.Node> fringe = new PriorityQueue<>();
-        for (long id : allNodes) {
-            GraphDB.Node node = graph.get(id);
-            node.setDistanceToEnd();
-            fringe.add(node);
-        }
-
-        fringe.remove(start);
-        start.relaxEdge(fringe, edgeTo);
-        while (!fringe.isEmpty()) {
-            GraphDB.Node node = fringe.remove();
-            if (node.equals(end)) {
-                break;
-            }
-            node.relaxEdge(fringe, edgeTo);
-        }
-
-        path.add(destNodeID);
-        long goal = destNodeID;
-        while (goal != startNodeID) {
-            long parent = edgeTo.get(goal);
-            path.add(0, parent);
-            goal = parent;
-        }
-
-        return path;
     }
 
 
