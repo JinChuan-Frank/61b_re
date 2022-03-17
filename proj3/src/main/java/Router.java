@@ -40,20 +40,37 @@ public class Router {
         Map<Long, Long> edgeTo = new HashMap<>();
         Map<Long, Double> bestDistanceFromSource = new HashMap<>();
 
+        bestDistanceFromSource = initializeDistance(startNodeID, bestDistanceFromSource);
         Vertex start = new Vertex(startNodeID);
         fringe.add(start);
+
         while (!fringe.isEmpty()) {
             Vertex v = fringe.remove();
-            if (v.equals())
+            long vID = v.getId();
+            path.add(vID);
+            if (vID == destNodeID) {
+                break;
+            }
             v.relaxEdge();
         }
-        return null;
+        return path;
     }
+
+    private static Map<Long, Double> initializeDistance(long startNodeID, Map<Long, Double> distance) {
+        for (long l: distance.keySet()) {
+            distance.put(l, Double.MAX_VALUE);
+        }
+        distance.put(startNodeID, 0.0);
+        return distance;
+    }
+
+
 
     static class Vertex implements Comparable<Vertex> {
         long id;
         double distanceFromSource;
         double distanceToGoal;
+        List<Vertex> adjacentVertices;
 
         Vertex(long id) {
             this.id = id;
@@ -79,6 +96,10 @@ public class Router {
             return distanceToGoal;
         }
 
+        List<Vertex> getAdjacentVertices() {
+            return adjacentVertices;
+        }
+
         @Override
         public int compareTo(Vertex o) {
             double distanceFromSource1 = getDistanceFromSource();
@@ -88,8 +109,24 @@ public class Router {
             return Double.compare(distanceFromSource1 + distanceToGoal1, distanceFromSource2 + distanceToGoal2);
         }
 
-        void relaxEdge() {
+        private List<Vertex> createAdjacentVertices(GraphDB g, long destID) {
+            List<Vertex> vertices = new ArrayList<>();
+            Iterable<Long> adjacent = g.adjacent(getId());
+            for (long id : adjacent) {
+                Vertex v = new Vertex(id);
+                v.setDistanceToGoal(g.distance(id, destID));
+                adjacentVertices.add(v);
+            }
+            return vertices;
+        }
 
+        void relaxEdge(Map<Long, Double> distance) {
+            List<Vertex> adjacent = getAdjacentVertices();
+            for (Vertex vertex : adjacent) {
+                long adjacentID = vertex.getId();
+                double currentDistanceFromStart = distance.get(id);
+
+            }
         }
     }
 
