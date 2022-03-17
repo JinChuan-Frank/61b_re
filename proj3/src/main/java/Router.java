@@ -29,22 +29,68 @@ public class Router {
      */
     public static List<Long> shortestPath(GraphDB g, double stlon, double stlat,
                                           double destlon, double destlat) {
-
-
-        return null;
+        long startNodeID = g.closest(stlon, stlat);
+        long destNodeID = g.closest(destlon, destlat);
+        return findShortestPath(g, startNodeID, destNodeID);
     }
 
     private static List<Long> findShortestPath(GraphDB g, long startNodeID, long destNodeID) {
         List<Long> path = new ArrayList<>();
+        PriorityQueue<Vertex> fringe = new PriorityQueue<>();
         Map<Long, Long> edgeTo = new HashMap<>();
-        Map<Long, Double> bestDistance = new HashMap<>();
+        Map<Long, Double> bestDistanceFromSource = new HashMap<>();
 
+        Vertex start = new Vertex(startNodeID);
+        fringe.add(start);
+        while (!fringe.isEmpty()) {
+            Vertex v = fringe.remove();
+            if (v.equals())
+            v.relaxEdge();
+        }
         return null;
     }
 
-    class Vertex{
+    static class Vertex implements Comparable<Vertex> {
         long id;
+        double distanceFromSource;
+        double distanceToGoal;
 
+        Vertex(long id) {
+            this.id = id;
+        }
+
+        void setDistanceFromSource(double distance) {
+            distanceFromSource = distance;
+        }
+
+        void setDistanceToGoal(double distance) {
+            distanceToGoal = distance;
+        }
+
+        long getId() {
+            return id;
+        }
+
+        double getDistanceFromSource() {
+            return distanceFromSource;
+        }
+
+        double getDistanceToGoal() {
+            return distanceToGoal;
+        }
+
+        @Override
+        public int compareTo(Vertex o) {
+            double distanceFromSource1 = getDistanceFromSource();
+            double distanceFromSource2 = o.getDistanceFromSource();
+            double distanceToGoal1 = getDistanceToGoal();
+            double distanceToGoal2 = o.getDistanceToGoal();
+            return Double.compare(distanceFromSource1 + distanceToGoal1, distanceFromSource2 + distanceToGoal2);
+        }
+
+        void relaxEdge() {
+
+        }
     }
 
 
