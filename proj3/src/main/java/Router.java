@@ -51,7 +51,7 @@ public class Router {
             if (vID == destNodeID) {
                 break;
             }
-            v.relaxEdge();
+            v.relaxEdge(g, bestDistanceFromSource);
         }
         return path;
     }
@@ -120,12 +120,16 @@ public class Router {
             return vertices;
         }
 
-        void relaxEdge(Map<Long, Double> distance) {
+        void relaxEdge(GraphDB g, Map<Long, Double> bestDistance) {
             List<Vertex> adjacent = getAdjacentVertices();
+            double myDistanceFromStart = bestDistance.get(getId());
             for (Vertex vertex : adjacent) {
                 long adjacentID = vertex.getId();
-                double currentDistanceFromStart = distance.get(id);
-
+                double neighborDistanceFromStart = bestDistance.get(adjacentID);
+                double distanceBetweenTwoVertices = g.distance(getId(), adjacentID);
+                if (myDistanceFromStart + distanceBetweenTwoVertices < neighborDistanceFromStart) {
+                    bestDistance
+                }
             }
         }
     }
