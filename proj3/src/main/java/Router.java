@@ -16,6 +16,8 @@ import java.util.regex.Pattern;
  * down to the priority you use to order your vertices.
  */
 public class Router {
+    //private static GraphDB graphDB;
+
     /**
      * Return a List of longs representing the shortest path from the node
      * closest to a start location and the node closest to the destination
@@ -29,6 +31,7 @@ public class Router {
      */
     public static List<Long> shortestPath(GraphDB g, double stlon, double stlat,
                                           double destlon, double destlat) {
+
         long startNodeID = g.closest(stlon, stlat);
         long destNodeID = g.closest(destlon, destlat);
         return findShortestPath(g, startNodeID, destNodeID);
@@ -39,8 +42,13 @@ public class Router {
         PriorityQueue<Vertex> fringe = new PriorityQueue<>();
         Map<Long, Long> edgeTo = new HashMap<>();
         Map<Long, Double> bestDistanceFromSource = new HashMap<>();
+        Map<Long, Double> distanceToGoal = new HashMap<>();
 
         bestDistanceFromSource = initializeDistance(startNodeID, bestDistanceFromSource);
+
+        DistAndEdgeTo d = new DistAndEdgeTo(bestDistanceFromSource, distanceToGoal, edgeTo);
+
+
         Vertex start = new Vertex(startNodeID);
         fringe.add(start);
 
@@ -51,7 +59,7 @@ public class Router {
             if (vID == destNodeID) {
                 break;
             }
-            v.relaxEdge(g, bestDistanceFromSource);
+            v.relaxEdge(g, d);
         }
         return path;
     }
@@ -120,17 +128,31 @@ public class Router {
             return vertices;
         }
 
-        void relaxEdge(GraphDB g, Map<Long, Double> bestDistance) {
+        DistAndEdgeTo relaxEdge(GraphDB g, DistAndEdgeTo d) {
             List<Vertex> adjacent = getAdjacentVertices();
-            double myDistanceFromStart = bestDistance.get(getId());
+            double myDistanceFromStart = d.distanceFromStart.get(getId());
+
             for (Vertex vertex : adjacent) {
                 long adjacentID = vertex.getId();
-                double neighborDistanceFromStart = bestDistance.get(adjacentID);
+                double neighborDistanceFromStart = d.distanceFromStart.get(adjacentID);
                 double distanceBetweenTwoVertices = g.distance(getId(), adjacentID);
                 if (myDistanceFromStart + distanceBetweenTwoVertices < neighborDistanceFromStart) {
-                    bestDistance
+                    d.distanceFromStart.put(adjacentID, myDistanceFromStart + distanceBetweenTwoVertices);
+                    d.edgeTo.put(adjacentID, getId());
                 }
             }
+            return d;
+        }
+    }
+
+    static class DistAndEdgeTo {
+        Map<Long, Double> distanceFromStart;
+        Map<Long, Double> distanceToGoal;
+        Map<Long, Long> edgeTo;
+        DistAndEdgeTo(Map<Long, Double> d1, Map<Long, Double> d2,  Map<Long, Long> e) {
+            distanceFromStart = d1;
+            distanceToGoal = d2;
+            edgeTo = e;
         }
     }
 
