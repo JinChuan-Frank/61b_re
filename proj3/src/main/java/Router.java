@@ -41,25 +41,29 @@ public class Router {
         List<Long> path = new ArrayList<>();
         PriorityQueue<Vertex> fringe = new PriorityQueue<>();
         Map<Long, Long> edgeTo = new HashMap<>();
-        Map<Long, Double> bestDistanceFromSource = new HashMap<>();
-        Map<Long, Double> distanceToGoal = new HashMap<>();
+        FringeAndEdge fringeAndEdge = new FringeAndEdge(fringe, edgeTo);
 
-        bestDistanceFromSource = initializeDistance(startNodeID, bestDistanceFromSource);
+        Vertex start = new Vertex(g, startNodeID, destNodeID);
+        start.distanceFromSource = 0.0;
+        fringeAndEdge.fringe.add(start);
 
-        DistAndEdgeTo d = new DistAndEdgeTo(bestDistanceFromSource, distanceToGoal, edgeTo);
-
-
-        Vertex start = new Vertex(startNodeID);
-        fringe.add(start);
-
-        while (!fringe.isEmpty()) {
-            Vertex v = fringe.remove();
+        while (!fringeAndEdge.fringe.isEmpty()) {
+            System.out.println("fringe size: " + fringeAndEdge.fringe.size());
+            Vertex v = fringeAndEdge.fringe.remove();
             long vID = v.getId();
             path.add(vID);
             if (vID == destNodeID) {
                 break;
             }
-            v.relaxEdge(g, d);
+            fringeAndEdge = v.relaxEdge(g, destNodeID, fringeAndEdge);
+        }
+
+        long v = destNodeID;
+        edgeTo = fringeAndEdge.edgeTo;
+        System.out.println("edgeTo.size(): " + edgeTo.size());
+        while (v != startNodeID) {
+            path.add(0, v);
+            v = edgeTo.get(v);
         }
         return path;
     }
@@ -73,24 +77,25 @@ public class Router {
     }
 
 
-
     static class Vertex implements Comparable<Vertex> {
+        GraphDB g;
         long id;
         double distanceFromSource;
         double distanceToGoal;
-        List<Vertex> adjacentVertices;
+        Iterable<Long> adjacentVerticesIDs;
 
-        Vertex(long id) {
-            this.id = id;
+        Vertex(GraphDB graphDB, long idNum, long destNode) {
+            g = graphDB;
+            id = idNum;
+            distanceFromSource = Double.MAX_VALUE;
+            distanceToGoal = g.distance(idNum, destNode);
+            adjacentVerticesIDs = g.adjacent(id);
         }
 
-        void setDistanceFromSource(double distance) {
+        void reSetDistanceFromSource(double distance) {
             distanceFromSource = distance;
         }
 
-        void setDistanceToGoal(double distance) {
-            distanceToGoal = distance;
-        }
 
         long getId() {
             return id;
@@ -104,9 +109,6 @@ public class Router {
             return distanceToGoal;
         }
 
-        List<Vertex> getAdjacentVertices() {
-            return adjacentVertices;
-        }
 
         @Override
         public int compareTo(Vertex o) {
@@ -117,41 +119,47 @@ public class Router {
             return Double.compare(distanceFromSource1 + distanceToGoal1, distanceFromSource2 + distanceToGoal2);
         }
 
-        private List<Vertex> createAdjacentVertices(GraphDB g, long destID) {
+        private List<Vertex> createAdjacentVertices(long destID) {
             List<Vertex> vertices = new ArrayList<>();
-            Iterable<Long> adjacent = g.adjacent(getId());
-            for (long id : adjacent) {
-                Vertex v = new Vertex(id);
-                v.setDistanceToGoal(g.distance(id, destID));
-                adjacentVertices.add(v);
+
+            for (long id : adjacentVerticesIDs) {
+                Vertex v = new Vertex(g, id, destID);
+                vertices.add(v);
             }
+
             return vertices;
         }
 
-        DistAndEdgeTo relaxEdge(GraphDB g, DistAndEdgeTo d) {
-            List<Vertex> adjacent = getAdjacentVertices();
-            double myDistanceFromStart = d.distanceFromStart.get(getId());
+        FringeAndEdge relaxEdge(GraphDB g, long destID, FringeAndEdge fringeAndEdge) {
+            long myID = getId();
+            List<Vertex> adjacent = createAdjacentVertices(destID);
+            double myDistanceFromStart = getDistanceFromSource();
 
-            for (Vertex vertex : adjacent) {
-                long adjacentID = vertex.getId();
-                double neighborDistanceFromStart = d.distanceFromStart.get(adjacentID);
-                double distanceBetweenTwoVertices = g.distance(getId(), adjacentID);
+            for (Vertex adjacentVertex : adjacent) {
+                long adjacentID = adjacentVertex.getId();
+                double neighborDistanceFromStart = adjacentVertex.getDistanceFromSource();
+                double distanceBetweenTwoVertices = g.distance(myID, adjacentID);
+
                 if (myDistanceFromStart + distanceBetweenTwoVertices < neighborDistanceFromStart) {
-                    d.distanceFromStart.put(adjacentID, myDistanceFromStart + distanceBetweenTwoVertices);
-                    d.edgeTo.put(adjacentID, getId());
+                    adjacentVertex.reSetDistanceFromSource(myDistanceFromStart + distanceBetweenTwoVertices);
+                    fringeAndEdge.edgeTo.put(adjacentID, myID);
+
+                    if (fringeAndEdge.fringe.contains(adjacentVertex)) {
+                        fringeAndEdge.fringe.remove(adjacentVertex);
+                    }
+                    fringeAndEdge.fringe.add(adjacentVertex);
                 }
             }
-            return d;
+
+            return fringeAndEdge;
         }
     }
 
-    static class DistAndEdgeTo {
-        Map<Long, Double> distanceFromStart;
-        Map<Long, Double> distanceToGoal;
+    static class FringeAndEdge {
+        PriorityQueue<Vertex> fringe;
         Map<Long, Long> edgeTo;
-        DistAndEdgeTo(Map<Long, Double> d1, Map<Long, Double> d2,  Map<Long, Long> e) {
-            distanceFromStart = d1;
-            distanceToGoal = d2;
+        FringeAndEdge(PriorityQueue<Vertex> p, Map<Long, Long> e) {
+            fringe = p;
             edgeTo = e;
         }
     }
