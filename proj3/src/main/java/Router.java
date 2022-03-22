@@ -1,9 +1,12 @@
+
+import java.util.HashSet;
 import java.util.List;
 import java.util.ArrayList;
 import java.util.Map;
 import java.util.HashMap;
 import java.util.PriorityQueue;
 import java.util.Objects;
+import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -38,9 +41,128 @@ public class Router {
     }
 
     private static List<Long> aStarSearch(GraphDB g, long startNodeID, long destNodeID) {
+        Map<Long, GraphDB.Node> map = g.graph;
+        Map<Long, Vertex> vertices = new HashMap<>();
+        Map<Long, Long> edgeTo = new HashMap<>();
+        PriorityQueue<Vertex> fringe = new PriorityQueue<>();
+        ArrayList<Long> path = new ArrayList<>();
+        Set<Long> marked= new HashSet<>();
 
-        return null;
+        for(GraphDB.Node node : map.values()) {
+            Vertex v = new Vertex(g, node, destNodeID);
+            long id = v.getId();
+            vertices.put(id, v);
+        }
+
+        Vertex start = new Vertex(g, map.get(startNodeID), destNodeID);
+        start.resetDistanceFromStart(0.0);
+        fringe.add(start);
+
+        while (!fringe.isEmpty()) {
+            Vertex v = fringe.remove();
+            marked.add(v.getId());
+            if (v.getId() == destNodeID) {
+                break;
+            }
+            v.createNeighbors(g, destNodeID, marked);
+            ArrayList<Vertex> neighbors = v.getNeighbors();
+            edgeTo = relaxEdge(g, v, edgeTo);
+            for (Vertex neighbor : neighbors) {
+
+                fringe.add(neighbor);
+            }
+        }
+
+        long v = destNodeID;
+        while (v != startNodeID) {
+            path.add(0, v);
+            v = edgeTo.get(v);
+        }
+        path.add(0, v);
+
+        return path;
+
     }
+
+    static Map<Long, Long> relaxEdge(GraphDB g, Vertex v, Map<Long, Long> edgeTo) {
+
+        List<Vertex> neighbors = v.getNeighbors();
+        long vID = v.getId();
+        double vDistanceFromStart = v.getDistanceFromStart();
+
+        for (Vertex neighbor : neighbors) {
+            double neighborDistanceFromStart = neighbor.getDistanceFromStart();
+            double distanceBetweenVertices = g.distance(vID, neighbor.getId());
+            if (vDistanceFromStart + distanceBetweenVertices < neighborDistanceFromStart) {
+                edgeTo.put(neighbor.getId(), vID);
+                neighbor.resetDistanceFromStart(vDistanceFromStart + distanceBetweenVertices);
+            }
+        }
+        return edgeTo;
+    }
+
+    static class Vertex implements Comparable<Vertex> {
+
+        long id;
+        double distanceToGoal;
+        double distanceFromStart;
+        ArrayList<Vertex> neighbors;
+
+        Vertex(GraphDB g, GraphDB.Node node, long destNodeID) {
+            this.id = node.id;
+            distanceFromStart = Double.MAX_VALUE;
+            distanceToGoal = g.distance(id, destNodeID);
+
+        }
+
+
+        void createNeighbors(GraphDB g, long destNodeID, Set<Long> marked) {
+            List<GraphDB.Node> nodes = g.getGraph().get(id).getAdjacentVertices();
+            ArrayList<Vertex> neighbors = new ArrayList<>();
+
+            for (GraphDB.Node neighbor : nodes) {
+                if ( marked.contains(neighbor.getId())) {
+                    continue;
+                }
+                Vertex v = new Vertex(g, neighbor, destNodeID);
+                neighbors.add(v);
+            }
+            this.neighbors = neighbors;
+        }
+
+        public ArrayList<Vertex> getNeighbors() {
+            return neighbors;
+        }
+
+        void resetDistanceFromStart(double d) {
+            distanceFromStart = d;
+        }
+
+        long getId() {
+            return id;
+        }
+
+        public double getDistanceFromStart() {
+            return distanceFromStart;
+        }
+
+        public double getDistanceToGoal() {
+            return distanceToGoal;
+        }
+
+        @Override
+        public int compareTo(Vertex o) {
+            double distanceFromStart1 = getDistanceFromStart();
+            double distanceFromStart2 = o.getDistanceFromStart();
+            double distanceToGoal1 = getDistanceToGoal();
+            double distanceToGoal2 = o.getDistanceToGoal();
+            return Double.compare(distanceFromStart1 + distanceToGoal1, distanceFromStart2 + distanceToGoal2);
+        }
+    }
+
+
+
+
 
 
 
