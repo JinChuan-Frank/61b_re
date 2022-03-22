@@ -41,30 +41,33 @@ public class Router {
         List<Long> path = new ArrayList<>();
         PriorityQueue<Vertex> fringe = new PriorityQueue<>();
         Map<Long, Long> edgeTo = new HashMap<>();
+        Map<Long, Vertex> vertices = new HashMap<>();
         FringeAndEdge fringeAndEdge = new FringeAndEdge(fringe, edgeTo);
 
         Vertex start = new Vertex(g, startNodeID, destNodeID);
         start.distanceFromSource = 0.0;
         fringeAndEdge.fringe.add(start);
+        vertices.put(startNodeID, start);
 
         while (!fringeAndEdge.fringe.isEmpty()) {
             System.out.println("fringe size: " + fringeAndEdge.fringe.size());
             Vertex v = fringeAndEdge.fringe.remove();
             long vID = v.getId();
-            path.add(vID);
+            //path.add(vID);
             if (vID == destNodeID) {
                 break;
             }
-            fringeAndEdge = v.relaxEdge(g, destNodeID, fringeAndEdge);
+            fringeAndEdge = v.relaxEdge(g, destNodeID, fringeAndEdge, vertices);
         }
 
         long v = destNodeID;
         edgeTo = fringeAndEdge.edgeTo;
-        System.out.println("edgeTo.size(): " + edgeTo.size());
+        //System.out.println("edgeTo.size(): " + edgeTo.size());
         while (v != startNodeID) {
             path.add(0, v);
             v = edgeTo.get(v);
         }
+        path.add(0, v);
         return path;
     }
 
@@ -83,6 +86,7 @@ public class Router {
         double distanceFromSource;
         double distanceToGoal;
         Iterable<Long> adjacentVerticesIDs;
+        ArrayList<Vertex> adjacentVertices;
 
         Vertex(GraphDB graphDB, long idNum, long destNode) {
             g = graphDB;
@@ -90,15 +94,24 @@ public class Router {
             distanceFromSource = Double.MAX_VALUE;
             distanceToGoal = g.distance(idNum, destNode);
             adjacentVerticesIDs = g.adjacent(id);
+            adjacentVertices = new ArrayList<>();
         }
 
         void reSetDistanceFromSource(double distance) {
             distanceFromSource = distance;
         }
 
+        void addAdjacentVertex(Vertex v) {
+            adjacentVertices.add(v);
+        }
+
 
         long getId() {
             return id;
+        }
+
+        List<Vertex> getAdjacentVertices() {
+            return adjacentVertices;
         }
 
         double getDistanceFromSource() {
@@ -119,20 +132,22 @@ public class Router {
             return Double.compare(distanceFromSource1 + distanceToGoal1, distanceFromSource2 + distanceToGoal2);
         }
 
-        private List<Vertex> createAdjacentVertices(long destID) {
-            List<Vertex> vertices = new ArrayList<>();
+        private void createAdjacentVertices(long destID, Map<Long, Vertex> vertices) {
 
             for (long id : adjacentVerticesIDs) {
-                Vertex v = new Vertex(g, id, destID);
-                vertices.add(v);
+                if (!vertices.containsKey(id)) {
+                    Vertex v = new Vertex(g, id, destID);
+                    vertices.put(id, v);
+                    addAdjacentVertex(v);
+                    v.addAdjacentVertex(this);
+                }
             }
-
-            return vertices;
         }
 
-        FringeAndEdge relaxEdge(GraphDB g, long destID, FringeAndEdge fringeAndEdge) {
+        FringeAndEdge relaxEdge(GraphDB g, long destID, FringeAndEdge fringeAndEdge, Map<Long, Vertex> vertices) {
             long myID = getId();
-            List<Vertex> adjacent = createAdjacentVertices(destID);
+            createAdjacentVertices(destID, vertices);
+            List<Vertex> adjacent = getAdjacentVertices();
             double myDistanceFromStart = getDistanceFromSource();
 
             for (Vertex adjacentVertex : adjacent) {
@@ -147,8 +162,9 @@ public class Router {
                     if (fringeAndEdge.fringe.contains(adjacentVertex)) {
                         fringeAndEdge.fringe.remove(adjacentVertex);
                     }
-                    fringeAndEdge.fringe.add(adjacentVertex);
+
                 }
+                fringeAndEdge.fringe.add(adjacentVertex);
             }
 
             return fringeAndEdge;
