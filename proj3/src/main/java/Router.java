@@ -34,6 +34,11 @@ public class Router {
 
         long startNodeID = g.closest(stlon, stlat);
         long destNodeID = g.closest(destlon, destlat);
+        return aStarSearch(g, startNodeID, destNodeID);
+    }
+
+    private static List<Long> aStarSearch(GraphDB g, long startNodeID, long destNodeID) {
+
         return null;
     }
 
