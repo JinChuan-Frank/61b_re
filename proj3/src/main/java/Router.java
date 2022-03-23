@@ -41,29 +41,25 @@ public class Router {
     }
 
     public static List<Long> aStarSearch(GraphDB g, long startNodeID, long destNodeID) {
-        Map<Long, GraphDB.Node> map = g.graph;
-        Map<Long, Vertex> vertices = new HashMap<>();
+
+        Map<Long, Vertex> vertices = initiateVertices(g, destNodeID);
+        Vertex start = vertices.get(startNodeID);
+        Vertex end = vertices.get(destNodeID);
 
         PriorityQueue<Vertex> fringe = new PriorityQueue<>();
         ArrayList<Long> path = new ArrayList<>();
         Set<Long> marked = new HashSet<>();
 
-        for (GraphDB.Node node : map.values()) {
-            Vertex v = new Vertex(g, node, destNodeID);
-            long id = v.getId();
-            vertices.put(id, v);
-        }
 
-        Vertex start = new Vertex(g, map.get(startNodeID), destNodeID);
-        Vertex end = new Vertex(g, map.get(destNodeID), destNodeID);
+
         start.resetDistanceFromStart(0.0);
         fringe.add(start);
         int i = 1;
         while (!fringe.isEmpty()) {
 
             Vertex v = fringe.remove();
-            System.out.println("No." + i + "removed vertex: " + v.getId());
-            i ++;
+            //System.out.println("No." + i + "removed vertex: " + v.getId());
+            //i ++;
             marked.add(v.getId());
             if (v.getId() == destNodeID) {
                 end = v;
@@ -99,6 +95,24 @@ public class Router {
 
     }
 
+    static Map<Long, Vertex> initiateVertices(GraphDB g, long destNodeID) {
+        Map<Long, GraphDB.Node> map = g.graph;
+        Map<Long, Vertex> vertices = new HashMap<>();
+        for (GraphDB.Node node : map.values()) {
+            Vertex v = new Vertex(g, node, destNodeID);
+            long id = v.getId();
+            vertices.put(id, v);
+        }
+        initiateNeighbors(g, vertices);
+        return vertices;
+    }
+
+    static void initiateNeighbors(GraphDB g, Map<Long, Vertex> vertices) {
+        for (Vertex vertex : vertices.values()) {
+            vertex.initiateNeighbors(g, vertices);
+        }
+    }
+
     static void relaxEdge(GraphDB g, Vertex v) {
 
         List<Vertex> neighbors = v.getNeighbors();
@@ -131,6 +145,12 @@ public class Router {
 
         }
 
+        void initiateNeighbors(GraphDB g, Map<Long, Vertex> vertices) {
+            for (long l : g.adjacent(id)) {
+                Vertex vertex = vertices.get(l);
+                neighbors.add(vertex);
+            }
+        }
 
         void createNeighbors(GraphDB g, long destNodeID, Set<Long> marked) {
             List<GraphDB.Node> nodes = g.getGraph().get(id).getAdjacentVertices();
