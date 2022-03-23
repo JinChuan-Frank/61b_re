@@ -40,7 +40,7 @@ public class Router {
         return aStarSearch(g, startNodeID, destNodeID);
     }
 
-    private static List<Long> aStarSearch(GraphDB g, long startNodeID, long destNodeID) {
+    public static List<Long> aStarSearch(GraphDB g, long startNodeID, long destNodeID) {
         Map<Long, GraphDB.Node> map = g.graph;
         Map<Long, Vertex> vertices = new HashMap<>();
 
@@ -58,16 +58,23 @@ public class Router {
         Vertex end = new Vertex(g, map.get(destNodeID), destNodeID);
         start.resetDistanceFromStart(0.0);
         fringe.add(start);
-
+        int i = 1;
         while (!fringe.isEmpty()) {
+
             Vertex v = fringe.remove();
+            System.out.println("No." + i + "removed vertex: " + v.getId());
+            i ++;
             marked.add(v.getId());
             if (v.getId() == destNodeID) {
                 end = v;
                 break;
             }
-            v.createNeighbors(g, destNodeID, marked);
+            if (!v.neighborsCreated) {
+                v.createNeighbors(g, destNodeID, marked);
+            }
+
             ArrayList<Vertex> neighbors = v.getNeighbors();
+            System.out.println("number of neighbors: " + neighbors.size());
             relaxEdge(g, v);
             for (Vertex neighbor : neighbors) {
 
@@ -82,11 +89,12 @@ public class Router {
 
         Vertex v = end;
         while (v != null && v.getId() != startNodeID) {
+            //System.out.println("vertex: " + v.getId());
             path.add(0, v.getId());
             v = v.prevNode;
         }
         path.add(0, v.getId());
-
+        System.out.println("path is: " + path);
         return path;
 
     }
@@ -112,6 +120,7 @@ public class Router {
         long id;
         double distanceToGoal;
         double distanceFromStart;
+        boolean neighborsCreated = false;
         Vertex prevNode;
         ArrayList<Vertex> neighbors;
 
@@ -136,6 +145,7 @@ public class Router {
                 neighborVertices.add(v);
             }
             this.neighbors = neighborVertices;
+            neighborsCreated = true;
         }
 
         public ArrayList<Vertex> getNeighbors() {

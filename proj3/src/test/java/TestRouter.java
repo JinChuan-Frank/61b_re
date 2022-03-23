@@ -44,6 +44,12 @@ public class TestRouter {
         }
     }
 
+    @Test
+    public void aGTest() {
+        GraphDB g = new GraphDB(OSM_DB_PATH);
+        Router.aStarSearch(g, 53124029, 2793619986L);
+    }
+
     private List<Map<String, Double>> paramsFromFile() throws Exception {
         List<String> lines = Files.readAllLines(Paths.get(PARAMS_FILE), Charset.defaultCharset());
         List<Map<String, Double>> testParams = new ArrayList<>();
