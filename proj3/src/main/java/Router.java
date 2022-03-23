@@ -43,7 +43,7 @@ public class Router {
     private static List<Long> aStarSearch(GraphDB g, long startNodeID, long destNodeID) {
         Map<Long, GraphDB.Node> map = g.graph;
         Map<Long, Vertex> vertices = new HashMap<>();
-        Map<Long, Long> edgeTo = new HashMap<>();
+
         PriorityQueue<Vertex> fringe = new PriorityQueue<>();
         ArrayList<Long> path = new ArrayList<>();
         Set<Long> marked = new HashSet<>();
@@ -76,7 +76,7 @@ public class Router {
         }
 
         Vertex v = end;
-        while (v.getId() != startNodeID) {
+        while (v != null && v.getId() != startNodeID) {
             path.add(0, v.getId());
             v = v.prevNode;
         }
@@ -127,6 +127,7 @@ public class Router {
                     continue;
                 }
                 Vertex v = new Vertex(g, neighbor, destNodeID);
+                v.prevNode = this;
                 neighborVertices.add(v);
             }
             this.neighbors = neighborVertices;
