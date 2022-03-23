@@ -46,15 +46,16 @@ public class Router {
         Map<Long, Long> edgeTo = new HashMap<>();
         PriorityQueue<Vertex> fringe = new PriorityQueue<>();
         ArrayList<Long> path = new ArrayList<>();
-        Set<Long> marked= new HashSet<>();
+        Set<Long> marked = new HashSet<>();
 
-        for(GraphDB.Node node : map.values()) {
+        for (GraphDB.Node node : map.values()) {
             Vertex v = new Vertex(g, node, destNodeID);
             long id = v.getId();
             vertices.put(id, v);
         }
 
         Vertex start = new Vertex(g, map.get(startNodeID), destNodeID);
+        Vertex end = new Vertex(g, map.get(destNodeID), destNodeID);
         start.resetDistanceFromStart(0.0);
         fringe.add(start);
 
@@ -62,29 +63,30 @@ public class Router {
             Vertex v = fringe.remove();
             marked.add(v.getId());
             if (v.getId() == destNodeID) {
+                end = v;
                 break;
             }
             v.createNeighbors(g, destNodeID, marked);
             ArrayList<Vertex> neighbors = v.getNeighbors();
-            edgeTo = relaxEdge(g, v, edgeTo);
+            relaxEdge(g, v);
             for (Vertex neighbor : neighbors) {
 
                 fringe.add(neighbor);
             }
         }
 
-        long v = destNodeID;
-        while (v != startNodeID) {
-            path.add(0, v);
-            v = edgeTo.get(v);
+        Vertex v = end;
+        while (v.getId() != startNodeID) {
+            path.add(0, v.getId());
+            v = v.prevNode;
         }
-        path.add(0, v);
+        path.add(0, v.getId());
 
         return path;
 
     }
 
-    static Map<Long, Long> relaxEdge(GraphDB g, Vertex v, Map<Long, Long> edgeTo) {
+    static void relaxEdge(GraphDB g, Vertex v) {
 
         List<Vertex> neighbors = v.getNeighbors();
         long vID = v.getId();
@@ -94,11 +96,10 @@ public class Router {
             double neighborDistanceFromStart = neighbor.getDistanceFromStart();
             double distanceBetweenVertices = g.distance(vID, neighbor.getId());
             if (vDistanceFromStart + distanceBetweenVertices < neighborDistanceFromStart) {
-                edgeTo.put(neighbor.getId(), vID);
+                neighbor.prevNode = v;
                 neighbor.resetDistanceFromStart(vDistanceFromStart + distanceBetweenVertices);
             }
         }
-        return edgeTo;
     }
 
     static class Vertex implements Comparable<Vertex> {
@@ -106,6 +107,7 @@ public class Router {
         long id;
         double distanceToGoal;
         double distanceFromStart;
+        Vertex prevNode;
         ArrayList<Vertex> neighbors;
 
         Vertex(GraphDB g, GraphDB.Node node, long destNodeID) {
@@ -118,16 +120,16 @@ public class Router {
 
         void createNeighbors(GraphDB g, long destNodeID, Set<Long> marked) {
             List<GraphDB.Node> nodes = g.getGraph().get(id).getAdjacentVertices();
-            ArrayList<Vertex> neighbors = new ArrayList<>();
+            ArrayList<Vertex> neighborVertices = new ArrayList<>();
 
             for (GraphDB.Node neighbor : nodes) {
-                if ( marked.contains(neighbor.getId())) {
+                if (marked.contains(neighbor.getId())) {
                     continue;
                 }
                 Vertex v = new Vertex(g, neighbor, destNodeID);
-                neighbors.add(v);
+                neighborVertices.add(v);
             }
-            this.neighbors = neighbors;
+            this.neighbors = neighborVertices;
         }
 
         public ArrayList<Vertex> getNeighbors() {
@@ -156,7 +158,8 @@ public class Router {
             double distanceFromStart2 = o.getDistanceFromStart();
             double distanceToGoal1 = getDistanceToGoal();
             double distanceToGoal2 = o.getDistanceToGoal();
-            return Double.compare(distanceFromStart1 + distanceToGoal1, distanceFromStart2 + distanceToGoal2);
+            return Double.compare(distanceFromStart1 + distanceToGoal1,
+                    distanceFromStart2 + distanceToGoal2);
         }
     }
 
