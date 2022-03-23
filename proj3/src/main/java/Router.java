@@ -75,6 +75,8 @@ public class Router {
             }
             if (fringe.isEmpty()) {
                 System.out.println("fringe is empty!");
+                System.out.println("start: " + startNodeID);
+                System.out.println("dest: " + destNodeID);
             }
         }
 
