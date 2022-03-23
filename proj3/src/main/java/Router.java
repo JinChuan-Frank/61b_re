@@ -73,6 +73,9 @@ public class Router {
 
                 fringe.add(neighbor);
             }
+            if (fringe.isEmpty()) {
+                System.out.println("fringe is empty!");
+            }
         }
 
         Vertex v = end;
