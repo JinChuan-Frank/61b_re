@@ -44,15 +44,13 @@ public class Router {
 
         Map<Long, Vertex> vertices = initiateVertices(g, destNodeID);
         Vertex start = vertices.get(startNodeID);
+        start.resetDistanceFromStart(0.0);
         Vertex end = vertices.get(destNodeID);
 
         PriorityQueue<Vertex> fringe = new PriorityQueue<>();
         ArrayList<Long> path = new ArrayList<>();
         Set<Long> marked = new HashSet<>();
 
-
-
-        start.resetDistanceFromStart(0.0);
         fringe.add(start);
         int i = 1;
         while (!fringe.isEmpty()) {
@@ -61,30 +59,27 @@ public class Router {
             //System.out.println("No." + i + "removed vertex: " + v.getId());
             //i ++;
             marked.add(v.getId());
-            if (v.getId() == destNodeID) {
-                end = v;
+            if (v.equals(end)) {
                 break;
             }
-            if (!v.neighborsCreated) {
-                v.createNeighbors(g, destNodeID, marked);
-            }
 
-            ArrayList<Vertex> neighbors = v.getNeighbors();
-            System.out.println("number of neighbors: " + neighbors.size());
+            //System.out.println("number of neighbors: " + neighbors.size());
             relaxEdge(g, v);
+            ArrayList<Vertex> neighbors = v.getNeighbors();
             for (Vertex neighbor : neighbors) {
-
-                fringe.add(neighbor);
+                if (!marked.contains(neighbor.id)) {
+                    fringe.add(neighbor);
+                }
             }
             if (fringe.isEmpty()) {
                 System.out.println("fringe is empty!");
-                System.out.println("start: " + startNodeID);
-                System.out.println("dest: " + destNodeID);
+                //System.out.println("start: " + startNodeID);
+                //System.out.println("dest: " + destNodeID);
             }
         }
 
         Vertex v = end;
-        while (v != null && v.getId() != startNodeID) {
+        while (v.getId() != startNodeID) {
             //System.out.println("vertex: " + v.getId());
             path.add(0, v.getId());
             v = v.prevNode;
@@ -134,9 +129,8 @@ public class Router {
         long id;
         double distanceToGoal;
         double distanceFromStart;
-        boolean neighborsCreated = false;
         Vertex prevNode;
-        ArrayList<Vertex> neighbors;
+        ArrayList<Vertex> neighbors = new ArrayList<>();
 
         Vertex(GraphDB g, GraphDB.Node node, long destNodeID) {
             this.id = node.id;
@@ -150,22 +144,6 @@ public class Router {
                 Vertex vertex = vertices.get(l);
                 neighbors.add(vertex);
             }
-        }
-
-        void createNeighbors(GraphDB g, long destNodeID, Set<Long> marked) {
-            List<GraphDB.Node> nodes = g.getGraph().get(id).getAdjacentVertices();
-            ArrayList<Vertex> neighborVertices = new ArrayList<>();
-
-            for (GraphDB.Node neighbor : nodes) {
-                if (marked.contains(neighbor.getId())) {
-                    continue;
-                }
-                Vertex v = new Vertex(g, neighbor, destNodeID);
-                v.prevNode = this;
-                neighborVertices.add(v);
-            }
-            this.neighbors = neighborVertices;
-            neighborsCreated = true;
         }
 
         public ArrayList<Vertex> getNeighbors() {
