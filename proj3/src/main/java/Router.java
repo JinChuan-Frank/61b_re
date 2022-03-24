@@ -46,24 +46,21 @@ public class Router {
         Vertex start = vertices.get(startNodeID);
         start.resetDistanceFromStart(0.0);
         Vertex end = vertices.get(destNodeID);
+        boolean targetFound = false;
 
         PriorityQueue<Vertex> fringe = new PriorityQueue<>();
         ArrayList<Long> path = new ArrayList<>();
         Set<Long> marked = new HashSet<>();
 
         fringe.add(start);
-        int i = 1;
-        while (!fringe.isEmpty()) {
 
+        while (!fringe.isEmpty()) {
             Vertex v = fringe.remove();
-            //System.out.println("No." + i + "removed vertex: " + v.getId());
-            //i ++;
             marked.add(v.getId());
             if (v.equals(end)) {
+                targetFound = true;
                 break;
             }
-
-            //System.out.println("number of neighbors: " + neighbors.size());
             relaxEdge(g, v);
             ArrayList<Vertex> neighbors = v.getNeighbors();
             for (Vertex neighbor : neighbors) {
@@ -71,21 +68,20 @@ public class Router {
                     fringe.add(neighbor);
                 }
             }
-            if (fringe.isEmpty()) {
-                System.out.println("fringe is empty!");
-                //System.out.println("start: " + startNodeID);
-                //System.out.println("dest: " + destNodeID);
-            }
+
+        }
+        if (!targetFound) {
+            return new ArrayList<>();
         }
 
         Vertex v = end;
-        while (v.getId() != startNodeID) {
+        while (!v.equals(start)) {
             //System.out.println("vertex: " + v.getId());
             path.add(0, v.getId());
             v = v.prevNode;
         }
         path.add(0, v.getId());
-        System.out.println("path is: " + path);
+        //System.out.println("path is: " + path);
         return path;
 
     }
