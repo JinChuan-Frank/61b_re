@@ -50,13 +50,16 @@ public class Router {
 
         PriorityQueue<Vertex> fringe = new PriorityQueue<>();
         ArrayList<Long> path = new ArrayList<>();
-        Set<Long> marked = new HashSet<>();
+        Set<Vertex> marked = new HashSet<>();
 
         fringe.add(start);
 
         while (!fringe.isEmpty()) {
             Vertex v = fringe.remove();
-            marked.add(v.getId());
+            if (marked.contains(v)) {
+                continue;
+            }
+            marked.add(v);
             if (v.equals(end)) {
                 targetFound = true;
                 break;
