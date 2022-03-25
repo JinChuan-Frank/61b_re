@@ -67,12 +67,10 @@ public class Router {
             relaxEdge(g, v);
             ArrayList<Vertex> neighbors = v.getNeighbors();
             for (Vertex neighbor : neighbors) {
-                if (!marked.contains(neighbor.id)) {
-                    fringe.add(neighbor);
-                }
+                fringe.add(neighbor);
             }
-
         }
+
         if (!targetFound) {
             return new ArrayList<>();
         }

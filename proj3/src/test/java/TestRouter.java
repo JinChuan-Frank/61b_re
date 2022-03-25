@@ -5,6 +5,7 @@ import java.nio.charset.Charset;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -44,11 +45,18 @@ public class TestRouter {
         }
     }
 
-    @Test
+    /**@Test
     public void aGTest() {
         GraphDB g = new GraphDB(OSM_DB_PATH);
-        Router.aStarSearch(g, 539996336, 262251118L);
-    }
+        long id1 = g.closest(-122.2557587520453, 37.8498571750344);
+        GraphDB.Node node1 = g.graph.get(id1);
+        double distance1 = g.distance(-122.2557587520453, 37.8498571750344, node1.getLon(), node1.getLat());
+        System.out.println("closet node is: " + id1 + " distance is: " + distance1);
+
+        List<Long> path = Router.shortestPath(g, -122.2557587520453, 37.8498571750344, -122.28622622906174, 37.87084490105019);
+
+        System.out.println("path: " + path);
+    } */
 
     private List<Map<String, Double>> paramsFromFile() throws Exception {
         List<String> lines = Files.readAllLines(Paths.get(PARAMS_FILE), Charset.defaultCharset());
