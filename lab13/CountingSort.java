@@ -87,8 +87,15 @@ public class CountingSort {
         }
 
         int[] sorted = new int[arr.length];
-
+        int next = 0;
+        for (int i = 0; i < counts.length; i++) {
+            for (int j = counts[i]; j > 0; j --) {
+                int num = min + i;
+                sorted[next] = num;
+                next ++;
+            }
+        }
         
-        return null;
+        return sorted;
     }
 }
