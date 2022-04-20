@@ -3,8 +3,9 @@ import java.util.Arrays;
 public class TestRadixSort {
 
     public static void main(String[] args) {
-        String[] original = {"youth", "apple", "boy"};
-        String[] sorted = RadixSort.sort(original);
+        String[] original1 = {"youth", "apple", "boy"};
+        String[] original2 = {"a3", "a2", "b", "a0", "a5"};
+        String[] sorted = RadixSort.sort(original2);
         System.out.println(Arrays.toString(sorted));
     }
 }

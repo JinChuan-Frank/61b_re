@@ -79,10 +79,10 @@ public class RadixSort {
     }
 
     private static int getOrder(String s, int index) {
-        if (s.length() < index + 1) {
+        int forwardIndex = convertToForwardIndex(s, index);
+        if (forwardIndex > s.length() - 1) {
             return 0;
         }
-        int forwardIndex = convertToForwardIndex(s, index);
         Character c = s.charAt(forwardIndex);
         int order = (int) c;
         return order;
