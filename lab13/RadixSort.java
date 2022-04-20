@@ -17,18 +17,42 @@ public class RadixSort {
      */
     public static String[] sort(String[] asciis) {
         // TODO: Implement LSD Sort
-        return null;
+        int length = asciis.length;
+        String[] sorted = new String[length];
+        String[] aux = new String[length];
+        System.arraycopy(asciis, 0, aux, 0, length);
+        int longest = 0;
+        for (String s : asciis) {
+            int l = s.length();
+            if (l > longest) {
+                longest = l;
+            }
+        }
+        return sorted;
     }
 
     /**
      * LSD helper method that performs a destructive counting sort the array of
      * Strings based off characters at a specific index.
      * @param asciis Input array of Strings
-     * @param index The position to sort the Strings on.
+     * @param index The position to sort the Strings on. Starting from the smallest digit.
      */
     private static void sortHelperLSD(String[] asciis, int index) {
         // Optional LSD helper method for required LSD radix sort
+        for (String s : asciis) {
+
+        }
         return;
+    }
+
+    private int getOrder(String s, int index) {
+        return 0;
+    }
+
+    private int convertToForwardIndex(String s, int backWardIndex) {
+        int length = s.length();
+        int forwardIndex = length - 1 - backWardIndex;
+        return forwardIndex;
     }
 
     /**
