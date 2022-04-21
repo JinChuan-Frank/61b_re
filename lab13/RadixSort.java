@@ -1,4 +1,4 @@
-import javax.sound.midi.Soundbank;
+
 import java.util.Arrays;
 import java.util.Deque;
 import java.util.LinkedList;
@@ -22,7 +22,7 @@ public class RadixSort {
      * @return String[] the sorted array
      */
     public static String[] sort(String[] asciis) {
-        // TODO: Implement LSD Sort
+
         int length = asciis.length;
         String[] sorted = new String[length];
         String[] aux = new String[length];
@@ -38,7 +38,7 @@ public class RadixSort {
 
         for (int i = 0; i < longest; i++) {
             System.out.println("sorting digit " + i);
-            sortHelperLSD(aux, i);
+            sortHelperLSD(aux, i, longest);
             System.out.println(Arrays.toString(aux));
         }
 
@@ -53,7 +53,7 @@ public class RadixSort {
      * @param asciis Input array of Strings
      * @param index The position to sort the Strings on. Starting from the smallest digit.
      */
-    private static void sortHelperLSD(String[] asciis, int index) {
+    private static void sortHelperLSD(String[] asciis, int index, int longest) {
         // Optional LSD helper method for required LSD radix sort
         Deque<String>[] temp = new Deque[256];
 
@@ -62,7 +62,7 @@ public class RadixSort {
         }
 
         for (String s : asciis) {
-            int order = getOrder(s, index);
+            int order = getOrder(s, index, longest);
             temp[order].add(s);
         }
 
@@ -78,19 +78,21 @@ public class RadixSort {
         return;
     }
 
-    private static int getOrder(String s, int index) {
-        int forwardIndex = convertToForwardIndex(s, index);
-        if (forwardIndex > s.length() - 1) {
+    private static int getOrder(String s, int index, int longest) {
+        int unusefulLength = longest - s.length();
+        if (index < unusefulLength) {
             return 0;
         }
+        int forwardIndex = convertToForwardIndex(s, index, unusefulLength);
+
         Character c = s.charAt(forwardIndex);
         int order = (int) c;
         return order;
     }
 
-    private static int convertToForwardIndex(String s, int backWardIndex) {
+    private static int convertToForwardIndex(String s, int backWardIndex, int unusefulLength) {
         int length = s.length();
-        int forwardIndex = length - 1 - backWardIndex;
+        int forwardIndex = length - 1 - (backWardIndex - unusefulLength);
         return forwardIndex;
     }
 

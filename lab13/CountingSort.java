@@ -1,5 +1,3 @@
-import java.util.HashMap;
-import java.util.Map;
 
 /**
  * Class with 2 ways of doing Counting sort, one naive way and one "better" way
@@ -83,16 +81,16 @@ public class CountingSort {
 
         int[] counts = new int[max - min + 1];
         for (int i : arr) {
-            counts[i - min] ++;
+            counts[i - min]++;
         }
 
         int[] sorted = new int[arr.length];
         int next = 0;
         for (int i = 0; i < counts.length; i++) {
-            for (int j = counts[i]; j > 0; j --) {
+            for (int j = counts[i]; j > 0; j--) {
                 int num = min + i;
                 sorted[next] = num;
-                next ++;
+                next++;
             }
         }
         
