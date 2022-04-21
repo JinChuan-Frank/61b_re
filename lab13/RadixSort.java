@@ -37,9 +37,9 @@ public class RadixSort {
         }
 
         for (int i = 0; i < longest; i++) {
-            System.out.println("sorting digit " + i);
+            //System.out.println("sorting digit " + i);
             sortHelperLSD(aux, i, longest);
-            System.out.println(Arrays.toString(aux));
+            //System.out.println(Arrays.toString(aux));
         }
 
         System.arraycopy(aux, 0, sorted, 0, length);
