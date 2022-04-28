@@ -9,4 +9,5 @@ public class SineWaveAnimation {
         GeneratorAudioAnimator ga = new GeneratorAudioAnimator(generator);
         ga.drawAndPlay(500,400000);
     }
+
 }
