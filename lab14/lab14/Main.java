@@ -5,8 +5,8 @@ import lab14lib.GeneratorAudioVisualizer;
 
 public class Main {
 	public static void main(String[] args) {
-		Generator generator = new SawToothGenerator(512);
+		Generator generator = new AcceleratingSawToothGenerator(200, 0.95);
 		GeneratorAudioVisualizer gav = new GeneratorAudioVisualizer(generator);
-		gav.drawAndPlay(4096, 1000000);
+		gav.drawAndPlay(1000, 1000);
 	}
 } 
