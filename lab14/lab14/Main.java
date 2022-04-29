@@ -7,6 +7,6 @@ public class Main {
 	public static void main(String[] args) {
 		Generator generator = new StrangeBitwiseGenerator(200);
 		GeneratorAudioVisualizer gav = new GeneratorAudioVisualizer(generator);
-		gav.drawAndPlay(1000, 1000);
+		gav.drawAndPlay(1000, 1000000);
 	}
 } 
