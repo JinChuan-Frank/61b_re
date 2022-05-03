@@ -1,7 +1,7 @@
 package lab14;
 
 import lab14lib.Generator;
-import lab14lib.GeneratorAudioAnimator;
+
 import lab14lib.GeneratorAudioVisualizer;
 import lab14lib.MultiGenerator;
 

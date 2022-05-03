@@ -17,8 +17,8 @@ public class SawToothGenerator implements Generator {
         return normalize(state);
     }
 
-    private double normalize(int state) {
-        int x = state % period;
+    private double normalize(int num) {
+        int x = num % period;
         if (x == 0) {
             return -1.0;
         }

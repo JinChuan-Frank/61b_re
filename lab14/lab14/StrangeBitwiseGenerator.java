@@ -14,12 +14,12 @@ public class StrangeBitwiseGenerator implements Generator {
     @Override
     public double next() {
         state = state + 1;
-        int weirdState = state & (state >> 3) & (state >> 8) % period;
+        int weirdState = state & (state >> 7) % period;
         return normalize(weirdState);
     }
 
-    private double normalize(int state) {
-        int x = state % period;
+    private double normalize(int num) {
+        int x = num % period;
         if (x == 0) {
             return -1.0;
         }
