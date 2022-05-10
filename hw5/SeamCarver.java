@@ -1,9 +1,13 @@
 import edu.princeton.cs.algs4.Picture;
 
+import java.awt.Color;
+
 public class SeamCarver {
 
-    public SeamCarver(Picture picture) {
+    Picture image;
 
+    public SeamCarver(Picture picture) {
+        image = picture;
     }
 
     /**
@@ -11,7 +15,7 @@ public class SeamCarver {
      * @return current picture
      */
     public Picture picture() {
-        return null;
+        return image;
     }
 
     /**
@@ -19,7 +23,7 @@ public class SeamCarver {
      * @return width of current picture
      */
     public int width() {
-        return 0;
+        return image.width();
     }
 
     /**
@@ -27,7 +31,7 @@ public class SeamCarver {
      * @return height of current picture
      */
     public int height() {
-        return 0;
+        return image.height();
     }
 
     /**
@@ -37,6 +41,8 @@ public class SeamCarver {
      * @return energy of pixel at column x and row y
      */
     public double energy(int x, int y) {
+        Color color = image.get(x, y);
+
         return 0.0;
     }
 
