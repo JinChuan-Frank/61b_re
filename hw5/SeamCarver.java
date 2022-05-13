@@ -141,16 +141,19 @@ public class SeamCarver {
         int[] seam = new int[height];
         int column = 0;
         double minEnergy = minEnergies[height - 1][0];
+
         for (int i = 0; i < width; i++) {
             if (minEnergies[height - 1][i] < minEnergy) {
                 column = i;
                 minEnergy = minEnergies[height - 1][i];
             }
         }
+
         seam[height - 1] = column;
         for (int row = height - 2; row >= 0; row--) {
-            seam[row] = column;
-            if ()
+            if (minEnergies) {
+
+            }
         }
         return null;
     }
