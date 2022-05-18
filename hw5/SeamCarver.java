@@ -12,13 +12,14 @@ public class SeamCarver {
         image = picture;
         width = picture().width();
         height = picture.height();
+        energies = new double[width][height];
         calEnergies();
     }
 
     private void calEnergies() {
 
-        for (int i = 0; i < height; i++) {
-            for (int j = 0; j < width; j++) {
+        for (int i = 0; i < width; i++) {
+            for (int j = 0; j < height; j++) {
                 energies[i][j] = calPixelEnergy(i, j);
             }
         }
@@ -28,44 +29,6 @@ public class SeamCarver {
         double xGradient = calXGradient(x, y);
         double yGradient = calYGradient(x, y);
         return xGradient + yGradient;
-    }
-
-    /**
-     *
-     * @return current picture
-     */
-    public Picture picture() {
-        return image;
-    }
-
-    /**
-     *
-     * @return width of current picture
-     */
-    public int width() {
-        return width;
-    }
-
-    /**
-     *
-     * @return height of current picture
-     */
-    public int height() {
-        return height;
-    }
-
-    /**
-     *
-     * @param x
-     * @param y
-     * @return energy of pixel at column x and row y
-     */
-    public double energy(int x, int y) {
-
-        if (x < 0 || x >= width || y < 0 || y >= height) {
-            throw new IndexOutOfBoundsException();
-        }
-        return energies[x][y];
     }
 
     private double calXGradient(int x, int y) {
@@ -111,6 +74,47 @@ public class SeamCarver {
         return yGradient;
     }
 
+
+
+    /**
+     *
+     * @return current picture
+     */
+    public Picture picture() {
+        return image;
+    }
+
+    /**
+     *
+     * @return width of current picture
+     */
+    public int width() {
+        return width;
+    }
+
+    /**
+     *
+     * @return height of current picture
+     */
+    public int height() {
+        return height;
+    }
+
+    /**
+     *
+     * @param x
+     * @param y
+     * @return energy of pixel at column x and row y
+     */
+    public double energy(int x, int y) {
+
+        if (x < 0 || x >= width || y < 0 || y >= height) {
+            throw new IndexOutOfBoundsException();
+        }
+        return energies[x][y];
+    }
+
+
     /**
      *
      * @return sequence of indices for horizontal seam
@@ -119,67 +123,99 @@ public class SeamCarver {
         return null;
     }
 
+    private Picture transposePicture() {
+        Picture transposed = new Picture(height, width);
+
+        return null;
+    }
+
     /**
      *
      * @return sequence of indices for vertical seam
      */
     public int[] findVerticalSeam() {
-        int[] verticalSeam = new int[height];
+
         double[][] minEnergies = new double[width][height];
 
         for (int i = 0; i < height; i++) {
             for (int j = 0; j < width; j++) {
-                minEnergies[i][j] = calMinEnergies(i, j, minEnergies);
+                minEnergies[j][i] = calMinEnergies(j, i, minEnergies);
             }
         }
 
+        int[] seam = buildSeam(minEnergies);
 
-        return null;
+        return seam;
     }
 
     private int[] buildSeam(double[][] minEnergies) {
         int[] seam = new int[height];
+
+        if (width == 1) {
+            for (int i = 0; i < height; i++) {
+                seam[i] = 0;
+                return seam;
+            }
+        }
+
         int column = 0;
-        double minEnergy = minEnergies[height - 1][0];
+        double minEnergy = minEnergies[0][height - 1];
 
         for (int i = 0; i < width; i++) {
-            if (minEnergies[height - 1][i] < minEnergy) {
+            if (minEnergies[i][height - 1] < minEnergy) {
                 column = i;
-                minEnergy = minEnergies[height - 1][i];
+                minEnergy = minEnergies[i][height - 1];
             }
         }
 
         seam[height - 1] = column;
         for (int row = height - 2; row >= 0; row--) {
-            if (column == 1) {
-                if (!(minEnergies[row][column] <= minEnergies[row][column + 1])) {
+            int Best = column;
+
+            if (column == 0) {
+                int possibleBetter = column + 1;
+                if (minEnergies[row][possibleBetter] < minEnergies[row][Best]) {
                     column = column + 1;
                 }
-                seam[row] = column;
-            }
-            if (column == width - 1) {
-                if (!(minEnergies[row][column] <= minEnergies[row][column - 1])) {
+            } else if (column == width - 1) {
+                int possibleBetter = column - 1;
+                if (minEnergies[row][possibleBetter] < minEnergies[row][Best]) {
                     column = column - 1;
                 }
-                seam[row] = column;
+            } else {
+                int possibleBetter = column + 1;
+                if (energies[row][column - 1] < energies[row][column + 1]) {
+                    possibleBetter = column - 1;
+                }
+                if (energies[row][possibleBetter] < energies[row][Best]) {
+                    column = possibleBetter;
+                }
             }
 
+            seam[row] = column;
         }
-        return null;
+        return seam;
     }
 
+    /**
+     *
+     * @param x column
+     * @param y row
+     * @param minEnergies min energy table so far
+     * @return min energy path ending at pixel(col x, row y)
+     */
     private double calMinEnergies(int x, int y, double[][] minEnergies) {
 
-        if (x == 0) {
-            return energies[0][y];
-        }
         if (y == 0) {
-            return energy(x, y) + Double.min(minEnergies[x - 1][y], minEnergies[x - 1][y + 1]);
+            return energies[x][0];
         }
-        if (y == width - 1) {
-            return energy(x, y) + Double.min(minEnergies[x - 1][y - 1], minEnergies[x - 1][y]);
+        if (x == 0) {
+            return energy(x, y) + Double.min(minEnergies[x][y - 1], minEnergies[x + 1][y - 1]);
         }
-        return energy(x, y) + Double.min(minEnergies[x - 1][y - 1], Double.min(minEnergies[x - 1][y], minEnergies[x - 1][y + 1]));
+        if (x == width - 1) {
+            return energy(x, y) + Double.min(minEnergies[x - 1][y - 1], minEnergies[x][y - 1]);
+        }
+        return energy(x, y) + Double.min(minEnergies[x - 1][y - 1], Double.min(minEnergies[x][y - 1], minEnergies[x + 1][y - 1]));
     }
 
     /**
