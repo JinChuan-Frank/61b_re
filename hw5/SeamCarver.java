@@ -55,12 +55,12 @@ public class SeamCarver {
     }
 
     private double calYGradient(int x, int y) {
-        int upperY = y + 1;
-        int lowerY = y - 1;
-        if (upperY == height) {
-            upperY = 0;
-        } else if (upperY < 0) {
+        int lowerY = y + 1;
+        int upperY = y - 1;
+        if (upperY < 0) {
             upperY = height - 1;
+        } else if (lowerY == height) {
+            lowerY = 0;
         }
         int upperRGB = image.getRGB(x, upperY);
         int lowerRGB = image.getRGB(x, lowerY);
@@ -143,12 +143,12 @@ public class SeamCarver {
             }
         }
 
-        int[] seam = buildSeam(minEnergies);
+        int[] seam = buildVerticalSeam(minEnergies);
 
         return seam;
     }
 
-    private int[] buildSeam(double[][] minEnergies) {
+    private int[] buildVerticalSeam(double[][] minEnergies) {
         int[] seam = new int[height];
 
         if (width == 1) {
@@ -169,25 +169,26 @@ public class SeamCarver {
         }
 
         seam[height - 1] = column;
+
         for (int row = height - 2; row >= 0; row--) {
             int Best = column;
 
             if (column == 0) {
                 int possibleBetter = column + 1;
-                if (minEnergies[row][possibleBetter] < minEnergies[row][Best]) {
+                if (minEnergies[possibleBetter][row] < minEnergies[Best][row]) {
                     column = column + 1;
                 }
             } else if (column == width - 1) {
                 int possibleBetter = column - 1;
-                if (minEnergies[row][possibleBetter] < minEnergies[row][Best]) {
+                if (minEnergies[possibleBetter][row] < minEnergies[Best][row]) {
                     column = column - 1;
                 }
             } else {
                 int possibleBetter = column + 1;
-                if (energies[row][column - 1] < energies[row][column + 1]) {
+                if (energies[column - 1][row] < energies[column + 1][row]) {
                     possibleBetter = column - 1;
                 }
-                if (energies[row][possibleBetter] < energies[row][Best]) {
+                if (energies[possibleBetter][row] < energies[Best][row]) {
                     column = possibleBetter;
                 }
             }
