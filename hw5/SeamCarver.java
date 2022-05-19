@@ -1,5 +1,7 @@
 import edu.princeton.cs.algs4.Picture;
 
+import javax.sound.midi.Soundbank;
+
 
 public class SeamCarver {
 
@@ -59,7 +61,8 @@ public class SeamCarver {
         int upperY = y - 1;
         if (upperY < 0) {
             upperY = height - 1;
-        } else if (lowerY == height) {
+        }
+        if (lowerY == height) {
             lowerY = 0;
         }
         int upperRGB = image.getRGB(x, upperY);
@@ -143,6 +146,13 @@ public class SeamCarver {
             }
         }
 
+        for (int i = 0; i < height; i++) {
+            System.out.println();
+            for (int j = 0; j < width; j++) {
+                System.out.print(minEnergies[j][i] + " ");
+            }
+        }
+
         int[] seam = buildVerticalSeam(minEnergies);
 
         return seam;
@@ -211,6 +221,9 @@ public class SeamCarver {
             return energies[x][0];
         }
         if (x == 0) {
+            if (width == 1) {
+                return energies[0][y];
+            }
             return energy(x, y) + Double.min(minEnergies[x][y - 1], minEnergies[x + 1][y - 1]);
         }
         if (x == width - 1) {
