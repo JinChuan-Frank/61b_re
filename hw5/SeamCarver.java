@@ -128,8 +128,13 @@ public class SeamCarver {
 
     private Picture transposePicture() {
         Picture transposed = new Picture(height, width);
-
-        return null;
+        for (int i = 0 ; i < height; i++) {
+            for (int j = 0; j < width; j++) {
+                int RGB = image.getRGB(j, i);
+                transposed.setRGB(i, j, RGB);
+            }
+        }
+        return transposed;
     }
 
     /**
@@ -146,12 +151,12 @@ public class SeamCarver {
             }
         }
 
-        for (int i = 0; i < height; i++) {
+        /**for (int i = 0; i < height; i++) {
             System.out.println();
             for (int j = 0; j < width; j++) {
                 System.out.print(minEnergies[j][i] + " ");
             }
-        }
+        } */
 
         int[] seam = buildVerticalSeam(minEnergies);
 
@@ -195,10 +200,10 @@ public class SeamCarver {
                 }
             } else {
                 int possibleBetter = column + 1;
-                if (energies[column - 1][row] < energies[column + 1][row]) {
+                if (minEnergies[column - 1][row] < minEnergies[column + 1][row]) {
                     possibleBetter = column - 1;
                 }
-                if (energies[possibleBetter][row] < energies[Best][row]) {
+                if (minEnergies[possibleBetter][row] < minEnergies[Best][row]) {
                     column = possibleBetter;
                 }
             }
