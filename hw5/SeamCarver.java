@@ -1,7 +1,5 @@
 import edu.princeton.cs.algs4.Picture;
 
-import javax.sound.midi.Soundbank;
-
 
 public class SeamCarver {
 
@@ -123,19 +121,22 @@ public class SeamCarver {
      * @return sequence of indices for horizontal seam
      */
     public int[] findHorizontalSeam() {
+
         return null;
     }
 
     private Picture transposePicture() {
         Picture transposed = new Picture(height, width);
-        for (int i = 0 ; i < height; i++) {
-            for (int j = 0; j < width; j++) {
-                int RGB = image.getRGB(j, i);
-                transposed.setRGB(i, j, RGB);
+        for (int y = 0 ; y < height; y++) {
+            for (int x = 0; x < width; x++) {
+                int RGB = image.getRGB(x, y);
+                transposed.setRGB(y, width - 1 - x, RGB);
             }
         }
         return transposed;
     }
+
+
 
     /**
      *
