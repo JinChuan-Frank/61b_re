@@ -121,16 +121,24 @@ public class SeamCarver {
      * @return sequence of indices for horizontal seam
      */
     public int[] findHorizontalSeam() {
-
-        return null;
+        int[] horizontalSeam = new int[width];
+        Picture transposed = transposePicture();
+        SeamCarver transposedCarver = new SeamCarver(transposed);
+        int[] verticalSeam = transposedCarver.findVerticalSeam();
+        int j = width - 1;
+        for (int i = 0; i < width; i++) {
+            horizontalSeam[i] = verticalSeam[j];
+            j--;
+        }
+        return horizontalSeam;
     }
 
     private Picture transposePicture() {
         Picture transposed = new Picture(height, width);
-        for (int y = 0 ; y < height; y++) {
+        for (int y = 0; y < height; y++) {
             for (int x = 0; x < width; x++) {
-                int RGB = image.getRGB(x, y);
-                transposed.setRGB(y, width - 1 - x, RGB);
+                int rgb = image.getRGB(x, y);
+                transposed.setRGB(y, width - 1 - x, rgb);
             }
         }
         return transposed;
@@ -187,16 +195,16 @@ public class SeamCarver {
         seam[height - 1] = column;
 
         for (int row = height - 2; row >= 0; row--) {
-            int Best = column;
+            int best = column;
 
             if (column == 0) {
                 int possibleBetter = column + 1;
-                if (minEnergies[possibleBetter][row] < minEnergies[Best][row]) {
+                if (minEnergies[possibleBetter][row] < minEnergies[best][row]) {
                     column = column + 1;
                 }
             } else if (column == width - 1) {
                 int possibleBetter = column - 1;
-                if (minEnergies[possibleBetter][row] < minEnergies[Best][row]) {
+                if (minEnergies[possibleBetter][row] < minEnergies[best][row]) {
                     column = column - 1;
                 }
             } else {
@@ -204,7 +212,7 @@ public class SeamCarver {
                 if (minEnergies[column - 1][row] < minEnergies[column + 1][row]) {
                     possibleBetter = column - 1;
                 }
-                if (minEnergies[possibleBetter][row] < minEnergies[Best][row]) {
+                if (minEnergies[possibleBetter][row] < minEnergies[best][row]) {
                     column = possibleBetter;
                 }
             }
@@ -235,7 +243,8 @@ public class SeamCarver {
         if (x == width - 1) {
             return energy(x, y) + Double.min(minEnergies[x - 1][y - 1], minEnergies[x][y - 1]);
         }
-        return energy(x, y) + Double.min(minEnergies[x - 1][y - 1], Double.min(minEnergies[x][y - 1], minEnergies[x + 1][y - 1]));
+        return energy(x, y) + Double.min(minEnergies[x - 1][y - 1],
+                Double.min(minEnergies[x][y - 1], minEnergies[x + 1][y - 1]));
     }
 
     /**
@@ -243,7 +252,9 @@ public class SeamCarver {
      * @param seam
      */
     public void removeHorizontalSeam(int[] seam) {
-
+        validateSeam(seam);
+        image = SeamRemover.removeHorizontalSeam(image, seam);
+        height = image.height();
     }
 
     /**
@@ -251,7 +262,19 @@ public class SeamCarver {
      * @param seam
      */
     public void removeVerticalSeam(int[] seam) {
+        validateSeam(seam);
+        image = SeamRemover.removeVerticalSeam(image, seam);
+        width = image.width();
+    }
 
+    private void validateSeam(int[] seam) {
+        int length = seam.length;
+        for (int i = 0; i < length - 1; i++) {
+            int difference = seam[i] - seam[i + 1];
+            if (difference * difference > 1) {
+                throw new IllegalArgumentException();
+            }
+        }
     }
 
 }
