@@ -1,14 +1,12 @@
 import edu.princeton.cs.algs4.Picture;
-
 import java.awt.Color;
-
 
 public class SeamCarver {
 
-    Picture image;
-    double[][] energies;
-    int width;
-    int height;
+    private Picture image;
+    private double[][] energies;
+    private int width;
+    private int height;
 
     public SeamCarver(Picture picture) {
         image = new Picture(picture);
@@ -78,13 +76,12 @@ public class SeamCarver {
     }
 
 
-
     /**
      *
      * @return current picture
      */
     public Picture picture() {
-        return image;
+        return new Picture(image);
     }
 
     /**
