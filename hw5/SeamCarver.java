@@ -1,5 +1,7 @@
 import edu.princeton.cs.algs4.Picture;
 
+import java.awt.Color;
+
 
 public class SeamCarver {
 
@@ -9,7 +11,7 @@ public class SeamCarver {
     int height;
 
     public SeamCarver(Picture picture) {
-        image = picture;
+        image = new Picture(picture);
         width = picture().width();
         height = picture.height();
         energies = new double[width][height];
@@ -42,14 +44,14 @@ public class SeamCarver {
             rightX = 0;
         }
 
-        int leftRGB = image.getRGB(leftX, y);
-        int rightRGB = image.getRGB(rightX, y);
-        int r1 = (leftRGB >> 16) & 0xFF;
-        int g1 = (leftRGB >>  8) & 0xFF;
-        int b1 = (leftRGB >>  0) & 0xFF;
-        int r2 = (rightRGB >> 16) & 0xFF;
-        int g2 = (rightRGB >>  8) & 0xFF;
-        int b2 = (rightRGB >>  0) & 0xFF;
+        Color leftColor = image.get(leftX, y);
+        Color rightColor = image.get(rightX, y);
+        int r1 = leftColor.getRed();
+        int g1 = leftColor.getGreen();
+        int b1 = leftColor.getBlue();
+        int r2 = rightColor.getRed();
+        int g2 = rightColor.getGreen();
+        int b2 = rightColor.getBlue();
         double xGradient = (r1 - r2) * (r1 - r2) + (g1 - g2) * (g1 - g2) + (b1 - b2) * (b1 - b2);
         return xGradient;
     }
@@ -63,14 +65,14 @@ public class SeamCarver {
         if (lowerY == height) {
             lowerY = 0;
         }
-        int upperRGB = image.getRGB(x, upperY);
-        int lowerRGB = image.getRGB(x, lowerY);
-        int r1 = (upperRGB >> 16) & 0xFF;
-        int g1 = (upperRGB >>  8) & 0xFF;
-        int b1 = (upperRGB >>  0) & 0xFF;
-        int r2 = (lowerRGB >> 16) & 0xFF;
-        int g2 = (lowerRGB >>  8) & 0xFF;
-        int b2 = (lowerRGB >>  0) & 0xFF;
+        Color upperColor = image.get(x, upperY);
+        Color lowerColor = image.get(x, lowerY);
+        int r1 = upperColor.getRed();
+        int g1 = upperColor.getGreen();
+        int b1 = upperColor.getBlue();
+        int r2 = lowerColor.getRed();
+        int g2 = lowerColor.getGreen();
+        int b2 = lowerColor.getBlue();
         double yGradient = (r1 - r2) * (r1 - r2) + (g1 - g2) * (g1 - g2) + (b1 - b2) * (b1 - b2);
         return yGradient;
     }
@@ -137,8 +139,8 @@ public class SeamCarver {
         Picture transposed = new Picture(height, width);
         for (int y = 0; y < height; y++) {
             for (int x = 0; x < width; x++) {
-                int rgb = image.getRGB(x, y);
-                transposed.setRGB(y, width - 1 - x, rgb);
+                Color color = image.get(x, y);
+                transposed.setRGB(y, width - 1 - x, color.getRGB());
             }
         }
         return transposed;
