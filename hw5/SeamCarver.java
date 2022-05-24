@@ -140,7 +140,7 @@ public class SeamCarver {
         for (int y = 0; y < height; y++) {
             for (int x = 0; x < width; x++) {
                 Color color = image.get(x, y);
-                transposed.setRGB(y, width - 1 - x, color.getRGB());
+                transposed.set(y, width - 1 - x, color);
             }
         }
         return transposed;
